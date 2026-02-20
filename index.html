@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Francesco - Portfolio</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navigation">
+        <a href="#work" class="nav-link active">Work</a>
+        <a href="fun.html" class="nav-link">Fun</a>
+        <a href="#about" class="nav-link">About</a>
+        <a href="#resume" class="nav-link">Resume</a>
+    </nav>
+
+    <!-- Hamburger Menu (Mobile Only) -->
+    <button class="hamburger-menu" id="hamburgerBtn">
+        <span></span>
+        <span></span>
+        <span></span>
+    </button>
+
+    <!-- Mobile Location Widget (Top-Left) -->
+    <div class="location-widget-mobile">
+        <div class="location-map-mobile" id="weatherIconMobile">
+            ☀️
+        </div>
+        <div class="location-info-mobile">
+            <span class="location-city-mobile" id="locationCityMobile">Madrid</span>
+            <span class="weather-temp-mobile" id="weatherTempMobile">--°</span>
+        </div>
+    </div>
+
+    <!-- Hamburger Fade Zone (Mobile Only - hides content scrolling behind) -->
+    <div class="hamburger-fade-zone"></div>
+
+    <!-- Mobile Menu Overlay -->
+    <div class="mobile-menu" id="mobileMenu">
+        <a href="#work" class="nav-link active">Work</a>
+        <a href="fun.html" class="nav-link">Fun</a>
+        <a href="#about" class="nav-link">About</a>
+        <a href="#resume" class="nav-link">Resume</a>
+    </div>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="hero-content">
+                <h1 class="hero-title">Hello, I'm Francesco</h1>
+                <p class="hero-subtitle" id="rotatingText">I spend more time choosing music than actually listening to it.</p>
+                
+                <div class="hero-info">
+                    <div class="info-block">
+                        <h3>Currently</h3>
+                        <p>Localization QA - Universally Speaking</p>
+                    </div>
+                    <div class="info-block">
+                        <h3>Previously at</h3>
+                        <p>UX/UI Designer - Freelancer</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sidebar -->
+            <div class="sidebar">
+                <!-- Profile and Map Row -->
+                <div class="profile-map-row">
+                    <div class="profile-image">
+                        <img src="Assets/Images/Francesco_Gerbasio.webp" alt="Francesco Gerbasio">
+                    </div>
+                    
+                    <!-- Location Widget - Compact Version -->
+                    <div class="location-widget-compact">
+                        <div class="location-mini">
+                            <span class="location-pin">📍</span>
+                            <span class="location-city" id="locationCity">Madrid, Spain</span>
+                            <span class="vacation-badge" id="vacationBadge">🏖️ On vacation</span>
+                        </div>
+                        <div class="weather-info" id="weatherInfo">
+                            <span class="weather-icon" id="weatherIcon">☀️</span>
+                            <span class="weather-temp" id="weatherTemp">--°C</span>
+                            <span class="weather-desc" id="weatherDesc">Loading...</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <h3 class="sidebar-title">Nice to meet ya!</h3>
+                <p class="sidebar-bio">UX/UI designer by day, quality-obsessed by habit. <br>Turning early ideas into polished interfaces and catching the details that shouldn't ship.</p>
+                
+                <div class="social-links">
+                    <a href="https://www.linkedin.com/in/francesco-gerbasio" target="_blank" rel="noopener noreferrer" class="social-icon">
+                        <img src="Assets/Images/LinkedIn.svg" alt="LinkedIn">
+                    </a>
+                    <a href="https://www.instagram.com/gerbasio_francesco/" target="_blank" rel="noopener noreferrer" class="social-icon">
+                        <img src="Assets/Images/Instagram.svg" alt="Instagram">
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- LQA Section -->
+        <section id="work" class="work-section">
+            <h2 class="section-title">LQA</h2>
+            
+            <div class="projects-grid">
+                <!-- Red Dead Redemption Project - NDA Protected -->
+                <div class="project-card nda-protected" data-project-id="red-dead">
+                    <a href="https://www.rockstargames.com/reddeadredemption" target="_blank" class="project-image-link nda-link">
+                        <div class="project-image">
+                            <img src="Assets/Images/RedDeadRedemption.webp" alt="Red Dead Redemption">
+                            <!-- NDA Lock Overlay -->
+                            <div class="nda-overlay">
+                                <div class="nda-lock-icon">🔒</div>
+                                <div class="nda-text">NDA Protected Project</div>
+                                <div class="nda-subtext">Click to unlock</div>
+                            </div>
+                        </div>
+                    </a>
+                    <div class="project-info">
+                        <div class="project-header">
+                            <h3 class="project-title">Red Dead Redemption</h3>
+                            <span class="project-badge">SHIPPED</span>
+                        </div>
+                        <p class="project-description">Contributed to the Italian localization of the latest versions of <span class="nda-hidden-text">Red Dead Redemption</span>, ensuring linguistic accuracy, tonal consistency, and adherence to franchise standards.</p>
+                        <p class="project-meta"><span class="nda-hidden-text">Rockstar San Diego, Inc.</span> - 2025</p>
+                    </div>
+                </div>
+
+                <!-- Dead Take Project -->
+                <div class="project-card">
+                    <a href="https://www.surgentstudios.com/projects/dead-take" target="_blank" class="project-image-link">
+                        <div class="project-image">
+                            <img src="Assets/Images/DeadTake.webp" alt="Dead Take">
+                        </div>
+                    </a>
+                    <div class="project-info">
+                        <div class="project-header">
+                            <h3 class="project-title">Dead Take</h3>
+                            <span class="project-badge">SHIPPED</span>
+                        </div>
+                        <p class="project-description">Worked on the Italian localization of the horror game Dead Take, with a focus on linguistic accuracy, atmosphere, and player immersion.</p>
+                        <p class="project-meta">Surgent Studios - 2025</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Other Projects Section (Accordion) -->
+        <section class="work-section">
+            <div class="other-projects-accordion">
+                <button class="accordion-trigger" id="accordionTrigger">
+                    <span class="accordion-title">Other Projects I've Contributed To</span>
+                    <span class="accordion-count">(9)</span>
+                    <span class="accordion-icon" id="accordionIcon">+</span>
+                </button>
+                
+                <div class="accordion-content" id="accordionContent">
+                    <div class="projects-list">
+                        <!-- 2026 - NDA Protected -->
+                        <div class="project-list-item nda-protected-item" data-project-id="seven-deadly-sins-origin" data-release-date="2026-03-23">
+                            <span class="project-name nda-hidden-text">The Seven Deadly Sins: Origin</span>
+                            <span class="project-divider">·</span>
+                            <span class="project-studio nda-hidden-text">Netmarble</span>
+                            <span class="project-divider">·</span>
+                            <span class="project-year">2026</span>
+                        </div>
+                        
+                        <!-- 202x - NDA Protected -->
+                        <div class="project-list-item nda-protected-item" data-project-id="little-nightmares-vr">
+                            <span class="project-name nda-hidden-text">Little Nightmares VR: Altered Echoes</span>
+                            <span class="project-divider">·</span>
+                            <span class="project-studio nda-hidden-text">Iconik Studio</span>
+                            <span class="project-divider">·</span>
+                            <span class="project-year">202x</span>
+                        </div>
+                        
+                        <!-- 2025 Projects - Released, chronological order with links -->
+                        <a href="https://en.bandainamcoent.eu/dragon-ball/dragon-ball-sparking-zero" target="_blank" class="project-list-item clickable">
+                            <span class="project-name">Dragon Ball: Sparking! Zero</span>
+                            <span class="project-divider">·</span>
+                            <span class="project-studio">Spike Chunsoft</span>
+                            <span class="project-divider">·</span>
+                            <span class="project-year">2025</span>
+                        </a>
+                        <a href="https://www.paydaythegame.com/payday3/" target="_blank" class="project-list-item clickable">
+                            <span class="project-name">Payday 3</span>
+                            <span class="project-divider">·</span>
+                            <span class="project-studio">Starbreeze Studios</span>
+                            <span class="project-divider">·</span>
+                            <span class="project-year">2025</span>
+                        </a>
+                        <a href="https://en.bandainamcoent.eu/tamagotchi/tamagotchi-plaza" target="_blank" class="project-list-item clickable">
+                            <span class="project-name">Tamagotchi Plaza Nintendo Switch™ 2 Edition</span>
+                            <span class="project-divider">·</span>
+                            <span class="project-studio">Hyde, Inc.</span>
+                            <span class="project-divider">·</span>
+                            <span class="project-year">2025</span>
+                        </a>
+                        <a href="https://gameofthrones.netmarble.com/en" target="_blank" class="project-list-item clickable">
+                            <span class="project-name">Game of Thrones: Kingsroad</span>
+                            <span class="project-divider">·</span>
+                            <span class="project-studio">netmarbleNeo</span>
+                            <span class="project-divider">·</span>
+                            <span class="project-year">2025</span>
+                        </a>
+                        <a href="https://www.roblox.com/communities/5544719/Cartoon-Network-Games#!/about" target="_blank" class="project-list-item clickable">
+                            <span class="project-name">Cartoon Network Games</span>
+                            <span class="project-divider">·</span>
+                            <span class="project-studio">Roblox Corporation</span>
+                            <span class="project-divider">·</span>
+                            <span class="project-year">2025</span>
+                        </a>
+                        <a href="https://apps.apple.com/es/app/the-seven-deadly-sins/id1475440231?l=en-GB
+                        The Seven Deadly Sins" target="_blank" class="project-list-item clickable">
+                            <span class="project-name">The Seven Deadly Sins</span>
+                            <span class="project-divider">·</span>
+                            <span class="project-studio">Netmarble</span>
+                            <span class="project-divider">·</span>
+                            <span class="project-year">2025</span>
+                        </a>
+                        <a href="https://en.bandainamcoent.eu/synduality/synduality" target="_blank" class="project-list-item clickable">
+                            <span class="project-name">SYNDUALITY Echo of Ada</span>
+                            <span class="project-divider">·</span>
+                            <span class="project-studio">Game Studio</span>
+                            <span class="project-divider">·</span>
+                            <span class="project-year">2025</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- UX/UI Design Section -->
+        <section class="work-section">
+            <h2 class="section-title">UX/UI Design</h2>
+            
+            <div class="projects-grid">
+                <!-- Cines Callao Project -->
+                <div class="project-card">
+                    <div class="project-image">
+                        <img src="Assets/Images/CinesCallao.webp" alt="Cines Callao">
+                    </div>
+                    <div class="project-info">
+                        <h3 class="project-title">Cines Callao</h3>
+                        <p class="project-description">A mobile app concept that streamlines the process of discovering new movies, watching trailers, and booking tickets at the famous Cines Callao theater in Madrid.</p>
+                        <p class="project-meta">Personal Project - 2025</p>
+                    </div>
+                </div>
+
+                <!-- QuickCheckout Project -->
+                <div class="project-card">
+                    <div class="project-image">
+                        <img src="Assets/Images/QuickCheckout.webp" alt="QuickCheckout">
+                    </div>
+                    <div class="project-info">
+                        <h3 class="project-title">QuickCheckout</h3>
+                        <p class="project-description">Worked on the Italian localization of the horror game Dead Take, with a focus on linguistic accuracy, atmosphere, and player immersion.</p>
+                        <p class="project-meta">Personal Project - 2024</p>
+                    </div>
+                </div>
+
+                <!-- Abruzzo Experience Project -->
+                <div class="project-card">
+                    <div class="project-image">
+                        <img src="Assets/Images/AbruzzoExperience.webp" alt="Abruzzo Experience">
+                    </div>
+                    <div class="project-info">
+                        <h3 class="project-title">Abruzzo Experience</h3>
+                        <p class="project-description">A mobile app concept that streamlines the process of discovering new movies, watching trailers, and booking tickets at the famous Cines Callao theater in Madrid.</p>
+                        <p class="project-meta">Personal Project - 2024</p>
+                    </div>
+                </div>
+
+                <!-- Dicarlobus Redesign Project -->
+                <div class="project-card">
+                    <div class="project-image">
+                        <img src="Assets/Images/DicarlobusRedesign.webp" alt="Dicarlobus Redesign">
+                    </div>
+                    <div class="project-info">
+                        <h3 class="project-title">Dicarlobus Redesign</h3>
+                        <p class="project-description">A mobile app concept that streamlines the process of discovering new movies, watching trailers, and booking tickets at the famous Cines Callao theater in Madrid.</p>
+                        <p class="project-meta">Personal Project - 2024</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- NDA Password Modal -->
+    <div class="nda-modal" id="ndaModal">
+        <div class="nda-modal-content">
+            <h2 class="nda-modal-title">🔒 Protected Project</h2>
+            <p class="nda-modal-description">This project is under NDA. Please enter the password provided to view the full details.</p>
+            <div class="nda-password-wrapper">
+                <input 
+                    type="password" 
+                    class="nda-password-input" 
+                    id="ndaPasswordInput" 
+                    placeholder="Enter password"
+                    autocomplete="off"
+                >
+                <button type="button" class="nda-password-toggle" id="ndaPasswordToggle" aria-label="Toggle password visibility">
+                    <!-- Eye Open Icon -->
+                    <svg class="eye-open" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                        <circle cx="12" cy="12" r="3"/>
+                    </svg>
+                </button>
+            </div>
+            <div class="nda-error-message" id="ndaErrorMessage">Incorrect password. Please try again.</div>
+            <div class="nda-modal-buttons">
+                <button class="nda-btn nda-btn-secondary" id="ndaCancelBtn">Cancel</button>
+                <button class="nda-btn nda-btn-primary" id="ndaSubmitBtn">Unlock</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="location-config.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

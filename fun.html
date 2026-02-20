@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fun - Francesco Gerbasio</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Fixed Navigation -->
+    <nav class="navigation">
+        <a href="index.html#work" class="nav-link">Work</a>
+        <a href="fun.html" class="nav-link active">Fun</a>
+        <a href="index.html#about" class="nav-link">About</a>
+        <a href="index.html#resume" class="nav-link">Resume</a>
+    </nav>
+
+    <!-- Hamburger Button -->
+    <button class="hamburger-menu" id="hamburgerBtn">
+        <span></span>
+        <span></span>
+        <span></span>
+    </button>
+
+    <!-- Hamburger Fade Zone (Mobile Only - hides content scrolling behind) -->
+    <div class="hamburger-fade-zone"></div>
+
+    <!-- Mobile Menu Overlay -->
+    <div class="mobile-menu" id="mobileMenu">
+        <a href="index.html#work" class="nav-link">Work</a>
+        <a href="fun.html" class="nav-link active">Fun</a>
+        <a href="index.html#about" class="nav-link">About</a>
+        <a href="index.html#resume" class="nav-link">Resume</a>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Category Navigation at Top Right -->
+        <div class="category-nav-top">
+            <button class="category-btn active" data-category="travel">
+                Travel
+            </button>
+            <button class="category-btn" data-category="music">
+                Music
+            </button>
+            <button class="category-btn" data-category="gaming">
+                Gaming
+            </button>
+        </div>
+
+        <!-- Dynamic Subtitle (Body Text) -->
+        <p class="category-subtitle" id="categorySubtitle">Places I've been and stories from the road. Every journey tells a story, and these are mine captured through moments and memories.</p>
+
+        <!-- Travel Section -->
+        <section class="category-section active" id="travel-section">
+            <!-- Country Flag Navigation -->
+            <div class="flag-navigation" id="flagNavigation">
+                <button class="flag-btn active" data-country="all">
+                    🌍 All
+                </button>
+                <button class="flag-btn" data-country="italy">
+                    🇮🇹 Italy
+                </button>
+                <button class="flag-btn" data-country="spain">
+                    🇪🇸 Spain
+                </button>
+                <button class="flag-btn" data-country="japan">
+                    🇯🇵 Japan
+                </button>
+            </div>
+
+            <!-- Masonry Grid for Travel Photos -->
+            <div class="masonry-grid" id="travelGrid">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>Loading travel moments...</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Music Section -->
+        <section class="category-section" id="music-section">
+            <!-- My Music (Original Productions) -->
+            <div class="music-category">
+                <h3 class="music-category-title">My Music</h3>
+                <div class="my-music-container" id="myMusicContainer">
+                    <div class="song-card">
+                        <div class="song-artwork">
+                            <img src="https://via.placeholder.com/300x300" alt="Song artwork">
+                            <div class="play-overlay">
+                                <svg class="play-icon" viewBox="0 0 24 24" fill="white">
+                                    <path d="M8 5v14l11-7z"/>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="song-info">
+                            <h4 class="song-title">Loading...</h4>
+                            <p class="song-artist">Francesco Gerbasio</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Favorite Artists -->
+            <div class="music-category">
+                <h3 class="music-category-title">Favorite Artists</h3>
+                <div class="artists-grid" id="artistsGrid">
+                    <div class="loading-state">
+                        <div class="spinner"></div>
+                        <p>Loading artists...</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Gaming Section -->
+        <section class="category-section" id="gaming-section">
+            <div class="games-grid" id="gamesGrid">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>Loading games...</p>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script src="fun.js"></script>
+</body>
+</html>
