@@ -193,9 +193,9 @@ function displayTravelPhotos(country) {
         filtered = shuffleArray([...filtered]);
     }
     
-    // Create cards
+    // Create cards with click-to-filter functionality
     grid.innerHTML = filtered.map(photo => `
-        <div class="travel-card">
+        <div class="travel-card" data-country="${photo.country}">
             <img src="${photo.image}" alt="${photo.location}" loading="lazy">
             <div class="travel-card-location">
                 <span class="flag">${photo.flag}</span>
@@ -203,6 +203,30 @@ function displayTravelPhotos(country) {
             </div>
         </div>
     `).join('');
+    
+    // Add click listeners to cards
+    grid.querySelectorAll('.travel-card').forEach(card => {
+        card.addEventListener('click', () => {
+            const clickedCountry = card.getAttribute('data-country');
+            
+            // Update flag button active state
+            document.querySelectorAll('.flag-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.getAttribute('data-country') === clickedCountry) {
+                    btn.classList.add('active');
+                }
+            });
+            
+            // Filter photos by clicked country
+            displayTravelPhotos(clickedCountry);
+            
+            // Smooth scroll to top of gallery
+            document.getElementById('travel-section').scrollIntoView({ 
+                behavior: 'smooth', 
+                block: 'start' 
+            });
+        });
+    });
     
     // Apply masonry layout after images load
     layoutMasonry();
