@@ -1462,8 +1462,32 @@ html {
 .flag-navigation {
     display: flex;
     gap: 12px;
-    flex-wrap: wrap;
     margin-bottom: 40px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding-bottom: 8px;
+    position: relative;
+    /* Hide scrollbar but keep functionality */
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE/Edge */
+}
+
+.flag-navigation::-webkit-scrollbar {
+    display: none; /* Chrome/Safari */
+}
+
+/* Subtle fade hint on mobile to indicate scrollability */
+@media (max-width: 768px) {
+    .flag-navigation::after {
+        content: '';
+        position: absolute;
+        right: 0;
+        top: 0;
+        bottom: 8px;
+        width: 40px;
+        background: linear-gradient(to right, transparent, var(--color-bg));
+        pointer-events: none;
+    }
 }
 
 .flag-btn {
@@ -1480,6 +1504,8 @@ html {
     display: flex;
     align-items: center;
     gap: 8px;
+    white-space: nowrap; /* Prevent text wrapping */
+    flex-shrink: 0; /* Prevent buttons from shrinking */
 }
 
 .flag-btn:hover {
