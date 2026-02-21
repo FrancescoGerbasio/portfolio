@@ -179,13 +179,18 @@ function generateFlagButtons() {
 
 function displayTravelPhotos(country) {
     const grid = document.getElementById('travelGrid');
-    const filtered = country === 'all' 
+    let filtered = country === 'all' 
         ? travelData 
         : travelData.filter(photo => photo.country === country);
     
     if (filtered.length === 0) {
         grid.innerHTML = '<div class="loading-state"><p>No photos for this location yet.</p></div>';
         return;
+    }
+    
+    // Shuffle photos when "all" is selected for nice mixed layout
+    if (country === 'all') {
+        filtered = shuffleArray([...filtered]);
     }
     
     // Create cards
@@ -201,6 +206,23 @@ function displayTravelPhotos(country) {
     
     // Apply masonry layout after images load
     layoutMasonry();
+}
+
+// Fisher-Yates shuffle algorithm (deterministic with seed)
+function shuffleArray(array) {
+    const shuffled = [...array];
+    // Use a seed so shuffle is consistent across page loads
+    let seed = 12345;
+    
+    for (let i = shuffled.length - 1; i > 0; i--) {
+        // Seeded random
+        seed = (seed * 9301 + 49297) % 233280;
+        const random = seed / 233280;
+        const j = Math.floor(random * (i + 1));
+        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+    
+    return shuffled;
 }
 
 // Masonry layout function - works in all browsers
