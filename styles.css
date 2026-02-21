@@ -1321,6 +1321,9 @@ a {
     .sidebar-bio {
         font-size: 16px;
         line-height: 1.5;
+        text-align: justify;
+        hyphens: auto;
+        -webkit-hyphens: auto;
     }
     
     .profile-image {
@@ -1435,6 +1438,15 @@ html {
     transition: opacity 0.3s ease;
 }
 
+/* Justify text on mobile for better readability */
+@media (max-width: 768px) {
+    .category-subtitle {
+        text-align: justify;
+        hyphens: auto;
+        -webkit-hyphens: auto;
+    }
+}
+
 /* Category Sections */
 .category-section {
     display: none;
@@ -1516,18 +1528,30 @@ html {
     flex-shrink: 0;
 }
 
-.flag-btn:hover {
-    background: var(--color-text);
-    color: white;
-    border-color: var(--color-text);
-    transform: translateY(-2px);
+/* Hover state (desktop only) - lighter style to differentiate from active */
+@media (hover: hover) {
+    .flag-btn:hover:not(.active) {
+        background: rgba(0, 0, 0, 0.05);
+        border-color: var(--color-text);
+        transform: translateY(-2px);
+    }
 }
 
+/* Active/selected state - full black */
 .flag-btn.active {
     background: var(--color-text);
     color: white;
     border-color: var(--color-text);
-    transform: translateY(0); /* Prevent jump on mobile */
+    transform: translateY(0);
+}
+
+/* Prevent accidental hover styling on mobile during scroll */
+@media (max-width: 768px) {
+    .flag-btn:hover:not(.active) {
+        background: white;
+        border-color: var(--color-border);
+        transform: none;
+    }
 }
 
 /* Masonry Grid for Travel - Using CSS Columns */
