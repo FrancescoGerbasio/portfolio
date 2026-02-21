@@ -215,17 +215,24 @@ a {
     letter-spacing: clamp(2px, 0.3vw, 5px);
     margin-bottom: 0;
     margin-top: clamp(10px, 1.5vw, 25px);
-    min-height: 3.60em; /* Minimum height, can expand */
+    min-height: 3.60em; /* Reserve space */
     display: flex;
     align-items: flex-start;
-    overflow: visible; /* Allow text to show when it wraps */
+    overflow: visible;
     transition: opacity 0.5s ease, transform 0.5s ease, font-size 0.3s ease, letter-spacing 0.3s ease;
+}
+
+/* On mobile, expand to fit content but keep Currently/Previously at consistent position */
+@media (max-width: 768px) {
+    .hero-subtitle {
+        min-height: 180px; /* Fixed minimum space on mobile */
+    }
 }
 
 .hero-info {
     display: flex;
     gap: clamp(40px, 6vw, 100px);
-    margin-top: clamp(50px, 6vw, 90px); /* Increase space above Currently/Previously */
+    margin-top: clamp(50px, 6vw, 90px);
 }
 
 .info-block h3 {
@@ -1468,8 +1475,8 @@ html {
     overflow-x: auto;
     overflow-y: hidden;
     padding-bottom: 8px;
-    padding-right: 20px; /* Add space on right so last button isn't cut off */
     position: relative;
+    scroll-behavior: smooth; /* Smooth scroll when programmatically scrolled */
     /* Hide scrollbar but keep functionality */
     scrollbar-width: none; /* Firefox */
     -ms-overflow-style: none; /* IE/Edge */
@@ -1479,6 +1486,16 @@ html {
 
 .flag-navigation::-webkit-scrollbar {
     display: none; /* Chrome/Safari */
+}
+
+/* Mobile: Negative margin to extend to screen edge */
+@media (max-width: 768px) {
+    .flag-navigation {
+        margin-left: -20px;
+        margin-right: -20px;
+        padding-left: 20px;
+        padding-right: 20px;
+    }
 }
 
 .flag-btn {
@@ -1491,12 +1508,12 @@ html {
     font-family: var(--font-body);
     color: var(--color-text);
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: background 0.3s ease, color 0.3s ease, border-color 0.3s ease, transform 0.3s ease;
     display: flex;
     align-items: center;
     gap: 8px;
-    white-space: nowrap; /* Prevent text wrapping */
-    flex-shrink: 0; /* Prevent buttons from shrinking */
+    white-space: nowrap;
+    flex-shrink: 0;
 }
 
 .flag-btn:hover {
@@ -1510,6 +1527,7 @@ html {
     background: var(--color-text);
     color: white;
     border-color: var(--color-text);
+    transform: translateY(0); /* Prevent jump on mobile */
 }
 
 /* Masonry Grid for Travel - Using CSS Columns */

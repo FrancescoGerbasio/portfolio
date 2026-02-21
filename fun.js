@@ -169,6 +169,9 @@ function generateFlagButtons() {
             flagNav.querySelectorAll('.flag-btn').forEach(b => b.classList.remove('active'));
             this.classList.add('active');
             
+            // Scroll button into view (centered)
+            this.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+            
             // Load photos for selected country
             const country = this.getAttribute('data-country');
             currentCountry = country;
@@ -214,6 +217,8 @@ function displayTravelPhotos(country) {
                 btn.classList.remove('active');
                 if (btn.getAttribute('data-country') === clickedCountry) {
                     btn.classList.add('active');
+                    // Scroll the active flag button into view
+                    btn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
                 }
             });
             
