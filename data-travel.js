@@ -26,7 +26,7 @@ const travelConfig = {
         {
             folder: 'Monaco',
             location: 'Monaco',
-            country: 'Principauté de Monaco',
+            country: 'Principality of Monaco',
             flag: '🇲🇨',
             photoCount: 12
         },
