@@ -1466,28 +1466,17 @@ html {
     overflow-x: auto;
     overflow-y: hidden;
     padding-bottom: 8px;
+    padding-right: 20px; /* Add space on right so last button isn't cut off */
     position: relative;
     /* Hide scrollbar but keep functionality */
     scrollbar-width: none; /* Firefox */
     -ms-overflow-style: none; /* IE/Edge */
+    /* Smooth scrolling on mobile */
+    -webkit-overflow-scrolling: touch;
 }
 
 .flag-navigation::-webkit-scrollbar {
     display: none; /* Chrome/Safari */
-}
-
-/* Subtle fade hint on mobile to indicate scrollability */
-@media (max-width: 768px) {
-    .flag-navigation::after {
-        content: '';
-        position: absolute;
-        right: 0;
-        top: 0;
-        bottom: 8px;
-        width: 40px;
-        background: linear-gradient(to right, transparent, var(--color-bg));
-        pointer-events: none;
-    }
 }
 
 .flag-btn {
