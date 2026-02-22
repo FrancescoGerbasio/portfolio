@@ -458,32 +458,25 @@ async function loadFavoriteArtists() {
         
         if (artists.length === 0) throw new Error('No artists data');
         
-        // Render artist cards with hover popup
+        // Render simple artist cards - no popup
         grid.innerHTML = artists.map(artist => `
             <div class="artist-card">
                 <div class="artist-image">
-                    <img src="${artist.image}" alt="${artist.name}">
+                    <img src="${artist.image}" alt="${artist.name}" onerror="this.src='https://via.placeholder.com/240x240?text=${encodeURIComponent(artist.name)}'">
                 </div>
                 <h4 class="artist-name">${artist.name}</h4>
-                
-                ${artist.albums && artist.albums.length > 0 ? `
-                    <!-- Albums popup on hover -->
-                    <div class="artist-albums-popup">
-                        <h5 class="popup-artist-name">${artist.name}</h5>
-                        <div class="popup-albums-list">
-                            ${artist.albums.map(album => `
-                                <div class="album-item">
-                                    <div class="album-cover">
-                                        <img src="${album.cover}" alt="${album.name}">
-                                    </div>
-                                    <span class="album-name">${album.name}</span>
-                                </div>
-                            `).join('')}
-                        </div>
-                    </div>
-                ` : ''}
             </div>
         `).join('');
+        
+    } catch (error) {
+        console.error('Error loading artists:', error);
+        grid.innerHTML = `
+            <div class="loading-state">
+                <p>Add your favorite artists in data-music.js!</p>
+            </div>
+        `;
+    }
+}
         
     } catch (error) {
         console.error('Error loading artists:', error);
