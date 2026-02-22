@@ -195,6 +195,8 @@ a {
     max-width: none;
     padding-right: clamp(60px, 5vw, 80px);
     margin-right: 50px; /* Gap before divider */
+    position: relative;
+    min-height: 500px; /* Ensure enough space */
 }
 
 .hero-title {
@@ -215,24 +217,17 @@ a {
     letter-spacing: clamp(2px, 0.3vw, 5px);
     margin-bottom: 0;
     margin-top: clamp(10px, 1.5vw, 25px);
-    min-height: 3.60em; /* Reserve space */
     display: flex;
     align-items: flex-start;
-    overflow: visible;
     transition: opacity 0.5s ease, transform 0.5s ease, font-size 0.3s ease, letter-spacing 0.3s ease;
-}
-
-/* On mobile, expand to fit content but keep Currently/Previously at consistent position */
-@media (max-width: 768px) {
-    .hero-subtitle {
-        min-height: 180px; /* Fixed minimum space on mobile */
-    }
 }
 
 .hero-info {
     display: flex;
     gap: clamp(40px, 6vw, 100px);
-    margin-top: clamp(50px, 6vw, 90px);
+    position: absolute;
+    bottom: 0;
+    left: 0;
 }
 
 .info-block h3 {
@@ -1290,6 +1285,12 @@ a {
         margin-top: 0;
     }
     
+    .hero-content {
+        min-height: auto; /* Remove fixed height on mobile */
+        position: relative;
+        padding-bottom: 180px; /* Space for absolutely positioned hero-info */
+    }
+    
     .hero-title,
     .hero-subtitle {
         font-size: 36px;
@@ -1299,13 +1300,16 @@ a {
     }
     
     .hero-subtitle {
-        min-height: 200px; /* Fixed height to prevent Currently/Previously from jumping */
+        min-height: 150px; /* Reserve space so Currently/Previously stay fixed */
     }
     
     .hero-info {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
         flex-direction: column;
         gap: 24px;
-        margin-top: 32px;
     }
     
     .info-block h3 {
