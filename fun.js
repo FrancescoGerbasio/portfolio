@@ -477,17 +477,6 @@ async function loadFavoriteArtists() {
         `;
     }
 }
-        
-    } catch (error) {
-        console.error('Error loading artists:', error);
-        // Fallback
-        grid.innerHTML = `
-            <div class="loading-state">
-                <p>Add your favorite artists in data-music.js!</p>
-            </div>
-        `;
-    }
-}
 
 // ===================================
 // GAMING SECTION
