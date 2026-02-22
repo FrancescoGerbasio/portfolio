@@ -195,8 +195,8 @@ a {
     max-width: none;
     padding-right: clamp(60px, 5vw, 80px);
     margin-right: 50px;
-    display: flex;
-    flex-direction: column;
+    padding-bottom: 120px; /* Reserve space for absolutely positioned hero-info */
+    position: relative;
 }
 
 .hero-title {
@@ -217,18 +217,17 @@ a {
     letter-spacing: clamp(2px, 0.3vw, 5px);
     margin-top: clamp(10px, 1.5vw, 25px);
     margin-bottom: 0;
-    height: 260px; /* FIXED HEIGHT - phrases can wrap inside but won't push below */
-    overflow: visible;
-    display: flex;
-    align-items: flex-start;
+    min-height: 200px; /* Minimum space for phrases to wrap */
     transition: opacity 0.5s ease, transform 0.5s ease, font-size 0.3s ease, letter-spacing 0.3s ease;
 }
 
 .hero-info {
     display: flex;
     gap: clamp(40px, 6vw, 100px);
-    margin-top: clamp(50px, 6vw, 90px);
-    /* This will ALWAYS be at same position because hero-subtitle has fixed height */
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: clamp(60px, 5vw, 80px);
 }
 
 .info-block h3 {
@@ -1287,8 +1286,8 @@ a {
     }
     
     .hero-content {
-        display: flex;
-        flex-direction: column;
+        padding-bottom: 160px; /* Space for absolutely positioned hero-info */
+        position: relative;
     }
     
     .hero-title,
@@ -1300,15 +1299,16 @@ a {
     }
     
     .hero-subtitle {
-        height: 200px; /* FIXED - phrases wrap inside, Currently/Previously never move */
-        overflow: visible;
+        min-height: 180px; /* Space for phrases to wrap */
     }
     
     .hero-info {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
         flex-direction: column;
         gap: 24px;
-        margin-top: 40px;
-        position: relative;
     }
     
     .info-block h3 {
