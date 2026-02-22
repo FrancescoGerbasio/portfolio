@@ -195,8 +195,6 @@ a {
     max-width: none;
     padding-right: clamp(60px, 5vw, 80px);
     margin-right: 50px;
-    padding-bottom: 120px; /* Reserve space for absolutely positioned hero-info */
-    position: relative;
 }
 
 .hero-title {
@@ -208,6 +206,7 @@ a {
     transition: font-size 0.3s ease;
 }
 
+/* Wrapper with fixed height - text can overflow but won't push below */
 .hero-subtitle {
     font-family: var(--font-heading);
     font-size: clamp(40px, 4vw, 72px);
@@ -216,18 +215,15 @@ a {
     color: var(--color-text-light);
     letter-spacing: clamp(2px, 0.3vw, 5px);
     margin-top: clamp(10px, 1.5vw, 25px);
-    margin-bottom: 0;
-    min-height: 200px; /* Minimum space for phrases to wrap */
-    transition: opacity 0.5s ease, transform 0.5s ease, font-size 0.3s ease, letter-spacing 0.3s ease;
+    margin-bottom: clamp(50px, 6vw, 90px); /* Fixed spacing to Currently/Previously */
+    max-height: 250px; /* Fixed maximum height */
+    overflow: visible; /* Text shows outside but doesn't affect layout */
+    transition: opacity 0.5s ease, transform 0.5s ease;
 }
 
 .hero-info {
     display: flex;
     gap: clamp(40px, 6vw, 100px);
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: clamp(60px, 5vw, 80px);
 }
 
 .info-block h3 {
@@ -1267,8 +1263,6 @@ a {
         max-width: 100%;
         padding-right: 0;
         margin-bottom: 40px;
-        padding-bottom: 160px; /* Space for absolutely positioned hero-info */
-        position: relative;
     }
     
     /* Add divider before sidebar (before profile picture) */
@@ -1287,8 +1281,7 @@ a {
         margin-top: 0;
     }
     
-    .hero-title,
-    .hero-subtitle {
+    .hero-title {
         font-size: 36px;
         letter-spacing: 2px;
         line-height: 1.3;
@@ -1296,14 +1289,16 @@ a {
     }
     
     .hero-subtitle {
-        min-height: 180px; /* Space for phrases to wrap */
+        font-size: 36px;
+        letter-spacing: 2px;
+        line-height: 1.3;
+        max-width: 100%;
+        max-height: 200px; /* Fixed container height */
+        overflow: visible; /* Text shows but doesn't push layout */
+        margin-bottom: 40px; /* Fixed space to Currently/Previously */
     }
     
     .hero-info {
-        position: absolute !important; /* Force it */
-        bottom: 0 !important;
-        left: 0;
-        right: 0;
         flex-direction: column;
         gap: 24px;
     }
