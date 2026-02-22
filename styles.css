@@ -208,7 +208,7 @@ a {
 
 /* Fixed height container wrapper */
 .phrase-container {
-    height: 260px; /* FIXED - never changes */
+    height: 220px; /* REDUCED from 260px */
     margin-top: clamp(10px, 1.5vw, 25px);
     margin-bottom: clamp(50px, 6vw, 90px);
     position: relative;
@@ -1294,9 +1294,9 @@ a {
     }
     
     .phrase-container {
-        height: 180px; /* FIXED container for mobile */
+        height: 200px; /* INCREASED from 180px for more space */
         margin-top: 10px;
-        margin-bottom: 40px;
+        margin-bottom: 50px; /* INCREASED from 40px */
     }
     
     .hero-subtitle {
