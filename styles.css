@@ -1267,6 +1267,8 @@ a {
         max-width: 100%;
         padding-right: 0;
         margin-bottom: 40px;
+        padding-bottom: 160px; /* Space for absolutely positioned hero-info */
+        position: relative;
     }
     
     /* Add divider before sidebar (before profile picture) */
@@ -1285,11 +1287,6 @@ a {
         margin-top: 0;
     }
     
-    .hero-content {
-        padding-bottom: 160px; /* Space for absolutely positioned hero-info */
-        position: relative;
-    }
-    
     .hero-title,
     .hero-subtitle {
         font-size: 36px;
@@ -1303,8 +1300,8 @@ a {
     }
     
     .hero-info {
-        position: absolute;
-        bottom: 0;
+        position: absolute !important; /* Force it */
+        bottom: 0 !important;
         left: 0;
         right: 0;
         flex-direction: column;
