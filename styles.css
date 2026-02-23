@@ -24,11 +24,21 @@
 /* Font fallbacks - Replace these with your custom fonts later */
 :root {
     --font-heading: 'Qurova', sans-serif;
-    --font-body: 'BrittiSans', sans-serif;    
-    --color-bg: #fdf5f6;
-    --color-text: #000000;
-    --color-text-light: #888888;
-    --color-border: #888888;
+    --font-body: 'BrittiSans', sans-serif;
+    
+    /* OKLCH Colors - Better perceptual uniformity */
+    --color-bg: oklch(98% 0.01 15 / 1); /* #fdf5f6 */
+    --color-text: oklch(0% 0 0 / 1); /* #000000 */
+    --color-text-light: oklch(60% 0 0 / 1); /* #888888 */
+    --color-border: oklch(60% 0 0 / 1); /* #888888 */
+    
+    /* Fallback for older browsers */
+    @supports not (color: oklch(0% 0 0)) {
+        --color-bg: #fdf5f6;
+        --color-text: #000000;
+        --color-text-light: #888888;
+        --color-border: #888888;
+    }
 }
 
 /* ===================================
