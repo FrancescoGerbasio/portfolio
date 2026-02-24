@@ -412,22 +412,78 @@ async function loadMySong() {
         
         if (!song) throw new Error('No song data');
         
+        // Check if online
+        const isOnline = navigator.onLine;
+        
         container.innerHTML = `
-            <div class="song-card" onclick="window.open('${song.youtubeUrl}', '_blank')">
-                <div class="song-artwork">
-                    <img src="${song.artwork}" alt="${song.title}">
+            <div class="song-card" id="songCard" data-youtube-id="${song.youtubeEmbedId || ''}" data-online="${isOnline}">
+                <div class="song-artwork" id="songArtwork">
+                    <img src="${song.artwork}" alt="${song.title}" onerror="this.src='https://via.placeholder.com/500x500?text=BRONX'">
                     <div class="play-overlay">
                         <svg class="play-icon" viewBox="0 0 24 24" fill="white">
                             <path d="M8 5v14l11-7z"/>
                         </svg>
                     </div>
+                    ${isOnline ? `
+                        <iframe 
+                            id="youtubePreview"
+                            style="display:none; position:absolute; top:0; left:0; width:100%; height:100%;"
+                            src=""
+                            frameborder="0"
+                            allow="autoplay; encrypted-media"
+                            allowfullscreen>
+                        </iframe>
+                    ` : ''}
                 </div>
                 <div class="song-info">
                     <h4 class="song-title">${song.title}</h4>
                     <p class="song-artist">${song.artist}</p>
+                    <p class="song-producer">${song.producer}</p>
                 </div>
             </div>
         `;
+        
+        // Add hover video preview if online
+        if (isOnline && song.youtubeEmbedId) {
+            const songCard = document.getElementById('songCard');
+            const artwork = document.getElementById('songArtwork');
+            const iframe = document.getElementById('youtubePreview');
+            
+            let hoverTimeout;
+            
+            songCard.addEventListener('mouseenter', () => {
+                // Delay 500ms before showing video
+                hoverTimeout = setTimeout(() => {
+                    if (iframe) {
+                        iframe.src = `https://www.youtube.com/embed/${song.youtubeEmbedId}?autoplay=1&mute=1&controls=0&modestbranding=1&rel=0`;
+                        artwork.querySelector('img').style.opacity = '0';
+                        artwork.querySelector('.play-overlay').style.opacity = '0';
+                        iframe.style.display = 'block';
+                    }
+                }, 500);
+            });
+            
+            songCard.addEventListener('mouseleave', () => {
+                clearTimeout(hoverTimeout);
+                if (iframe) {
+                    iframe.style.display = 'none';
+                    iframe.src = '';
+                    artwork.querySelector('img').style.opacity = '1';
+                    artwork.querySelector('.play-overlay').style.opacity = '1';
+                }
+            });
+            
+            // Click to open full video
+            songCard.addEventListener('click', () => {
+                window.open(song.youtubeUrl, '_blank');
+            });
+        } else {
+            // No internet or no video ID - just click to open
+            const songCard = document.getElementById('songCard');
+            songCard.addEventListener('click', () => {
+                window.open(song.youtubeUrl, '_blank');
+            });
+        }
         
     } catch (error) {
         console.error('Error loading song:', error);
@@ -435,7 +491,7 @@ async function loadMySong() {
         container.innerHTML = `
             <div class="song-card" onclick="window.open('https://youtu.be/N4ygYzmWhVk', '_blank')">
                 <div class="song-artwork">
-                    <img src="https://via.placeholder.com/300x300" alt="Your Song">
+                    <img src="https://via.placeholder.com/500x500?text=BRONX" alt="BRONX">
                     <div class="play-overlay">
                         <svg class="play-icon" viewBox="0 0 24 24" fill="white">
                             <path d="M8 5v14l11-7z"/>
@@ -443,6 +499,14 @@ async function loadMySong() {
                     </div>
                 </div>
                 <div class="song-info">
+                    <h4 class="song-title">BRONX</h4>
+                    <p class="song-artist">Giovane Soldato feat. Cashmoneynobaby & K3Y</p>
+                    <p class="song-producer">Produced by Francesco Gerbasio</p>
+                </div>
+            </div>
+        `;
+    }
+}
                     <h4 class="song-title">Add your song!</h4>
                     <p class="song-artist">Francesco Gerbasio</p>
                 </div>
