@@ -507,7 +507,6 @@ async function loadMySong() {
         `;
     }
 }
-}
 
 // ===================================
 // MUSIC SECTION - Spotify Artists
