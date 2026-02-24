@@ -133,6 +133,9 @@ async function loadTravelPhotos(country = 'all') {
 function generateFlagButtons() {
     const flagNav = document.getElementById('flagNavigation');
     
+    // Detect Windows (emoji support is poor)
+    const isWindows = navigator.platform.toLowerCase().includes('win');
+    
     // Get unique countries
     const countries = {};
     travelConfig.destinations.forEach(dest => {
@@ -140,7 +143,8 @@ function generateFlagButtons() {
             countries[dest.country] = {
                 name: dest.country.charAt(0).toUpperCase() + dest.country.slice(1),
                 flag: dest.flag,
-                code: dest.country
+                code: dest.country.toUpperCase().substring(0, 2), // HR, IT, ES, etc.
+                countryCode: dest.country
             };
         }
     });
@@ -148,14 +152,20 @@ function generateFlagButtons() {
     // Build buttons HTML
     let buttonsHTML = `
         <button class="flag-btn active" data-country="all">
-            🌍 All
+            All
         </button>
     `;
     
     Object.values(countries).forEach(country => {
+        // Windows: Show only country name (Croatia, Italy, Spain)
+        // Mac/iOS: Show flag emoji + country name (🇭🇷 Croatia)
+        const displayText = isWindows 
+            ? country.name
+            : `${country.flag} ${country.name}`;
+        
         buttonsHTML += `
-            <button class="flag-btn" data-country="${country.code}">
-                ${country.flag} ${country.name}
+            <button class="flag-btn" data-country="${country.countryCode}">
+                ${displayText}
             </button>
         `;
     });
@@ -196,6 +206,9 @@ function displayTravelPhotos(country) {
         filtered = shuffleArray([...filtered]);
     }
     
+    // Hide grid during layout to prevent flash
+    grid.style.opacity = '0';
+    
     // Create cards with click-to-filter functionality
     grid.innerHTML = filtered.map(photo => `
         <div class="travel-card" data-country="${photo.country}">
@@ -233,7 +246,7 @@ function displayTravelPhotos(country) {
         });
     });
     
-    // Apply masonry layout after images load
+    // Apply masonry layout after images load, then show grid
     layoutMasonry();
 }
 
@@ -357,6 +370,11 @@ function layoutMasonry() {
         // Set grid height to tallest column
         const maxHeight = Math.max(...columnHeights);
         grid.style.height = maxHeight + 'px';
+        
+        // Fade in grid after layout is complete
+        setTimeout(() => {
+            grid.style.opacity = '1';
+        }, 50);
         
         console.log('Column heights:', columnHeights.map(h => h.toFixed(0)));
         console.log('All same aspect ratio:', allSameAspect);

@@ -1583,6 +1583,7 @@ html {
 .masonry-grid {
     position: relative;
     width: 100%;
+    transition: opacity 0.3s ease;
 }
 
 .travel-card {
