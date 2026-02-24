@@ -507,8 +507,6 @@ async function loadMySong() {
         `;
     }
 }
-                    <h4 class="song-title">Add your song!</h4>
-                    <p class="song-artist">Francesco Gerbasio</p>
                 </div>
             </div>
         `;
