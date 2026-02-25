@@ -1622,7 +1622,7 @@ html {
         height 0.65s cubic-bezier(0.34, 1.20, 0.64, 1);
 }
 
-.song-card:hover {
+.song-card:has(.song-card-artwork:hover) {
     width: 480px;
     height: 270px;
 }
@@ -1636,7 +1636,7 @@ html {
     transition: transform 0.65s cubic-bezier(0.34, 1.20, 0.64, 1);
 }
 
-.song-card:hover .song-card-inner {
+.song-card:has(.song-card-artwork:hover) .song-card-inner {
     transform: rotateY(180deg);
 }
 
@@ -1695,12 +1695,15 @@ html {
     transition: background-position 0s;
 }
 
-.song-card:hover .song-card-artwork::after {
+.song-card:has(.song-card-artwork:hover) .song-card-artwork::after {
     background-position: 200% 0;
     transition: background-position 0.45s ease;
 }
 
-/* Frosted glass info bar */
+.song-card:has(.song-card-artwork:hover) .song-card-play-btn {
+    background: rgba(255,255,255,0.2);
+    transform: scale(1.08);
+}
 .song-card-info {
     padding: 14px 16px 16px;
     background: rgba(10, 10, 10, 0.72);

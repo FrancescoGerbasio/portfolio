@@ -270,19 +270,30 @@ async function loadMySong() {
             </div>
         `;
 
-        const songCard = document.getElementById('songCard');
+        const songCard   = document.getElementById('songCard');
+        const artwork    = songCard.querySelector('.song-card-artwork');
 
         if (canPreview) {
             const iframe   = document.getElementById('youtubePreview');
             const embedSrc = `https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&controls=0&modestbranding=1&rel=0&iv_load_policy=3&playsinline=1`;
             let hoverTimer = null;
 
-            songCard.addEventListener('mouseenter', () => {
+            // Only trigger on artwork hover — info bar / play button stays stable
+            artwork.addEventListener('mouseenter', () => {
                 hoverTimer = setTimeout(() => { iframe.src = embedSrc; }, 350);
             });
-            songCard.addEventListener('mouseleave', () => {
+            artwork.addEventListener('mouseleave', () => {
                 clearTimeout(hoverTimer);
                 iframe.src = '';
+            });
+        }
+
+        // Play button clicks open YouTube directly
+        const playBtn = songCard.querySelector('.song-card-play-btn');
+        if (playBtn) {
+            playBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                window.open(song.youtubeUrl, '_blank');
             });
         }
 
