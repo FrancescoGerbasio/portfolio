@@ -1589,7 +1589,7 @@ html {
 }
 
 /* ===================================
-   MUSIC SECTION
+   MUSIC SECTION - Apple-Grade Song Card
    =================================== */
 
 .music-category {
@@ -1609,101 +1609,290 @@ html {
     flex-wrap: wrap;
 }
 
+/* ── Outer wrapper: holds the 3D perspective & drives the shape change ── */
 .song-card {
+    position: relative;
     width: 300px;
-    background: white;
-    border: 1px solid var(--color-border);
-    border-radius: 12px;
-    overflow: hidden;
-    transition: all 0.3s ease;
+    height: 300px; /* starts square */
+    perspective: 1200px;
     cursor: pointer;
+    /* Spring-like expand on hover */
+    transition:
+        width  0.65s cubic-bezier(0.34, 1.20, 0.64, 1),
+        height 0.65s cubic-bezier(0.34, 1.20, 0.64, 1);
+    flex-shrink: 0;
 }
 
+/* Hover → expand to 16:9 (480 × 270) */
 .song-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.1);
+    width: 480px;
+    height: 270px;
 }
 
-.song-artwork {
+/* ── 3D flip container ── */
+.song-card-inner {
     position: relative;
     width: 100%;
-    aspect-ratio: 1;
+    height: 100%;
+    transform-style: preserve-3d;
+    transition: transform 0.65s cubic-bezier(0.34, 1.20, 0.64, 1);
+    border-radius: 18px;
+}
+
+.song-card:hover .song-card-inner {
+    transform: rotateY(180deg);
+}
+
+/* ── Shared face styles ── */
+.song-card-front,
+.song-card-back {
+    position: absolute;
+    inset: 0;
+    border-radius: 18px;
+    overflow: hidden;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+}
+
+/* ══════════════════════════════════════
+   FRONT FACE — Artwork + Song Info
+   ══════════════════════════════════════ */
+.song-card-front {
+    background: #000;
+    /* Apple-style triple-layer shadow */
+    box-shadow:
+        0 1px 2px  rgba(0,0,0,0.10),
+        0 8px 24px rgba(0,0,0,0.12),
+        0 24px 48px rgba(0,0,0,0.08);
+    border: 0.5px solid rgba(255,255,255,0.12);
+    display: flex;
+    flex-direction: column;
+}
+
+/* Artwork fills ~75% of the front */
+.song-card-artwork {
+    position: relative;
+    flex: 1;
     overflow: hidden;
 }
 
-.song-artwork img {
+.song-card-artwork img {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transition: opacity 0.4s ease;
+    display: block;
+    transition: transform 0.65s cubic-bezier(0.34, 1.20, 0.64, 1);
 }
 
-.song-card:hover .song-artwork img {
-    transform: scale(1.05);
-}
-
-.play-overlay {
+/* Subtle grain overlay (Apple adds noise to depth) */
+.song-card-artwork::before {
+    content: '';
     position: absolute;
     inset: 0;
-    background: rgba(0, 0, 0, 0.5);
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    background-size: 128px;
+    mix-blend-mode: overlay;
+    pointer-events: none;
+    z-index: 2;
+    opacity: 0.6;
+}
+
+/* Shine sweep on hover — runs before the flip */
+.song-card-artwork::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        105deg,
+        transparent 30%,
+        rgba(255,255,255,0.18) 50%,
+        transparent 70%
+    );
+    background-size: 200% 100%;
+    background-position: -100% 0;
+    z-index: 3;
+    pointer-events: none;
+    transition: background-position 0s;
+}
+
+.song-card:hover .song-card-artwork::after {
+    background-position: 200% 0;
+    transition: background-position 0.45s ease;
+}
+
+/* Frosted glass info bar at bottom of front */
+.song-card-info {
+    position: relative;
+    padding: 14px 16px 16px;
+    background: rgba(10, 10, 10, 0.72);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border-top: 0.5px solid rgba(255,255,255,0.08);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    z-index: 4;
+}
+
+/* Animated waveform bars (visible when preview would be active) */
+.song-card-waveform {
+    display: flex;
+    align-items: flex-end;
+    gap: 2px;
+    height: 18px;
+    flex-shrink: 0;
+}
+
+.song-card-waveform span {
+    display: block;
+    width: 3px;
+    background: rgba(255,255,255,0.5);
+    border-radius: 2px;
+    animation: waveBar 1s ease-in-out infinite;
+}
+
+.song-card-waveform span:nth-child(1) { height: 40%; animation-delay: 0s;    }
+.song-card-waveform span:nth-child(2) { height: 80%; animation-delay: 0.15s; }
+.song-card-waveform span:nth-child(3) { height: 55%; animation-delay: 0.3s;  }
+.song-card-waveform span:nth-child(4) { height: 90%; animation-delay: 0.1s;  }
+
+@keyframes waveBar {
+    0%, 100% { transform: scaleY(1);   opacity: 0.5; }
+    50%       { transform: scaleY(1.8); opacity: 1;   }
+}
+
+.song-card-text {
+    flex: 1;
+    min-width: 0; /* allow text truncation */
+}
+
+.song-card-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: rgba(255,255,255,0.95);
+    letter-spacing: -0.01em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin: 0 0 2px;
+    line-height: 1.3;
+}
+
+.song-card-artist {
+    font-size: 11px;
+    font-weight: 400;
+    color: rgba(255,255,255,0.45);
+    letter-spacing: 0.01em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin: 0;
+    line-height: 1.3;
+}
+
+.song-card-producer {
+    font-size: 10px;
+    font-weight: 500;
+    color: rgba(255,255,255,0.28);
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    margin: 4px 0 0;
+    line-height: 1.3;
+}
+
+/* Small play chevron */
+.song-card-play-btn {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.12);
+    border: 0.5px solid rgba(255,255,255,0.18);
     display: flex;
     align-items: center;
     justify-content: center;
-    opacity: 0;
-    transition: opacity 0.4s ease;
-    z-index: 1;
+    flex-shrink: 0;
+    transition: background 0.2s ease, transform 0.2s ease;
 }
 
-.song-card:hover .play-overlay {
-    opacity: 1;
+.song-card:hover .song-card-play-btn {
+    background: rgba(255,255,255,0.2);
+    transform: scale(1.08);
 }
 
-.play-icon {
-    width: 64px;
-    height: 64px;
+.song-card-play-btn svg {
+    width: 12px;
+    height: 12px;
+    fill: white;
+    margin-left: 2px; /* optical center for play triangle */
 }
 
-/* YouTube iframe inside song artwork */
+/* ══════════════════════════════════════
+   BACK FACE — YouTube 16:9 Video
+   ══════════════════════════════════════ */
+.song-card-back {
+    transform: rotateY(180deg);
+    background: #000;
+    box-shadow:
+        0 1px 2px  rgba(0,0,0,0.10),
+        0 8px 24px rgba(0,0,0,0.12),
+        0 24px 48px rgba(0,0,0,0.08);
+    border: 0.5px solid rgba(255,255,255,0.12);
+}
+
+/* iframe fills the whole back face */
 #youtubePreview {
     position: absolute;
-    top: 0;
-    left: 0;
+    inset: 0;
     width: 100%;
     height: 100%;
     border: none;
-    opacity: 0;
-    transition: opacity 0.4s ease;
-    z-index: 2;
-    pointer-events: none;
+    pointer-events: none; /* click goes to card → opens YouTube */
+    border-radius: 18px;
 }
 
-/* "Preview" live badge - bottom left corner */
-.preview-badge {
+/* Minimal overlay: title + "Now Previewing" — bottom strip */
+.song-card-back-overlay {
     position: absolute;
-    bottom: 12px;
-    left: 12px;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 20px 16px 14px;
+    background: linear-gradient(to top, rgba(0,0,0,0.75) 0%, transparent 100%);
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    z-index: 5;
+    border-radius: 0 0 18px 18px;
+}
+
+.song-card-back-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: rgba(255,255,255,0.9);
+    letter-spacing: -0.01em;
+    margin: 0;
+}
+
+/* Live preview pill */
+.preview-badge {
     display: flex;
     align-items: center;
-    gap: 6px;
-    background: rgba(0, 0, 0, 0.65);
+    gap: 5px;
+    background: rgba(0,0,0,0.55);
     color: white;
-    font-size: 12px;
+    font-size: 11px;
     font-weight: 600;
-    padding: 5px 10px;
+    padding: 4px 9px;
     border-radius: 20px;
-    opacity: 0;
-    transition: opacity 0.4s ease;
-    z-index: 3;
-    pointer-events: none;
-    letter-spacing: 0.5px;
-    backdrop-filter: blur(4px);
-    -webkit-backdrop-filter: blur(4px);
+    letter-spacing: 0.02em;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 0.5px solid rgba(255,255,255,0.15);
 }
 
-/* Pulsing red dot */
 .preview-dot {
-    width: 7px;
-    height: 7px;
+    width: 6px;
+    height: 6px;
     background: #ff3b30;
     border-radius: 50%;
     animation: pulse-dot 1.4s ease-in-out infinite;
@@ -1715,30 +1904,28 @@ html {
     50%       { opacity: 0.4; transform: scale(0.7); }
 }
 
-.song-info {
-    padding: 20px;
+/* ── Responsive ── */
+@media (max-width: 768px) {
+    .my-music-container {
+        justify-content: center;
+    }
+
+    /* Disable flip on mobile — just tap to open */
+    .song-card {
+        width: 280px;
+        height: 280px;
+    }
+
+    .song-card:hover {
+        width: 280px;
+        height: 280px;
+    }
+
+    .song-card:hover .song-card-inner {
+        transform: none;
+    }
 }
 
-.song-title {
-    font-size: 18px;
-    font-weight: 600;
-    margin: 0 0 8px 0;
-    color: var(--color-text);
-}
-
-.song-artist {
-    font-size: 14px;
-    color: var(--color-text-light);
-    margin: 0 0 4px 0;
-}
-
-.song-producer {
-    font-size: 12px;
-    color: var(--color-text-light);
-    font-style: italic;
-    margin: 0;
-    opacity: 0.8;
-}
 
 /* ===================================
    ARTISTS GRID
