@@ -1636,7 +1636,7 @@ html {
     height: 100%;
     transform-style: preserve-3d;
     transition: transform 0.65s cubic-bezier(0.34, 1.20, 0.64, 1);
-    border-radius: 18px;
+    /* border-radius on inner via faces, not here — preserves 3D context */
 }
 
 .song-card:hover .song-card-inner {
@@ -1644,14 +1644,18 @@ html {
 }
 
 /* ── Shared face styles ── */
+/* IMPORTANT: overflow:hidden breaks backface-visibility in Chrome/Safari.
+   Use border-radius + clip via the wrapper instead. */
 .song-card-front,
 .song-card-back {
     position: absolute;
     inset: 0;
     border-radius: 18px;
-    overflow: hidden;
+    /* overflow: hidden is intentionally NOT set here — it breaks 3D */
     backface-visibility: hidden;
     -webkit-backface-visibility: hidden;
+    /* Clip children to border-radius without breaking 3D */
+    isolation: isolate;
 }
 
 /* ══════════════════════════════════════
@@ -1659,14 +1663,15 @@ html {
    ══════════════════════════════════════ */
 .song-card-front {
     background: #000;
-    /* Apple-style triple-layer shadow */
     box-shadow:
         0 1px 2px  rgba(0,0,0,0.10),
-        0 8px 24px rgba(0,0,0,0.12),
-        0 24px 48px rgba(0,0,0,0.08);
+        0 8px 24px rgba(0,0,0,0.14),
+        0 24px 48px rgba(0,0,0,0.10);
     border: 0.5px solid rgba(255,255,255,0.12);
     display: flex;
     flex-direction: column;
+    /* Clip children to rounded corners without breaking backface-visibility */
+    clip-path: inset(0 round 18px);
 }
 
 /* Artwork fills ~75% of the front */
@@ -1834,9 +1839,11 @@ html {
     background: #000;
     box-shadow:
         0 1px 2px  rgba(0,0,0,0.10),
-        0 8px 24px rgba(0,0,0,0.12),
-        0 24px 48px rgba(0,0,0,0.08);
+        0 8px 24px rgba(0,0,0,0.14),
+        0 24px 48px rgba(0,0,0,0.10);
     border: 0.5px solid rgba(255,255,255,0.12);
+    /* Clip children to rounded corners without breaking backface-visibility */
+    clip-path: inset(0 round 18px);
 }
 
 /* iframe fills the whole back face */
@@ -1863,6 +1870,8 @@ html {
     justify-content: space-between;
     z-index: 5;
     border-radius: 0 0 18px 18px;
+    /* Counter-rotate so text reads correctly after the card flips */
+    transform: rotateY(180deg);
 }
 
 .song-card-back-title {
