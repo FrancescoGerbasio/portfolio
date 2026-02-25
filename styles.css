@@ -218,7 +218,7 @@ a {
 
 /* Fixed height container wrapper */
 .phrase-container {
-    height: 220px; /* REDUCED from 260px */
+    height: 220px;
     margin-top: clamp(10px, 1.5vw, 25px);
     margin-bottom: clamp(50px, 6vw, 90px);
     position: relative;
@@ -592,7 +592,6 @@ a {
 
 /* ===================================
    OTHER PROJECTS ACCORDION
-   Expandable list for additional contributions
    =================================== */
 
 .other-projects-accordion {
@@ -673,7 +672,6 @@ a {
     color: inherit;
 }
 
-/* Only clickable items get hover effect */
 .project-list-item.clickable {
     cursor: pointer;
 }
@@ -683,7 +681,6 @@ a {
     border-color: var(--color-text);
 }
 
-/* NDA protected items - no hover */
 .project-list-item.nda-protected-item {
     cursor: default;
 }
@@ -694,7 +691,6 @@ a {
     transform: none;
 }
 
-/* NDA Protected accordion items */
 .project-list-item.nda-protected-item .nda-hidden-text {
     color: transparent !important;
     user-select: none !important;
@@ -736,7 +732,6 @@ a {
     opacity: 0.7;
 }
 
-/* Mobile adjustments */
 @media (max-width: 768px) {
     .accordion-trigger {
         padding: 16px 20px;
@@ -817,7 +812,6 @@ a {
     position: relative;
 }
 
-/* NDA Protected Project */
 .project-card.nda-protected .project-image {
     position: relative;
     overflow: hidden;
@@ -854,7 +848,6 @@ a {
     transition: filter 0.5s ease, transform 0.5s ease;
 }
 
-/* Hidden text - simple transparent with particles overlaid by JS */
 .project-card.nda-protected .nda-hidden-text,
 .project-card.nda-protected .project-title {
     color: transparent !important;
@@ -874,24 +867,15 @@ a {
     animation: text-reveal 1s ease-out forwards;
 }
 
-/* Particle system */
 .particle-container {
     z-index: 1;
 }
 
 @keyframes particle-drift {
-    0%, 100% {
-        transform: translate(0, 0);
-    }
-    25% {
-        transform: translate(-10px, -15px);
-    }
-    50% {
-        transform: translate(15px, 10px);
-    }
-    75% {
-        transform: translate(-5px, 20px);
-    }
+    0%, 100% { transform: translate(0, 0); }
+    25%       { transform: translate(-10px, -15px); }
+    50%       { transform: translate(15px, 10px); }
+    75%       { transform: translate(-5px, 20px); }
 }
 
 .project-card.nda-protected.unlocked .particle-container {
@@ -899,25 +883,13 @@ a {
 }
 
 @keyframes particles-disperse {
-    0% {
-        opacity: 1;
-        transform: scale(1);
-    }
-    100% {
-        opacity: 0;
-        transform: scale(1.5) translateY(-50px);
-    }
+    0%   { opacity: 1; transform: scale(1); }
+    100% { opacity: 0; transform: scale(1.5) translateY(-50px); }
 }
 
 @keyframes text-reveal {
-    0% {
-        opacity: 0;
-        filter: blur(10px);
-    }
-    100% {
-        opacity: 1;
-        filter: blur(0);
-    }
+    0%   { opacity: 0; filter: blur(10px); }
+    100% { opacity: 1; filter: blur(0); }
 }
 
 .nda-overlay {
@@ -1035,7 +1007,7 @@ a {
    =================================== */
 
 .hamburger-menu {
-    display: none; /* Hidden by default on desktop */
+    display: none;
     position: fixed;
     top: 20px;
     right: 20px;
@@ -1056,7 +1028,6 @@ a {
     border-radius: 2px;
 }
 
-/* Hamburger animation when menu is open */
 .hamburger-menu.active span:nth-child(1) {
     transform: rotate(-45deg) translate(-6px, 6px);
 }
@@ -1069,7 +1040,6 @@ a {
     transform: rotate(45deg) translate(-6px, -6px);
 }
 
-/* Mobile menu overlay - floats on top of content */
 .mobile-menu {
     display: none;
     position: fixed;
@@ -1118,7 +1088,6 @@ a {
     background-color: rgba(136, 136, 136, 0.25);
 }
 
-/* Remove backdrop - menu floats on content */
 .menu-backdrop {
     display: none;
 }
@@ -1127,7 +1096,6 @@ a {
    RESPONSIVE DESIGN
    =================================== */
 
-/* Tablets and smaller (1200px and below) */
 @media (max-width: 1200px) {
     .navigation {
         top: 1.5%;
@@ -1150,7 +1118,6 @@ a {
         margin-bottom: 40px;
     }
     
-    /* Add horizontal divider before sidebar on tablet */
     .sidebar::before {
         content: '';
         display: block;
@@ -1171,14 +1138,11 @@ a {
     }
 }
 
-/* Hamburger menu fade zone - hides content scrolling behind it (mobile only) */
 .hamburger-fade-zone {
     display: none;
 }
 
-/* Mobile */
 @media (max-width: 768px) {
-    /* Simple clean fade zone at the top */
     .hamburger-fade-zone {
         display: block;
         position: fixed;
@@ -1205,12 +1169,10 @@ a {
         padding: 25px 20px;
     }
     
-    /* Hide desktop location widget */
     .location-widget-compact {
         display: none;
     }
     
-    /* Show mobile location widget in top-left */
     .location-widget-mobile {
         display: flex;
         position: fixed;
@@ -1253,12 +1215,10 @@ a {
         line-height: 1.2;
     }
     
-    /* Show hamburger menu on mobile */
     .hamburger-menu {
         display: block;
     }
     
-    /* Hide regular navigation on mobile */
     .navigation {
         display: none;
     }
@@ -1269,7 +1229,6 @@ a {
         margin-bottom: 60px;
     }
     
-    /* Remove the pseudo-element divider from hero */
     .hero::after {
         display: none;
     }
@@ -1280,7 +1239,6 @@ a {
         margin-bottom: 40px;
     }
     
-    /* Add divider before sidebar (before profile picture) */
     .sidebar::before {
         content: '';
         display: block;
@@ -1304,9 +1262,9 @@ a {
     }
     
     .phrase-container {
-        height: 200px; /* INCREASED from 180px for more space */
+        height: 200px;
         margin-top: 10px;
-        margin-bottom: 50px; /* INCREASED from 40px */
+        margin-bottom: 50px;
     }
     
     .hero-subtitle {
@@ -1399,6 +1357,7 @@ html {
         transform: translateY(0);
     }
 }
+
 /* ===================================
    FUN PAGE
    =================================== */
@@ -1410,7 +1369,6 @@ html {
     color: var(--color-text);
 }
 
-/* Category Navigation at Top Right */
 .category-nav-top {
     display: flex;
     gap: 24px;
@@ -1444,7 +1402,6 @@ html {
     border-bottom-color: var(--color-text);
 }
 
-/* Category Subtitle - Body Text */
 .category-subtitle {
     font-size: clamp(16px, 1.5vw, 18px);
     line-height: 1.6;
@@ -1456,7 +1413,6 @@ html {
     transition: opacity 0.3s ease;
 }
 
-/* Justify text on mobile for better readability */
 @media (max-width: 768px) {
     .category-subtitle {
         text-align: justify;
@@ -1467,7 +1423,6 @@ html {
     }
 }
 
-/* Category Sections */
 .category-section {
     display: none;
     animation: fadeIn 0.5s ease;
@@ -1475,17 +1430,6 @@ html {
 
 .category-section.active {
     display: block;
-}
-
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
 }
 
 .fun-section {
@@ -1499,7 +1443,10 @@ html {
     color: var(--color-text);
 }
 
-/* Flag Navigation */
+/* ===================================
+   FLAG NAVIGATION
+   =================================== */
+
 .flag-navigation {
     display: flex;
     gap: 12px;
@@ -1507,7 +1454,7 @@ html {
     overflow-x: auto;
     overflow-y: hidden;
     padding-bottom: 8px;
-    padding-top: 4px; /* Prevent cut-off during hover lift */
+    padding-top: 4px;
     position: relative;
     scroll-behavior: smooth;
     scrollbar-width: none;
@@ -1516,10 +1463,9 @@ html {
 }
 
 .flag-navigation::-webkit-scrollbar {
-    display: none; /* Chrome/Safari */
+    display: none;
 }
 
-/* Mobile: Negative margin to extend to screen edge */
 @media (max-width: 768px) {
     .flag-navigation {
         margin-left: -20px;
@@ -1547,7 +1493,6 @@ html {
     flex-shrink: 0;
 }
 
-/* Hover state (desktop only) - lighter style to differentiate from active */
 @media (hover: hover) {
     .flag-btn:hover:not(.active) {
         background: rgba(0, 0, 0, 0.05);
@@ -1556,7 +1501,6 @@ html {
     }
 }
 
-/* Active/selected state - full black */
 .flag-btn.active {
     background: var(--color-text);
     color: white;
@@ -1564,7 +1508,6 @@ html {
     transform: translateY(0);
 }
 
-/* Prevent accidental hover styling on mobile during scroll */
 @media (max-width: 768px) {
     .flag-btn:hover:not(.active) {
         background: white;
@@ -1573,13 +1516,10 @@ html {
     }
 }
 
-/* Masonry Grid for Travel - Using CSS Columns */
-.masonry-grid {
-    column-count: 4;
-    column-gap: 20px;
-}
+/* ===================================
+   MASONRY GRID
+   =================================== */
 
-/* Masonry Grid - JavaScript Positioned */
 .masonry-grid {
     position: relative;
     width: 100%;
@@ -1612,7 +1552,6 @@ html {
     transform: scale(1.05);
 }
 
-/* Location overlay - hidden by default, shows on hover */
 .travel-card-location {
     position: absolute;
     bottom: 0;
@@ -1649,7 +1588,10 @@ html {
     font-weight: 600;
 }
 
-/* Music Category */
+/* ===================================
+   MUSIC SECTION
+   =================================== */
+
 .music-category {
     margin-bottom: 60px;
 }
@@ -1661,7 +1603,6 @@ html {
     color: var(--color-text);
 }
 
-/* My Music Container */
 .my-music-container {
     display: flex;
     gap: 24px;
@@ -1694,7 +1635,7 @@ html {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transition: transform 0.3s ease;
+    transition: opacity 0.4s ease;
 }
 
 .song-card:hover .song-artwork img {
@@ -1709,7 +1650,8 @@ html {
     align-items: center;
     justify-content: center;
     opacity: 0;
-    transition: opacity 0.3s ease;
+    transition: opacity 0.4s ease;
+    z-index: 1;
 }
 
 .song-card:hover .play-overlay {
@@ -1719,6 +1661,58 @@ html {
 .play-icon {
     width: 64px;
     height: 64px;
+}
+
+/* YouTube iframe inside song artwork */
+#youtubePreview {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    z-index: 2;
+    pointer-events: none;
+}
+
+/* "Preview" live badge - bottom left corner */
+.preview-badge {
+    position: absolute;
+    bottom: 12px;
+    left: 12px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(0, 0, 0, 0.65);
+    color: white;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 5px 10px;
+    border-radius: 20px;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    z-index: 3;
+    pointer-events: none;
+    letter-spacing: 0.5px;
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+}
+
+/* Pulsing red dot */
+.preview-dot {
+    width: 7px;
+    height: 7px;
+    background: #ff3b30;
+    border-radius: 50%;
+    animation: pulse-dot 1.4s ease-in-out infinite;
+    flex-shrink: 0;
+}
+
+@keyframes pulse-dot {
+    0%, 100% { opacity: 1;   transform: scale(1);   }
+    50%       { opacity: 0.4; transform: scale(0.7); }
 }
 
 .song-info {
@@ -1746,17 +1740,10 @@ html {
     opacity: 0.8;
 }
 
-.song-artwork {
-    position: relative;
-    overflow: hidden;
-}
+/* ===================================
+   ARTISTS GRID
+   =================================== */
 
-.song-artwork img,
-.song-artwork .play-overlay {
-    transition: opacity 0.3s ease;
-}
-
-/* Artists Grid */
 .artists-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
@@ -1807,7 +1794,10 @@ html {
     color: var(--color-text);
 }
 
-/* Games Grid */
+/* ===================================
+   GAMES GRID
+   =================================== */
+
 .games-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
@@ -1861,7 +1851,10 @@ html {
     margin: 0;
 }
 
-/* Loading State */
+/* ===================================
+   LOADING STATE
+   =================================== */
+
 .loading-state {
     text-align: center;
     padding: 60px 20px;
@@ -1887,22 +1880,17 @@ html {
     margin: 0;
 }
 
-/* Responsive */
-@media (max-width: 1400px) {
-    /* Masonry columns handled by JavaScript */
-}
+/* ===================================
+   RESPONSIVE - FUN PAGE
+   =================================== */
 
 @media (max-width: 1024px) {
-    /* Masonry columns handled by JavaScript */
-    
     .artists-grid {
         grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
     }
 }
 
 @media (max-width: 768px) {
-    /* Masonry columns handled by JavaScript */
-    
     .my-music-container {
         justify-content: center;
     }

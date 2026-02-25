@@ -7,13 +7,12 @@ const musicData = {
         title: 'BRONX',
         artist: 'Giovane Soldato feat. Cashmoneynobaby & K3Y',
         producer: 'Produced by Francesco Gerbasio',
-        artwork: 'Assets/Images/Music/Bronx.webp',  // Add your artwork here
-        youtubeUrl: 'https://youtu.be/d2nUN5jcyfE?si=RycWPCsKHkMKrIsQ',  // Update with actual BRONX video URL
-        youtubeEmbedId: 'https://www.youtube.com/embed/d2nUN5jcyfE?si=RycWPCsKHkMKrIsQ'  // Just the video ID for embedding
+        artwork: 'Assets/Images/Music/Bronx.webp',
+        youtubeUrl: 'https://youtu.be/d2nUN5jcyfE?si=RycWPCsKHkMKrIsQ',
+        youtubeEmbedId: 'd2nUN5jcyfE'  // ← Just the video ID, not the full URL
     },
     
     // Favorite Artists
-    // You can find artist images on Spotify Web or Google Images
     artists: [
         // Italian Artists
         {

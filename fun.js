@@ -98,14 +98,13 @@ async function loadTravelPhotos(country = 'all') {
             generateFlagButtons();
         }
         
-        // Build photo list from config (no need to check if images exist)
+        // Build photo list from config
         const allPhotos = [];
         
         for (const destination of travelConfig.destinations) {
             const folderPath = `Assets/Images/Travel/${destination.folder}`;
             const photoCount = destination.photoCount || 0;
             
-            // Generate photo entries based on photoCount
             for (let i = 1; i <= photoCount; i++) {
                 allPhotos.push({
                     id: `${destination.folder}-${i}`,
@@ -133,23 +132,20 @@ async function loadTravelPhotos(country = 'all') {
 function generateFlagButtons() {
     const flagNav = document.getElementById('flagNavigation');
     
-    // Detect Windows (emoji support is poor)
     const isWindows = navigator.platform.toLowerCase().includes('win');
     
-    // Get unique countries
     const countries = {};
     travelConfig.destinations.forEach(dest => {
         if (!countries[dest.country]) {
             countries[dest.country] = {
                 name: dest.country.charAt(0).toUpperCase() + dest.country.slice(1),
                 flag: dest.flag,
-                code: dest.country.toUpperCase().substring(0, 2), // HR, IT, ES, etc.
+                code: dest.country.toUpperCase().substring(0, 2),
                 countryCode: dest.country
             };
         }
     });
     
-    // Build buttons HTML
     let buttonsHTML = `
         <button class="flag-btn active" data-country="all">
             All
@@ -157,8 +153,6 @@ function generateFlagButtons() {
     `;
     
     Object.values(countries).forEach(country => {
-        // Windows: Show only country name (Croatia, Italy, Spain)
-        // Mac/iOS: Show flag emoji + country name (🇭🇷 Croatia)
         const displayText = isWindows 
             ? country.name
             : `${country.flag} ${country.name}`;
@@ -172,17 +166,11 @@ function generateFlagButtons() {
     
     flagNav.innerHTML = buttonsHTML;
     
-    // Re-attach click listeners
     flagNav.querySelectorAll('.flag-btn').forEach(btn => {
         btn.addEventListener('click', function() {
-            // Update active state
             flagNav.querySelectorAll('.flag-btn').forEach(b => b.classList.remove('active'));
             this.classList.add('active');
-            
-            // Scroll button into view (centered)
             this.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
-            
-            // Load photos for selected country
             const country = this.getAttribute('data-country');
             currentCountry = country;
             displayTravelPhotos(country);
@@ -201,15 +189,12 @@ function displayTravelPhotos(country) {
         return;
     }
     
-    // Shuffle photos when "all" is selected for nice mixed layout
     if (country === 'all') {
         filtered = shuffleArray([...filtered]);
     }
     
-    // Hide grid during layout to prevent flash
     grid.style.opacity = '0';
     
-    // Create cards with click-to-filter functionality
     grid.innerHTML = filtered.map(photo => `
         <div class="travel-card" data-country="${photo.country}">
             <img src="${photo.image}" alt="${photo.location}" loading="lazy">
@@ -220,25 +205,20 @@ function displayTravelPhotos(country) {
         </div>
     `).join('');
     
-    // Add click listeners to cards
     grid.querySelectorAll('.travel-card').forEach(card => {
         card.addEventListener('click', () => {
             const clickedCountry = card.getAttribute('data-country');
             
-            // Update flag button active state
             document.querySelectorAll('.flag-btn').forEach(btn => {
                 btn.classList.remove('active');
                 if (btn.getAttribute('data-country') === clickedCountry) {
                     btn.classList.add('active');
-                    // Scroll the active flag button into view
                     btn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
                 }
             });
             
-            // Filter photos by clicked country
             displayTravelPhotos(clickedCountry);
             
-            // Smooth scroll to top of gallery
             document.getElementById('travel-section').scrollIntoView({ 
                 behavior: 'smooth', 
                 block: 'start' 
@@ -246,18 +226,15 @@ function displayTravelPhotos(country) {
         });
     });
     
-    // Apply masonry layout after images load, then show grid
     layoutMasonry();
 }
 
-// Fisher-Yates shuffle algorithm (deterministic with seed)
+// Fisher-Yates shuffle with seed
 function shuffleArray(array) {
     const shuffled = [...array];
-    // Use a seed so shuffle is consistent across page loads
     let seed = 12345;
     
     for (let i = shuffled.length - 1; i > 0; i--) {
-        // Seeded random
         seed = (seed * 9301 + 49297) % 233280;
         const random = seed / 233280;
         const j = Math.floor(random * (i + 1));
@@ -267,13 +244,12 @@ function shuffleArray(array) {
     return shuffled;
 }
 
-// Masonry layout function - works in all browsers
+// Masonry layout
 function layoutMasonry() {
     const grid = document.getElementById('travelGrid');
     const cards = Array.from(grid.querySelectorAll('.travel-card'));
     const gap = 20;
     
-    // Responsive column count
     const windowWidth = window.innerWidth;
     let columns;
     if (windowWidth > 1400) {
@@ -286,15 +262,11 @@ function layoutMasonry() {
         columns = 1;
     }
     
-    console.log('Masonry layout:', columns, 'columns for width', windowWidth);
-    
-    // Wait for images to load
     const imagePromises = cards.map(card => {
         const img = card.querySelector('img');
         return new Promise(resolve => {
-            if (img.complete) {
-                resolve();
-            } else {
+            if (img.complete) resolve();
+            else {
                 img.onload = () => resolve();
                 img.onerror = () => resolve();
             }
@@ -302,14 +274,10 @@ function layoutMasonry() {
     });
     
     Promise.all(imagePromises).then(() => {
-        // Calculate column width
         const gridWidth = grid.offsetWidth;
         const columnWidth = (gridWidth - (gap * (columns - 1))) / columns;
-        
-        // Track height of each column
         const columnHeights = Array(columns).fill(0);
         
-        // Check if all images have same aspect ratio
         let allSameAspect = true;
         let firstAspect = null;
         
@@ -318,10 +286,7 @@ function layoutMasonry() {
             const imgWidth = img.naturalWidth || img.width;
             const imgHeight = img.naturalHeight || img.height;
             
-            if (!imgWidth || !imgHeight) {
-                console.warn('Image dimensions not available for card', index);
-                return;
-            }
+            if (!imgWidth || !imgHeight) return;
             
             const aspectRatio = imgHeight / imgWidth;
             
@@ -333,18 +298,13 @@ function layoutMasonry() {
             
             let cardHeight = columnWidth * aspectRatio;
             
-            // If all same aspect, add random variation for visual interest
             if (allSameAspect && columns > 1) {
-                // Deterministic "random" based on index (consistent across refreshes)
                 const seed = (index * 7919) % 100;
-                const variation = (seed / 100) * 0.3 - 0.15; // -15% to +15%
+                const variation = (seed / 100) * 0.3 - 0.15;
                 cardHeight = cardHeight * (1 + variation);
             }
             
-            // Find shortest column
             const shortestColumn = columnHeights.indexOf(Math.min(...columnHeights));
-            
-            // Position card
             const left = shortestColumn * (columnWidth + gap);
             const top = columnHeights[shortestColumn];
             
@@ -354,34 +314,24 @@ function layoutMasonry() {
             card.style.width = columnWidth + 'px';
             card.style.height = cardHeight + 'px';
             
-            // Set image height to match card
             const cardImg = card.querySelector('img');
             if (cardImg) {
                 cardImg.style.height = cardHeight + 'px';
                 cardImg.style.objectFit = 'cover';
             }
             
-            console.log(`Card ${index}: column ${shortestColumn}, top ${top.toFixed(0)}px, height ${cardHeight.toFixed(0)}px, aspect ${aspectRatio.toFixed(2)}`);
-            
-            // Update column height
             columnHeights[shortestColumn] += cardHeight + gap;
         });
         
-        // Set grid height to tallest column
         const maxHeight = Math.max(...columnHeights);
         grid.style.height = maxHeight + 'px';
         
-        // Fade in grid after layout is complete
         setTimeout(() => {
             grid.style.opacity = '1';
         }, 50);
-        
-        console.log('Column heights:', columnHeights.map(h => h.toFixed(0)));
-        console.log('All same aspect ratio:', allSameAspect);
     });
 }
 
-// Re-layout on window resize
 let resizeTimer;
 window.addEventListener('resize', () => {
     clearTimeout(resizeTimer);
@@ -393,47 +343,64 @@ window.addEventListener('resize', () => {
 });
 
 // ===================================
-// MUSIC SECTION - Local Data
+// MUSIC SECTION - My Song with Hover Video Preview
 // ===================================
 
 async function loadMySong() {
     const container = document.getElementById('myMusicContainer');
     
     try {
-        // Load from local data file
         const response = await fetch('data-music.js');
         const scriptText = await response.text();
         
-        // Extract musicData from the script
         const tempFunc = new Function(scriptText + '; return musicData;');
         const musicData = tempFunc();
         
         const song = musicData?.mySong;
-        
         if (!song) throw new Error('No song data');
-        
-        // Check if online
+
+        // youtubeEmbedId should be just the video ID, e.g. 'd2nUN5jcyfE'
+        const videoId = song.youtubeEmbedId;
         const isOnline = navigator.onLine;
-        
+        const canPreview = isOnline && videoId;
+
         container.innerHTML = `
-            <div class="song-card" id="songCard" data-youtube-id="${song.youtubeEmbedId || ''}" data-online="${isOnline}">
+            <div class="song-card" id="songCard">
                 <div class="song-artwork" id="songArtwork">
-                    <img src="${song.artwork}" alt="${song.title}" onerror="this.src='https://via.placeholder.com/500x500?text=BRONX'">
-                    <div class="play-overlay">
+
+                    <!-- Thumbnail / artwork image -->
+                    <img 
+                        id="songThumbnail"
+                        src="${song.artwork}" 
+                        alt="${song.title}"
+                        onerror="this.src='https://i.ytimg.com/vi/${videoId}/hqdefault.jpg'"
+                    >
+
+                    <!-- Play icon overlay (shown at rest) -->
+                    <div class="play-overlay" id="playOverlay">
                         <svg class="play-icon" viewBox="0 0 24 24" fill="white">
                             <path d="M8 5v14l11-7z"/>
                         </svg>
                     </div>
-                    ${isOnline ? `
-                        <iframe 
-                            id="youtubePreview"
-                            style="display:none; position:absolute; top:0; left:0; width:100%; height:100%;"
-                            src=""
-                            frameborder="0"
-                            allow="autoplay; encrypted-media"
-                            allowfullscreen>
-                        </iframe>
+
+                    ${canPreview ? `
+                    <!-- YouTube iframe (hidden until hover) -->
+                    <iframe
+                        id="youtubePreview"
+                        src=""
+                        frameborder="0"
+                        allow="autoplay; encrypted-media"
+                        allowfullscreen
+                        tabindex="-1"
+                    ></iframe>
+
+                    <!-- "Now previewing" badge -->
+                    <div class="preview-badge" id="previewBadge">
+                        <span class="preview-dot"></span>
+                        Preview
+                    </div>
                     ` : ''}
+
                 </div>
                 <div class="song-info">
                     <h4 class="song-title">${song.title}</h4>
@@ -442,56 +409,84 @@ async function loadMySong() {
                 </div>
             </div>
         `;
-        
-        // Add hover video preview if online
-        if (isOnline && song.youtubeEmbedId) {
-            const songCard = document.getElementById('songCard');
-            const artwork = document.getElementById('songArtwork');
-            const iframe = document.getElementById('youtubePreview');
-            
-            let hoverTimeout;
-            
+
+        const songCard   = document.getElementById('songCard');
+        const thumbnail  = document.getElementById('songThumbnail');
+        const playOverlay = document.getElementById('playOverlay');
+
+        if (canPreview) {
+            const iframe      = document.getElementById('youtubePreview');
+            const badge       = document.getElementById('previewBadge');
+            let hoverTimer    = null;
+            let isPreviewActive = false;
+
+            // Build the embed URL once
+            // - autoplay=1  → starts playing immediately
+            // - mute=1      → no audio (required for autoplay)
+            // - controls=0  → hide player controls
+            // - modestbranding=1 → minimal YouTube branding
+            // - rel=0       → no related videos at the end
+            // - iv_load_policy=3 → hide annotations
+            // - playsinline=1 → plays inline on iOS
+            const embedSrc = `https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&controls=0&modestbranding=1&rel=0&iv_load_policy=3&playsinline=1&enablejsapi=1`;
+
+            function showPreview() {
+                isPreviewActive = true;
+                iframe.src = embedSrc;
+
+                // Fade thumbnail & play icon out
+                thumbnail.style.opacity  = '0';
+                playOverlay.style.opacity = '0';
+
+                // Fade iframe & badge in
+                iframe.style.opacity = '1';
+                iframe.style.pointerEvents = 'none'; // keep clicks going to card
+                badge.style.opacity  = '1';
+            }
+
+            function hidePreview() {
+                isPreviewActive = false;
+
+                // Stop video immediately by clearing src
+                iframe.src = '';
+
+                // Fade thumbnail & play icon back in
+                thumbnail.style.opacity  = '1';
+                playOverlay.style.opacity = '1';
+
+                // Fade iframe & badge out
+                iframe.style.opacity = '0';
+                badge.style.opacity  = '0';
+            }
+
             songCard.addEventListener('mouseenter', () => {
-                // Delay 500ms before showing video
-                hoverTimeout = setTimeout(() => {
-                    if (iframe) {
-                        iframe.src = `https://www.youtube.com/embed/${song.youtubeEmbedId}?autoplay=1&mute=1&controls=0&modestbranding=1&rel=0`;
-                        artwork.querySelector('img').style.opacity = '0';
-                        artwork.querySelector('.play-overlay').style.opacity = '0';
-                        iframe.style.display = 'block';
-                    }
-                }, 500);
+                // 400ms delay before preview starts — feels more intentional
+                hoverTimer = setTimeout(showPreview, 400);
             });
-            
+
             songCard.addEventListener('mouseleave', () => {
-                clearTimeout(hoverTimeout);
-                if (iframe) {
-                    iframe.style.display = 'none';
-                    iframe.src = '';
-                    artwork.querySelector('img').style.opacity = '1';
-                    artwork.querySelector('.play-overlay').style.opacity = '1';
-                }
+                clearTimeout(hoverTimer);
+                if (isPreviewActive) hidePreview();
             });
-            
-            // Click to open full video
+
+            // Click opens full YouTube page
             songCard.addEventListener('click', () => {
                 window.open(song.youtubeUrl, '_blank');
             });
+
         } else {
-            // No internet or no video ID - just click to open
-            const songCard = document.getElementById('songCard');
+            // No preview available — just click to open
             songCard.addEventListener('click', () => {
                 window.open(song.youtubeUrl, '_blank');
             });
         }
-        
+
     } catch (error) {
         console.error('Error loading song:', error);
-        // Fallback
         container.innerHTML = `
-            <div class="song-card" onclick="window.open('https://youtu.be/N4ygYzmWhVk', '_blank')">
+            <div class="song-card" onclick="window.open('https://youtu.be/d2nUN5jcyfE', '_blank')">
                 <div class="song-artwork">
-                    <img src="https://via.placeholder.com/500x500?text=BRONX" alt="BRONX">
+                    <img src="https://i.ytimg.com/vi/d2nUN5jcyfE/hqdefault.jpg" alt="BRONX">
                     <div class="play-overlay">
                         <svg class="play-icon" viewBox="0 0 24 24" fill="white">
                             <path d="M8 5v14l11-7z"/>
@@ -509,11 +504,7 @@ async function loadMySong() {
 }
 
 // ===================================
-// MUSIC SECTION - Spotify Artists
-// ===================================
-
-// ===================================
-// MUSIC SECTION - Favorite Artists (Local Data)
+// MUSIC SECTION - Favorite Artists
 // ===================================
 
 async function loadFavoriteArtists() {
@@ -521,19 +512,15 @@ async function loadFavoriteArtists() {
     grid.innerHTML = '<div class="loading-state"><div class="spinner"></div><p>Loading artists...</p></div>';
     
     try {
-        // Load from local data file
         const response = await fetch('data-music.js');
         const scriptText = await response.text();
         
-        // Extract musicData from the script
         const tempFunc = new Function(scriptText + '; return musicData;');
         const musicData = tempFunc();
         
         const artists = musicData?.artists || [];
-        
         if (artists.length === 0) throw new Error('No artists data');
         
-        // Render simple artist cards - no popup
         grid.innerHTML = artists.map(artist => `
             <div class="artist-card">
                 <div class="artist-image">
@@ -545,11 +532,7 @@ async function loadFavoriteArtists() {
         
     } catch (error) {
         console.error('Error loading artists:', error);
-        grid.innerHTML = `
-            <div class="loading-state">
-                <p>Add your favorite artists in data-music.js!</p>
-            </div>
-        `;
+        grid.innerHTML = `<div class="loading-state"><p>Add your favorite artists in data-music.js!</p></div>`;
     }
 }
 
@@ -560,23 +543,10 @@ async function loadFavoriteArtists() {
 function loadGames() {
     const grid = document.getElementById('gamesGrid');
     
-    // Mock games for now - will be replaced with your actual games
     const mockGames = [
-        {
-            title: 'Game Title 1',
-            platform: 'PC, PlayStation 5',
-            cover: 'https://via.placeholder.com/250x333'
-        },
-        {
-            title: 'Game Title 2',
-            platform: 'Xbox Series X, PC',
-            cover: 'https://via.placeholder.com/250x333'
-        },
-        {
-            title: 'Game Title 3',
-            platform: 'Nintendo Switch',
-            cover: 'https://via.placeholder.com/250x333'
-        }
+        { title: 'Game Title 1', platform: 'PC, PlayStation 5',   cover: 'https://via.placeholder.com/250x333' },
+        { title: 'Game Title 2', platform: 'Xbox Series X, PC',   cover: 'https://via.placeholder.com/250x333' },
+        { title: 'Game Title 3', platform: 'Nintendo Switch',      cover: 'https://via.placeholder.com/250x333' }
     ];
     
     grid.innerHTML = mockGames.map(game => `
@@ -597,15 +567,12 @@ function loadGames() {
 // ===================================
 
 document.addEventListener('DOMContentLoaded', function() {
-    // ===================================
-    // MOBILE HAMBURGER MENU
-    // ===================================
-    
+
+    // Mobile hamburger menu
     const hamburgerBtn = document.getElementById('hamburgerBtn');
-    const mobileMenu = document.getElementById('mobileMenu');
+    const mobileMenu   = document.getElementById('mobileMenu');
     const mobileNavLinks = document.querySelectorAll('.mobile-menu .nav-link');
     
-    // Toggle mobile menu
     if (hamburgerBtn) {
         hamburgerBtn.addEventListener('click', function(e) {
             e.stopPropagation();
@@ -614,7 +581,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
-    // Close menu when clicking outside
     document.addEventListener('click', function(e) {
         if (mobileMenu && mobileMenu.classList.contains('active')) {
             if (!mobileMenu.contains(e.target) && !hamburgerBtn.contains(e.target)) {
@@ -624,7 +590,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
     
-    // Close menu when clicking a link
     mobileNavLinks.forEach(link => {
         link.addEventListener('click', function() {
             hamburgerBtn.classList.remove('active');
@@ -632,36 +597,23 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
     
-    // ===================================
-    // NAVIGATION SCROLL EFFECT
-    // ===================================
-    
+    // Navigation scroll effect
     const navigation = document.querySelector('.navigation');
-    let lastScrollY = 0;
     
     function handleScroll() {
-        const currentScrollY = window.scrollY;
-        
-        // Add frosted glass effect when scrolled down more than 20px
-        if (currentScrollY > 20) {
+        if (window.scrollY > 20) {
             navigation.classList.add('scrolled');
         } else {
             navigation.classList.remove('scrolled');
         }
-        
-        lastScrollY = currentScrollY;
     }
     
-    // Listen for scroll events
     window.addEventListener('scroll', handleScroll);
-    
-    // Check initial state
     handleScroll();
     
-    // Load only travel section initially (others load on demand)
+    // Load travel section on init
     loadTravelPhotos('all');
     travelDataLoaded = true;
     
-    // Set initial subtitle
     document.getElementById('categorySubtitle').textContent = CATEGORY_SUBTITLES.travel;
 });
