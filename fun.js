@@ -218,7 +218,7 @@ async function loadMySong() {
         const song = musicData?.mySong;
         if (!song) throw new Error('No song data');
 
-        const videoId    = song.youtubeEmbedId; // just the ID, e.g. 'd2nUN5jcyfE'
+        const videoId    = song.youtubeEmbedId;
         const isOnline   = navigator.onLine;
         const canPreview = isOnline && videoId;
         const artworkSrc = song.artwork || `https://i.ytimg.com/vi/${videoId}/maxresdefault.jpg`;
@@ -227,15 +227,10 @@ async function loadMySong() {
             <div class="song-card" id="songCard">
                 <div class="song-card-inner">
 
-                    <!-- FRONT: artwork + frosted info bar -->
                     <div class="song-card-front">
                         <div class="song-card-artwork">
-                            <img
-                                id="songThumbnail"
-                                src="${artworkSrc}"
-                                alt="${song.title}"
-                                onerror="this.src='https://i.ytimg.com/vi/${videoId}/hqdefault.jpg'"
-                            >
+                            <img src="${artworkSrc}" alt="${song.title}"
+                                 onerror="this.src='https://i.ytimg.com/vi/${videoId}/hqdefault.jpg'">
                         </div>
                         <div class="song-card-info">
                             <div class="song-card-waveform">
@@ -247,37 +242,25 @@ async function loadMySong() {
                                 <p class="song-card-producer">${song.producer}</p>
                             </div>
                             <div class="song-card-play-btn">
-                                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M8 5v14l11-7z"/>
-                                </svg>
+                                <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
                             </div>
                         </div>
                     </div>
 
-                    <!-- BACK: YouTube 16:9 -->
                     <div class="song-card-back">
                         ${canPreview ? `
-                            <iframe
-                                id="youtubePreview"
-                                src=""
-                                frameborder="0"
-                                allow="autoplay; encrypted-media"
-                                allowfullscreen
-                                tabindex="-1"
-                            ></iframe>
+                            <iframe id="youtubePreview" src="" frameborder="0"
+                                allow="autoplay; encrypted-media" allowfullscreen tabindex="-1">
+                            </iframe>
                         ` : `
-                            <img
-                                src="https://i.ytimg.com/vi/${videoId}/hqdefault.jpg"
-                                alt="${song.title}"
-                                style="width:100%;height:100%;object-fit:cover;"
-                            >
+                            <img src="https://i.ytimg.com/vi/${videoId}/hqdefault.jpg"
+                                 alt="${song.title}" style="width:100%;height:100%;object-fit:cover;">
                         `}
                         <div class="song-card-back-overlay">
                             <p class="song-card-back-title">${song.title}</p>
                             ${canPreview ? `
                                 <div class="preview-badge">
-                                    <span class="preview-dot"></span>
-                                    Preview
+                                    <span class="preview-dot"></span>Preview
                                 </div>
                             ` : ''}
                         </div>
@@ -295,20 +278,15 @@ async function loadMySong() {
             let hoverTimer = null;
 
             songCard.addEventListener('mouseenter', () => {
-                // Start iframe slightly after flip begins so it's ready when card turns
                 hoverTimer = setTimeout(() => { iframe.src = embedSrc; }, 350);
             });
-
             songCard.addEventListener('mouseleave', () => {
                 clearTimeout(hoverTimer);
-                iframe.src = ''; // stop video immediately
+                iframe.src = '';
             });
         }
 
-        // Click opens YouTube in new tab
-        songCard.addEventListener('click', () => {
-            window.open(song.youtubeUrl, '_blank');
-        });
+        songCard.addEventListener('click', () => window.open(song.youtubeUrl, '_blank'));
 
     } catch (error) {
         console.error('Error loading song:', error);
@@ -332,7 +310,8 @@ async function loadMySong() {
                         </div>
                     </div>
                     <div class="song-card-back">
-                        <img src="https://i.ytimg.com/vi/d2nUN5jcyfE/hqdefault.jpg" alt="BRONX" style="width:100%;height:100%;object-fit:cover;">
+                        <img src="https://i.ytimg.com/vi/d2nUN5jcyfE/hqdefault.jpg" alt="BRONX"
+                             style="width:100%;height:100%;object-fit:cover;">
                         <div class="song-card-back-overlay">
                             <p class="song-card-back-title">BRONX</p>
                         </div>
