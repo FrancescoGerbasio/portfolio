@@ -1903,6 +1903,9 @@ html {
     cursor: pointer;
     aspect-ratio: 3/4;
     background: #111;
+    transform: translateZ(0);        /* Force GPU layer - fixes Safari overflow:hidden + border-radius */
+    -webkit-transform: translateZ(0);
+    isolation: isolate;              /* Ensures children respect border-radius */
 
     /* Layered shadow for depth */
     box-shadow:
