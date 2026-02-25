@@ -362,15 +362,26 @@ async function loadFavoriteArtists() {
         const musicData  = tempFunc();
         const artists    = musicData?.artists || [];
         if (artists.length === 0) throw new Error('No artists data');
-        grid.innerHTML = artists.map(artist => `
-            <div class="artist-card">
+        grid.innerHTML = artists.map((artist, i) => `
+            <div class="artist-card" style="animation-delay: ${i * 45}ms">
                 <div class="artist-image">
                     <img src="${artist.image}" alt="${artist.name}"
-                         onerror="this.src='https://via.placeholder.com/240x240?text=${encodeURIComponent(artist.name)}'">
+                         onerror="this.src='https://via.placeholder.com/400x533/111111/ffffff?text=${encodeURIComponent(artist.name)}'">
                 </div>
-                <h4 class="artist-name">${artist.name}</h4>
+                <div class="artist-info">
+                    <h4 class="artist-name">${artist.name}</h4>
+                    <span class="artist-spotify-pill">Open in Spotify</span>
+                </div>
             </div>
         `).join('');
+
+        // Click opens Spotify search for the artist
+        grid.querySelectorAll('.artist-card').forEach((card, i) => {
+            card.addEventListener('click', () => {
+                const name = artists[i].name;
+                window.open(`https://open.spotify.com/search/${encodeURIComponent(name)}`, '_blank');
+            });
+        });
     } catch (error) {
         console.error('Error loading artists:', error);
         grid.innerHTML = `<div class="loading-state"><p>Add your favorite artists in data-music.js!</p></div>`;
