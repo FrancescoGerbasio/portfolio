@@ -272,21 +272,36 @@ async function loadMySong() {
 
         const songCard   = document.getElementById('songCard');
         const artwork    = songCard.querySelector('.song-card-artwork');
+        const infoBar    = songCard.querySelector('.song-card-info');
 
-        if (canPreview) {
-            const iframe   = document.getElementById('youtubePreview');
-            const embedSrc = `https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&controls=0&modestbranding=1&rel=0&iv_load_policy=3&playsinline=1`;
-            let hoverTimer = null;
+        let isFlipping = false;
 
-            // Only trigger on artwork hover — info bar / play button stays stable
-            artwork.addEventListener('mouseenter', () => {
-                hoverTimer = setTimeout(() => { iframe.src = embedSrc; }, 350);
-            });
-            artwork.addEventListener('mouseleave', () => {
-                clearTimeout(hoverTimer);
-                iframe.src = '';
-            });
+        function flip() {
+            if (isFlipping) return;
+            isFlipping = true;
+            songCard.classList.add('flipped');
+            if (canPreview) {
+                const iframe = document.getElementById('youtubePreview');
+                setTimeout(() => { iframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&controls=0&modestbranding=1&rel=0&iv_load_policy=3&playsinline=1`; }, 350);
+            }
+            // Unlock after transition completes
+            setTimeout(() => { isFlipping = false; }, 700);
         }
+
+        function unflip() {
+            if (isFlipping) return;
+            isFlipping = true;
+            songCard.classList.remove('flipped');
+            if (canPreview) {
+                const iframe = document.getElementById('youtubePreview');
+                iframe.src = '';
+            }
+            setTimeout(() => { isFlipping = false; }, 700);
+        }
+
+        // Only flip when entering the artwork — info bar is a safe zone
+        artwork.addEventListener('mouseenter', flip);
+        songCard.addEventListener('mouseleave', unflip);
 
         // Play button clicks open YouTube directly
         const playBtn = songCard.querySelector('.song-card-play-btn');
