@@ -1915,7 +1915,7 @@ html {
 
     transition:
         transform  0.45s cubic-bezier(0.34, 1.30, 0.64, 1),
-        box-shadow 0.45s cubic-bezier(0.34, 1.30, 0.64, 1);
+        box-shadow 0.2s ease;
 
     animation: artistReveal 0.55s cubic-bezier(0.34, 1.20, 0.64, 1) both;
 }
@@ -1926,6 +1926,9 @@ html {
         0 4px 8px   rgba(0,0,0,0.10),
         0 16px 40px rgba(0,0,0,0.16),
         0 40px 80px rgba(0,0,0,0.14);
+    transition:
+        transform  0.45s cubic-bezier(0.34, 1.30, 0.64, 1),
+        box-shadow 0.3s ease;
 }
 
 /* All three layers share the same grid cell */
