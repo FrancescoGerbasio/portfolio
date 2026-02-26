@@ -18,7 +18,7 @@ const musicData = {
         {
             id: 'lazza',
             name: 'Lazza',
-            image: 'Assets/Images/Artists/lazza.jpg',
+            image: 'Assets/Images/Artists/lazza.webp',
             albums: [
                 { name: 'Sirio', cover: 'Assets/Images/Albums/lazza-sirio.jpg' },
                 { name: 'Re Mida', cover: 'Assets/Images/Albums/lazza-remida.jpg' },
@@ -28,7 +28,7 @@ const musicData = {
         {
             id: 'sfera-ebbasta',
             name: 'Sfera Ebbasta',
-            image: 'Assets/Images/Artists/sfera-ebbasta.jpg',
+            image: 'Assets/Images/Artists/sfera-ebbasta.webp',
             albums: [
                 { name: 'Famoso', cover: 'Assets/Images/Albums/sfera-famoso.jpg' },
                 { name: 'XDVR', cover: 'Assets/Images/Albums/sfera-xdvr.jpg' }
@@ -37,7 +37,7 @@ const musicData = {
         {
             id: 'flaco-g',
             name: 'Flaco G',
-            image: 'Assets/Images/Artists/flaco-g.jpg',
+            image: 'Assets/Images/Artists/flaco-g.webp',
             albums: [
                 { name: 'Album 1', cover: 'Assets/Images/Albums/flaco-album1.jpg' }
             ]
@@ -45,7 +45,7 @@ const musicData = {
         {
             id: 'izi',
             name: 'Izi',
-            image: 'Assets/Images/Artists/izi.jpg',
+            image: 'Assets/Images/Artists/izi.webp',
             albums: [
                 { name: 'Fenice', cover: 'Assets/Images/Albums/izi-fenice.jpg' }
             ]
@@ -53,31 +53,31 @@ const musicData = {
         {
             id: 'niky-savage',
             name: 'Niky Savage',
-            image: 'Assets/Images/Artists/niky-savage.jpg',
+            image: 'Assets/Images/Artists/niky-savage.webp',
             albums: []
         },
         {
             id: 'kid-yugi',
             name: 'Kid Yugi',
-            image: 'Assets/Images/Artists/kid-yugi.jpg',
+            image: 'Assets/Images/Artists/kid-yugi.webp',
             albums: []
         },
         {
             id: 'papa-v',
             name: 'Papa V',
-            image: 'Assets/Images/Artists/papa-v.jpg',
+            image: 'Assets/Images/Artists/papa-v.webp',
             albums: []
         },
         {
             id: 'nerissima-serpe',
             name: 'Nerissima Serpe',
-            image: 'Assets/Images/Artists/nerissima-serpe.jpg',
+            image: 'Assets/Images/Artists/nerissima-serpe.webp',
             albums: []
         },
         {
             id: 'rrari-dal-tacco',
             name: 'RRARI DAL TACCO',
-            image: 'Assets/Images/Artists/rrari-dal-tacco.jpg',
+            image: 'Assets/Images/Artists/rrari-dal-tacco.webp',
             albums: []
         },
         
