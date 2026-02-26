@@ -352,34 +352,6 @@ async function loadMySong() {
 // MUSIC — Favorite Artists
 // ===================================
 
-// Last.fm API key (free, no auth needed for artist images)
-const LASTFM_API_KEY = 'b25b959554ed76058ac220b7b2e0a026';
-
-async function getArtistImage(artistName, localPath) {
-    // 1. Use local image if provided and not a placeholder path
-    if (localPath && !localPath.includes('placeholder') && !localPath.includes('via.placeholder')) {
-        return localPath;
-    }
-
-    // 2. Try Last.fm
-    try {
-        const url = `https://ws.audioscrobbler.com/2.0/?method=artist.getinfo&artist=${encodeURIComponent(artistName)}&api_key=${LASTFM_API_KEY}&format=json`;
-        const res  = await fetch(url);
-        const data = await res.json();
-        const images = data?.artist?.image;
-        if (images) {
-            // Pick largest available (extralarge or large)
-            const xl   = images.find(i => i.size === 'extralarge')?.['#text'];
-            const lg   = images.find(i => i.size === 'large')?.['#text'];
-            const img  = xl || lg;
-            if (img && img.trim() !== '') return img;
-        }
-    } catch (e) { /* fall through */ }
-
-    // 3. Fallback placeholder
-    return `https://via.placeholder.com/400x533/111111/444444?text=${encodeURIComponent(artistName)}`;
-}
-
 async function loadFavoriteArtists() {
     const grid = document.getElementById('artistsGrid');
     grid.innerHTML = '<div class="loading-state"><div class="spinner"></div><p>Loading artists...</p></div>';
@@ -392,12 +364,16 @@ async function loadFavoriteArtists() {
         const artists    = musicData?.artists || [];
         if (artists.length === 0) throw new Error('No artists data');
 
-        // Render cards immediately with dark background, then load images async
+        // Set src directly in template — simple and reliable
         grid.innerHTML = artists.map((artist, i) => `
             <div class="artist-card" data-index="${i}" style="animation-delay: ${i * 45}ms">
                 <div class="artist-image">
-                    <img src="" alt="${artist.name}" data-artist="${artist.name}" data-local="${artist.image || ''}">
+                    ${artist.image
+                        ? `<img src="${artist.image}" alt="${artist.name}" onerror="this.style.display='none'">`
+                        : ''
+                    }
                 </div>
+                <div class="artist-overlay"></div>
                 <div class="artist-info">
                     <h4 class="artist-name">${artist.name}</h4>
                     <span class="artist-spotify-pill">Open in Spotify</span>
@@ -410,18 +386,6 @@ async function loadFavoriteArtists() {
             card.addEventListener('click', () => {
                 window.open(`https://open.spotify.com/search/${encodeURIComponent(artists[i].name)}`, '_blank');
             });
-        });
-
-        // Load images progressively — fetch in parallel, render as they arrive
-        const imgs = grid.querySelectorAll('img[data-artist]');
-        imgs.forEach(async (img) => {
-            const name  = img.dataset.artist;
-            const local = img.dataset.local;
-            const src   = await getArtistImage(name, local);
-            img.src = src;
-            img.onerror = () => {
-                img.src = `https://via.placeholder.com/400x533/111111/444444?text=${encodeURIComponent(name)}`;
-            };
         });
 
     } catch (error) {

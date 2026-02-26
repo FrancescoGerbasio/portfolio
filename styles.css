@@ -1895,28 +1895,29 @@ html {
     gap: 16px;
 }
 
-/* ── Artist Card ── */
+/* ── Artist Card — CSS Grid stacking (Safari-safe) ── */
 .artist-card {
-    position: relative;
     border-radius: 20px;
     overflow: hidden;
     cursor: pointer;
     aspect-ratio: 3/4;
     background: #111;
-    transform: translateZ(0);        /* Force GPU layer - fixes Safari overflow:hidden + border-radius */
-    -webkit-transform: translateZ(0);
-    isolation: isolate;              /* Ensures children respect border-radius */
 
-    /* Layered shadow for depth */
+    /* CSS Grid: all children occupy the same cell = natural stacking, no position:absolute needed */
+    display: grid;
+    grid-template-rows: 1fr;
+    grid-template-columns: 1fr;
+
     box-shadow:
         0 2px 4px  rgba(0,0,0,0.08),
         0 8px 20px rgba(0,0,0,0.10),
         0 20px 40px rgba(0,0,0,0.08);
 
-    /* Spring-like transition */
     transition:
         transform  0.45s cubic-bezier(0.34, 1.30, 0.64, 1),
         box-shadow 0.45s cubic-bezier(0.34, 1.30, 0.64, 1);
+
+    animation: artistReveal 0.55s cubic-bezier(0.34, 1.20, 0.64, 1) both;
 }
 
 .artist-card:hover {
@@ -1927,13 +1928,20 @@ html {
         0 40px 80px rgba(0,0,0,0.14);
 }
 
-/* ── Photo fills the card ── */
+/* All three layers share the same grid cell */
+.artist-image,
+.artist-overlay,
+.artist-info {
+    grid-row: 1;
+    grid-column: 1;
+}
+
+/* ── Layer 1: Photo ── */
 .artist-image {
-    position: absolute;
-    inset: 0;
     width: 100%;
     height: 100%;
-    z-index: 0;
+    overflow: hidden;
+    border-radius: 20px;
 }
 
 .artist-image img {
@@ -1943,60 +1951,37 @@ html {
     object-position: top center;
     display: block;
     transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-    will-change: transform;
 }
 
 .artist-card:hover .artist-image img {
     transform: scale(1.08);
 }
 
-/* ── Gradient overlay — fades from transparent to dark at bottom ── */
-.artist-card::before {
-    content: '';
-    position: absolute;
-    inset: 0;
+/* ── Layer 2: Gradient overlay ── */
+.artist-overlay {
+    border-radius: 20px;
     background: linear-gradient(
         to bottom,
-        transparent        0%,
-        transparent        35%,
-        rgba(0,0,0,0.20)   55%,
-        rgba(0,0,0,0.70)   75%,
-        rgba(0,0,0,0.92)  100%
+        transparent      0%,
+        transparent      35%,
+        rgba(0,0,0,0.20) 55%,
+        rgba(0,0,0,0.72) 75%,
+        rgba(0,0,0,0.93) 100%
     );
-    z-index: 1;
+    pointer-events: none;
     transition: opacity 0.4s ease;
 }
 
-.artist-card:hover::before {
-    opacity: 0.85;
-}
-
-/* ── Subtle grain texture overlay ── */
-.artist-card::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
-    background-size: 180px 180px;
-    z-index: 2;
-    pointer-events: none;
-    opacity: 0.5;
-    mix-blend-mode: overlay;
-}
-
-/* ── Info area at the bottom ── */
+/* ── Layer 3: Info — aligned to bottom via Grid ── */
 .artist-info {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
+    align-self: end;
     padding: 20px 14px 16px;
-    z-index: 3;
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    gap: 6px;
     transform: translateY(4px);
     transition: transform 0.4s cubic-bezier(0.34, 1.20, 0.64, 1);
+    pointer-events: none;
 }
 
 .artist-card:hover .artist-info {
@@ -2010,10 +1995,10 @@ html {
     letter-spacing: -0.01em;
     line-height: 1.2;
     margin: 0;
-    text-shadow: 0 1px 4px rgba(0,0,0,0.4);
+    text-shadow: 0 1px 4px rgba(0,0,0,0.5);
 }
 
-/* ── "Open in Spotify" pill — slides up on hover ── */
+/* ── Spotify pill ── */
 .artist-spotify-pill {
     display: inline-flex;
     align-items: center;
@@ -2042,7 +2027,6 @@ html {
     transform: translateY(0);
 }
 
-/* Spotify dot */
 .artist-spotify-pill::before {
     content: '';
     width: 6px;
@@ -2052,39 +2036,19 @@ html {
     flex-shrink: 0;
 }
 
-/* ── Staggered entrance animation ── */
-/* Wrapper handles the reveal so internal z-index stacking isn't affected */
-.artist-card {
-    animation: artistReveal 0.55s cubic-bezier(0.34, 1.20, 0.64, 1) both;
-}
-
 @keyframes artistReveal {
-    from {
-        opacity: 0;
-        transform: translateZ(0) translateY(24px) scale(0.96);
-    }
-    to {
-        opacity: 1;
-        transform: translateZ(0) translateY(0) scale(1);
-    }
+    from { opacity: 0; transform: translateY(24px) scale(0.96); }
+    to   { opacity: 1; transform: translateY(0)    scale(1);    }
 }
 
 /* Responsive */
 @media (max-width: 1024px) {
-    .artists-grid {
-        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-        gap: 12px;
-    }
+    .artists-grid { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 12px; }
 }
 
 @media (max-width: 768px) {
-    .artists-grid {
-        grid-template-columns: repeat(3, 1fr);
-        gap: 10px;
-    }
-    .artist-card:hover {
-        transform: none;
-    }
+    .artists-grid { grid-template-columns: repeat(3, 1fr); gap: 10px; }
+    .artist-card:hover { transform: none; }
 }
 
 /* ===================================
