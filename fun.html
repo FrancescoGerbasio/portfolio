@@ -22,7 +22,7 @@
         <span></span>
     </button>
 
-    <!-- Hamburger Fade Zone (Mobile Only - hides content scrolling behind) -->
+    <!-- Hamburger Fade Zone (Mobile Only) -->
     <div class="hamburger-fade-zone"></div>
 
     <!-- Mobile Menu Overlay -->
@@ -37,31 +37,19 @@
     <div class="container">
         <!-- Category Navigation at Top Right -->
         <div class="category-nav-top">
-            <button class="category-btn active" data-category="travel">
-                Travel
-            </button>
-            <button class="category-btn" data-category="music">
-                Music
-            </button>
-            <button class="category-btn" data-category="gaming">
-                Gaming
-            </button>
+            <button class="category-btn active" data-category="travel">Travel</button>
+            <button class="category-btn" data-category="music">Music</button>
+            <button class="category-btn" data-category="gaming">Gaming</button>
         </div>
 
-        <!-- Dynamic Subtitle (Body Text) -->
+        <!-- Dynamic Subtitle -->
         <p class="category-subtitle" id="categorySubtitle">Places I've been and stories from the road. Every journey tells a story, and these are mine captured through moments and memories.</p>
 
         <!-- Travel Section -->
         <section class="category-section active" id="travel-section">
-            <!-- Country Flag Navigation -->
             <div class="flag-navigation" id="flagNavigation">
-                <button class="flag-btn active" data-country="all">
-                    🌍 All
-                </button>
-                <!-- Flags auto-generated from your destinations -->
+                <button class="flag-btn active" data-country="all">🌍 All</button>
             </div>
-
-            <!-- Masonry Grid for Travel Photos -->
             <div class="masonry-grid" id="travelGrid">
                 <div class="loading-state">
                     <div class="spinner"></div>
@@ -72,28 +60,15 @@
 
         <!-- Music Section -->
         <section class="category-section" id="music-section">
-            <!-- My Music Productions -->
             <div class="music-category">
                 <h3 class="music-category-title">Music Production</h3>
                 <div class="my-music-container" id="myMusicContainer">
-                    <div class="song-card">
-                        <div class="song-artwork">
-                            <img src="https://via.placeholder.com/300x300" alt="Song artwork">
-                            <div class="play-overlay">
-                                <svg class="play-icon" viewBox="0 0 24 24" fill="white">
-                                    <path d="M8 5v14l11-7z"/>
-                                </svg>
-                            </div>
-                        </div>
-                        <div class="song-info">
-                            <h4 class="song-title">Loading...</h4>
-                            <p class="song-artist">Produced by Francesco Gerbasio</p>
-                        </div>
+                    <div class="loading-state">
+                        <div class="spinner"></div>
+                        <p>Loading...</p>
                     </div>
                 </div>
             </div>
-
-            <!-- Favorite Artists -->
             <div class="music-category">
                 <h3 class="music-category-title">Favorite Artists</h3>
                 <div class="artists-grid" id="artistsGrid">
@@ -118,7 +93,7 @@
 
     <!-- Version indicator -->
     <div style="position: fixed; bottom: 10px; right: 10px; font-size: 10px; color: rgba(0,0,0,0.3); font-family: monospace; z-index: 9999;">
-        v2.6.5
+        v2.6.6
     </div>
 
     <script src="fun.js"></script>

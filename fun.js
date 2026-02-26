@@ -401,9 +401,9 @@ async function loadFavoriteArtists() {
 function loadGames() {
     const grid = document.getElementById('gamesGrid');
     const mockGames = [
-        { title: 'Game Title 1', platform: 'PC, PlayStation 5',  cover: 'https://via.placeholder.com/250x333' },
-        { title: 'Game Title 2', platform: 'Xbox Series X, PC',  cover: 'https://via.placeholder.com/250x333' },
-        { title: 'Game Title 3', platform: 'Nintendo Switch',     cover: 'https://via.placeholder.com/250x333' }
+        { title: 'Game Title 1', platform: 'PC, PlayStation 5',  cover: '' },
+        { title: 'Game Title 2', platform: 'Xbox Series X, PC',  cover: '' },
+        { title: 'Game Title 3', platform: 'Nintendo Switch',     cover: '' }
     ];
     grid.innerHTML = mockGames.map(game => `
         <div class="game-card">
