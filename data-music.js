@@ -18,7 +18,7 @@ const musicData = {
         {
             id: 'lazza',
             name: 'Lazza',
-            image: 'Assets/Images/Artists/lazza.webp',
+            image: 'Assets/Images/Music/Artists/lazza.webp',
             albums: [
                 { name: 'Sirio', cover: 'Assets/Images/Albums/lazza-sirio.jpg' },
                 { name: 'Re Mida', cover: 'Assets/Images/Albums/lazza-remida.jpg' },
@@ -28,7 +28,7 @@ const musicData = {
         {
             id: 'sfera-ebbasta',
             name: 'Sfera Ebbasta',
-            image: 'Assets/Images/Artists/sfera-ebbasta.webp',
+            image: 'Assets/Images/Music/Artists/sfera-ebbasta.webp',
             albums: [
                 { name: 'Famoso', cover: 'Assets/Images/Albums/sfera-famoso.jpg' },
                 { name: 'XDVR', cover: 'Assets/Images/Albums/sfera-xdvr.jpg' }
@@ -37,7 +37,7 @@ const musicData = {
         {
             id: 'flaco-g',
             name: 'Flaco G',
-            image: 'Assets/Images/Artists/flaco-g.webp',
+            image: 'Assets/Images/Music/Artists/flaco-g.webp',
             albums: [
                 { name: 'Album 1', cover: 'Assets/Images/Albums/flaco-album1.jpg' }
             ]
@@ -45,7 +45,7 @@ const musicData = {
         {
             id: 'izi',
             name: 'Izi',
-            image: 'Assets/Images/Artists/izi.webp',
+            image: 'Assets/Images/Music/Artists/izi.webp',
             albums: [
                 { name: 'Fenice', cover: 'Assets/Images/Albums/izi-fenice.jpg' }
             ]
@@ -53,31 +53,31 @@ const musicData = {
         {
             id: 'niky-savage',
             name: 'Niky Savage',
-            image: 'Assets/Images/Artists/niky-savage.webp',
+            image: 'Assets/Images/Music/Artists/niky-savage.webp',
             albums: []
         },
         {
             id: 'kid-yugi',
             name: 'Kid Yugi',
-            image: 'Assets/Images/Artists/kid-yugi.webp',
+            image: 'Assets/Images/Music/Artists/kid-yugi.webp',
             albums: []
         },
         {
             id: 'papa-v',
             name: 'Papa V',
-            image: 'Assets/Images/Artists/papa-v.webp',
+            image: 'Assets/Images/Music/Artists/papa-v.webp',
             albums: []
         },
         {
             id: 'nerissima-serpe',
             name: 'Nerissima Serpe',
-            image: 'Assets/Images/Artists/nerissima-serpe.webp',
+            image: 'Assets/Images/Music/Artists/nerissima-serpe.webp',
             albums: []
         },
         {
             id: 'rrari-dal-tacco',
             name: 'RRARI DAL TACCO',
-            image: 'Assets/Images/Artists/rrari-dal-tacco.webp',
+            image: 'Assets/Images/Music/Artists/rrari-dal-tacco.webp',
             albums: []
         },
         
@@ -85,7 +85,7 @@ const musicData = {
         {
             id: 'bad-bunny',
             name: 'Bad Bunny',
-            image: 'Assets/Images/Artists/bad-bunny.jpg',
+            image: 'Assets/Images/Music/Artists/bad-bunny.jpg',
             albums: [
                 { name: 'Un Verano Sin Ti', cover: 'Assets/Images/Albums/bb-verano.jpg' },
                 { name: 'Nadie Sabe Lo Que Va a Pasar Mañana', cover: 'Assets/Images/Albums/bb-nadie.jpg' }
@@ -94,7 +94,7 @@ const musicData = {
         {
             id: 'j-balvin',
             name: 'J Balvin',
-            image: 'Assets/Images/Artists/j-balvin.jpg',
+            image: 'Assets/Images/Music/Artists/j-balvin.jpg',
             albums: [
                 { name: 'Jose', cover: 'Assets/Images/Albums/jbalvin-jose.jpg' }
             ]
@@ -102,31 +102,31 @@ const musicData = {
         {
             id: 'arcangel',
             name: 'Arcángel',
-            image: 'Assets/Images/Artists/arcangel.jpg',
+            image: 'Assets/Images/Music/Artists/arcangel.jpg',
             albums: []
         },
         {
             id: 'young-miko',
             name: 'Young Miko',
-            image: 'Assets/Images/Artists/young-miko.jpg',
+            image: 'Assets/Images/Music/Artists/young-miko.jpg',
             albums: []
         },
         {
             id: 'guaynaa',
             name: 'Guaynaa',
-            image: 'Assets/Images/Artists/guaynaa.jpg',
+            image: 'Assets/Images/Music/Artists/guaynaa.jpg',
             albums: []
         },
         {
             id: 'jhayco',
             name: 'Jhayco',
-            image: 'Assets/Images/Artists/jhayco.jpg',
+            image: 'Assets/Images/Music/Artists/jhayco.jpg',
             albums: []
         },
         {
             id: 'rauw-alejandro',
             name: 'Rauw Alejandro',
-            image: 'Assets/Images/Artists/rauw-alejandro.jpg',
+            image: 'Assets/Images/Music/Artists/rauw-alejandro.jpg',
             albums: [
                 { name: 'Saturno', cover: 'Assets/Images/Albums/rauw-saturno.jpg' }
             ]
@@ -134,19 +134,19 @@ const musicData = {
         {
             id: 'lyanno',
             name: 'Lyanno',
-            image: 'Assets/Images/Artists/lyanno.jpg',
+            image: 'Assets/Images/Music/Artists/lyanno.jpg',
             albums: []
         },
         {
             id: 'quevedo',
             name: 'Quevedo',
-            image: 'Assets/Images/Artists/quevedo.jpg',
+            image: 'Assets/Images/Music/Artists/quevedo.jpg',
             albums: []
         },
         {
             id: 'lucho-rk',
             name: 'Lucho RK',
-            image: 'Assets/Images/Artists/lucho-rk.jpg',
+            image: 'Assets/Images/Music/Artists/lucho-rk.jpg',
             albums: []
         }
     ]
