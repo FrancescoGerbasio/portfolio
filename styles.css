@@ -1966,13 +1966,12 @@ html {
     background: linear-gradient(
         to bottom,
         transparent      0%,
-        transparent      35%,
-        rgba(0,0,0,0.20) 55%,
-        rgba(0,0,0,0.72) 75%,
-        rgba(0,0,0,0.93) 100%
+        transparent      30%,
+        rgba(0,0,0,0.30) 50%,
+        rgba(0,0,0,0.80) 72%,
+        rgba(0,0,0,0.96) 100%
     );
     pointer-events: none;
-    transition: opacity 0.4s ease;
 }
 
 /* ── Layer 3: Info — aligned to bottom via Grid ── */
