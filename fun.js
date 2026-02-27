@@ -493,18 +493,55 @@ function buildFeatured(games) {
 
 // ── Game grid ──────────────────────────────────────────────
 function buildGrid(container, games) {
-    container.innerHTML = games.map(g => `
-        <div class="game-card">
-            <div class="game-cover">
-                <img src="${g.cover}" alt="${g.title}" loading="lazy">
-                <div class="game-cover-overlay"></div>
+    container.innerHTML = games.map(g => {
+        if (g.isSaga) {
+            return `
+                <div class="game-card saga-card" data-id="${g.id}">
+                    <div class="game-cover">
+                        <img src="${g.cover}" alt="${g.title}" loading="lazy">
+                        <div class="game-cover-overlay"></div>
+                        <div class="saga-badge">${g.games.length} games</div>
+                    </div>
+                    <div class="game-meta">
+                        <span class="game-genre-tag">${g.genre}</span>
+                        <h4 class="game-name">${g.title}</h4>
+                    </div>
+                    <div class="saga-drawer" id="drawer-${g.id}">
+                        <ul class="saga-list">
+                            ${g.games.map(entry => `
+                                <li class="saga-list-item">
+                                    <span class="saga-list-title">${entry.title}</span>
+                                    <span class="saga-list-year">${entry.year}</span>
+                                </li>
+                            `).join('')}
+                        </ul>
+                    </div>
+                </div>
+            `;
+        }
+        return `
+            <div class="game-card" data-id="${g.id}">
+                <div class="game-cover">
+                    <img src="${g.cover}" alt="${g.title}" loading="lazy">
+                    <div class="game-cover-overlay"></div>
+                </div>
+                <div class="game-meta">
+                    <span class="game-genre-tag">${g.genre}</span>
+                    <h4 class="game-name">${g.title}</h4>
+                </div>
             </div>
-            <div class="game-meta">
-                <span class="game-genre-tag">${g.genre}</span>
-                <h4 class="game-name">${g.title}</h4>
-            </div>
-        </div>
-    `).join('');
+        `;
+    }).join('');
+
+    // Saga expand/collapse
+    container.querySelectorAll('.saga-card').forEach(card => {
+        card.addEventListener('click', () => {
+            const isOpen = card.classList.contains('open');
+            // Close all open sagas in this grid first
+            container.querySelectorAll('.saga-card.open').forEach(c => c.classList.remove('open'));
+            if (!isOpen) card.classList.add('open');
+        });
+    });
 }
 
 // ===================================
