@@ -1550,7 +1550,7 @@ html {
 @media (max-width: 768px) {
     .flag-navigation {
         width: 100%;
-        border-radius: 14px;
+        border-radius: 50px;
     }
 }
 
