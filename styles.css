@@ -1902,33 +1902,46 @@ html {
     cursor: pointer;
     aspect-ratio: 3/4;
     background: #111;
+    position: relative;
 
-    /* CSS Grid: all children occupy the same cell = natural stacking, no position:absolute needed */
     display: grid;
     grid-template-rows: 1fr;
     grid-template-columns: 1fr;
 
+    /* Base shadow — always present, never animates */
     box-shadow:
         0 2px 4px  rgba(0,0,0,0.08),
         0 8px 20px rgba(0,0,0,0.10),
         0 20px 40px rgba(0,0,0,0.08);
 
-    transition:
-        transform  0.45s cubic-bezier(0.34, 1.30, 0.64, 1),
-        box-shadow 0.2s ease;
+    /* Only animate transform */
+    transition: transform 0.45s cubic-bezier(0.34, 1.30, 0.64, 1);
 
     animation: artistReveal 0.55s cubic-bezier(0.34, 1.20, 0.64, 1) both;
 }
 
-.artist-card:hover {
-    transform: translateY(-8px) scale(1.03);
+/* Elevated shadow as a pseudo-element — opacity is GPU-composited, feels instant */
+.artist-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 20px;
     box-shadow:
         0 4px 8px   rgba(0,0,0,0.10),
         0 16px 40px rgba(0,0,0,0.16),
         0 40px 80px rgba(0,0,0,0.14);
-    transition:
-        transform  0.45s cubic-bezier(0.34, 1.30, 0.64, 1),
-        box-shadow 0.3s ease;
+    opacity: 0;
+    transition: opacity 0.15s ease;
+    pointer-events: none;
+    z-index: 10;
+}
+
+.artist-card:hover {
+    transform: translateY(-8px) scale(1.03);
+}
+
+.artist-card:hover::before {
+    opacity: 1;
 }
 
 /* All three layers share the same grid cell */
@@ -2050,7 +2063,39 @@ html {
 
 @media (max-width: 768px) {
     .artists-grid { grid-template-columns: repeat(3, 1fr); gap: 10px; }
-    .artist-card:hover { transform: none; }
+
+    /* Disable hover lift on mobile */
+    .artist-card:hover {
+        transform: none;
+    }
+    .artist-card:hover::before {
+        opacity: 0;
+    }
+
+    /* Staggered float animation — each card gently bobs at a different phase */
+    .artist-card {
+        animation:
+            artistReveal 0.55s cubic-bezier(0.34, 1.20, 0.64, 1) both,
+            artistFloat  3.5s ease-in-out infinite;
+    }
+
+    /* Offset each card's float phase using nth-child */
+    .artist-card:nth-child(2)  { animation-delay: 0s,   0.3s;  }
+    .artist-card:nth-child(3)  { animation-delay: 0s,   0.6s;  }
+    .artist-card:nth-child(4)  { animation-delay: 0s,   0.9s;  }
+    .artist-card:nth-child(5)  { animation-delay: 0s,   1.2s;  }
+    .artist-card:nth-child(6)  { animation-delay: 0s,   1.5s;  }
+    .artist-card:nth-child(7)  { animation-delay: 0s,   1.8s;  }
+    .artist-card:nth-child(8)  { animation-delay: 0s,   2.1s;  }
+    .artist-card:nth-child(9)  { animation-delay: 0s,   2.4s;  }
+    .artist-card:nth-child(10) { animation-delay: 0s,   2.7s;  }
+    .artist-card:nth-child(11) { animation-delay: 0s,   3.0s;  }
+    .artist-card:nth-child(12) { animation-delay: 0s,   0.15s; }
+
+    @keyframes artistFloat {
+        0%, 100% { transform: translateY(0);   }
+        50%       { transform: translateY(-5px); }
+    }
 }
 
 /* ===================================
