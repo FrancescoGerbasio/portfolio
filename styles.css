@@ -645,6 +645,7 @@ a {
     display: flex;
     align-items: center;
     justify-content: center;
+    font-size: 0; /* hide any residual text content e.g. "+" */
     transition:
         background  0.2s ease,
         transform   0.4s cubic-bezier(0.34, 1.20, 0.64, 1);
@@ -806,17 +807,20 @@ a {
 
 @media (max-width: 768px) {
     .accordion-trigger {
-        padding: 16px 20px;
+        padding: 18px 0;
     }
-    
+
     .project-list-item {
-        flex-wrap: wrap;
-        padding: 14px 20px;
+        padding: 13px 0;
+        gap: 8px;
     }
-    
+
     .project-name {
-        flex: 1 0 100%;
-        margin-bottom: 4px;
+        font-size: 14px;
+    }
+
+    .project-studio {
+        font-size: 13px;
     }
 }
 
