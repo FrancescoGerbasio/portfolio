@@ -96,20 +96,46 @@ function generateFlagButtons() {
             };
         }
     });
-    let html = `<button class="flag-btn active" data-country="all">All</button>`;
+
+    let html = `<div class="flag-nav-pill" id="flagNavPill"></div>`;
+    html += `<button class="flag-btn active" data-country="all">All</button>`;
     Object.values(countries).forEach(c => {
         const label = isWindows ? c.name : `${c.flag} ${c.name}`;
         html += `<button class="flag-btn" data-country="${c.countryCode}">${label}</button>`;
     });
     flagNav.innerHTML = html;
+
+    const pill = document.getElementById('flagNavPill');
+
+    function movePill(btn) {
+        const navRect = flagNav.getBoundingClientRect();
+        const btnRect = btn.getBoundingClientRect();
+        const scrollLeft = flagNav.scrollLeft;
+        pill.style.left  = (btnRect.left - navRect.left + scrollLeft) + 'px';
+        pill.style.width = btnRect.width + 'px';
+    }
+
+    // Position pill on first active button after layout
+    requestAnimationFrame(() => {
+        const active = flagNav.querySelector('.flag-btn.active');
+        if (active) movePill(active);
+    });
+
     flagNav.querySelectorAll('.flag-btn').forEach(btn => {
         btn.addEventListener('click', function() {
             flagNav.querySelectorAll('.flag-btn').forEach(b => b.classList.remove('active'));
             this.classList.add('active');
+            movePill(this);
             this.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
             currentCountry = this.getAttribute('data-country');
             displayTravelPhotos(currentCountry);
         });
+    });
+
+    // Keep pill in sync when scrolling (for overflow containers)
+    flagNav.addEventListener('scroll', () => {
+        const active = flagNav.querySelector('.flag-btn.active');
+        if (active) movePill(active);
     });
 }
 
@@ -134,11 +160,21 @@ function displayTravelPhotos(country) {
     grid.querySelectorAll('.travel-card').forEach(card => {
         card.addEventListener('click', () => {
             const c = card.getAttribute('data-country');
+            const flagNav = document.getElementById('flagNavigation');
+            const pill = document.getElementById('flagNavPill');
             document.querySelectorAll('.flag-btn').forEach(btn => {
                 btn.classList.remove('active');
                 if (btn.getAttribute('data-country') === c) {
                     btn.classList.add('active');
                     btn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+                    if (pill && flagNav) {
+                        requestAnimationFrame(() => {
+                            const navRect = flagNav.getBoundingClientRect();
+                            const btnRect = btn.getBoundingClientRect();
+                            pill.style.left  = (btnRect.left - navRect.left + flagNav.scrollLeft) + 'px';
+                            pill.style.width = btnRect.width + 'px';
+                        });
+                    }
                 }
             });
             displayTravelPhotos(c);
