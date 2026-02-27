@@ -398,19 +398,110 @@ async function loadFavoriteArtists() {
 // GAMING
 // ===================================
 
-function loadGames() {
-    const grid = document.getElementById('gamesGrid');
-    const mockGames = [
-        { title: 'Game Title 1', platform: 'PC, PlayStation 5',  cover: '' },
-        { title: 'Game Title 2', platform: 'Xbox Series X, PC',  cover: '' },
-        { title: 'Game Title 3', platform: 'Nintendo Switch',     cover: '' }
-    ];
-    grid.innerHTML = mockGames.map(game => `
+// ===================================
+// GAMING SECTION
+// ===================================
+
+async function loadGames() {
+    const section = document.getElementById('gaming-section');
+    try {
+        const response  = await fetch('data-games.js');
+        const scriptText = await response.text();
+        const tempFunc  = new Function(scriptText + '; return gamesData;');
+        const gamesData = tempFunc();
+
+        section.innerHTML = `
+            <!-- Featured Hero -->
+            <div class="games-featured" id="gamesFeatured"></div>
+
+            <!-- Currently Playing -->
+            <div class="games-subsection">
+                <h3 class="games-subsection-title">
+                    <span class="games-subsection-dot playing"></span>
+                    Currently Playing
+                </h3>
+                <div class="games-grid small" id="gamesPlaying"></div>
+            </div>
+
+            <!-- All-Time Favourites -->
+            <div class="games-subsection">
+                <h3 class="games-subsection-title">All‑Time Favourites</h3>
+                <div class="games-grid" id="gamesFavourites"></div>
+            </div>
+        `;
+
+        buildFeatured(gamesData.featured);
+        buildGrid(document.getElementById('gamesPlaying'),    gamesData.currentlyPlaying);
+        buildGrid(document.getElementById('gamesFavourites'), gamesData.favorites);
+
+    } catch (err) {
+        console.error('Error loading games:', err);
+    }
+}
+
+// ── Featured carousel ──────────────────────────────────────
+function buildFeatured(games) {
+    const container = document.getElementById('gamesFeatured');
+    let current = 0;
+    let autoTimer;
+
+    container.innerHTML = `
+        <div class="gf-track" id="gfTrack">
+            ${games.map((g, i) => `
+                <div class="gf-slide ${i === 0 ? 'active' : ''}" data-index="${i}">
+                    <div class="gf-bg">
+                        <img src="${g.cover}" alt="${g.title}" class="gf-bg-img">
+                        <div class="gf-bg-overlay"></div>
+                    </div>
+                    <div class="gf-content">
+                        <span class="gf-genre">${g.genre}</span>
+                        <h2 class="gf-title">${g.title}</h2>
+                        <span class="gf-year">${g.year}</span>
+                    </div>
+                </div>
+            `).join('')}
+        </div>
+        <div class="gf-dots">
+            ${games.map((_, i) => `
+                <button class="gf-dot ${i === 0 ? 'active' : ''}" data-i="${i}"></button>
+            `).join('')}
+        </div>
+        <button class="gf-arrow gf-prev" aria-label="Previous">‹</button>
+        <button class="gf-arrow gf-next" aria-label="Next">›</button>
+    `;
+
+    const slides = container.querySelectorAll('.gf-slide');
+    const dots   = container.querySelectorAll('.gf-dot');
+
+    function goTo(n) {
+        slides[current].classList.remove('active');
+        dots[current].classList.remove('active');
+        current = (n + games.length) % games.length;
+        slides[current].classList.add('active');
+        dots[current].classList.add('active');
+    }
+
+    function startAuto() { autoTimer = setInterval(() => goTo(current + 1), 5000); }
+    function stopAuto()  { clearInterval(autoTimer); }
+
+    container.querySelector('.gf-next').addEventListener('click', () => { stopAuto(); goTo(current + 1); startAuto(); });
+    container.querySelector('.gf-prev').addEventListener('click', () => { stopAuto(); goTo(current - 1); startAuto(); });
+    dots.forEach(d => d.addEventListener('click', () => { stopAuto(); goTo(+d.dataset.i); startAuto(); }));
+
+    startAuto();
+}
+
+// ── Game grid ──────────────────────────────────────────────
+function buildGrid(container, games) {
+    container.innerHTML = games.map(g => `
         <div class="game-card">
-            <div class="game-image"><img src="${game.cover}" alt="${game.title}"></div>
-            <div class="game-info">
-                <h4 class="game-title">${game.title}</h4>
-                <p class="game-platform">${game.platform}</p>
+            <div class="game-cover">
+                <img src="${g.cover}" alt="${g.title}" loading="lazy">
+                <div class="game-cover-overlay"></div>
+            </div>
+            <div class="game-meta">
+                <span class="game-genre-tag">${g.genre}</span>
+                <h4 class="game-name">${g.title}</h4>
             </div>
         </div>
     `).join('');
