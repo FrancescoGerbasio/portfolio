@@ -6,6 +6,7 @@ const gamesData = {
         { id: 'halo4',          title: 'Halo 4',                       cover: 'Assets/Images/Games/halo4.webp',          genre: 'FPS',         year: '2012' },
         { id: 'witcher3',       title: 'The Witcher 3',                cover: 'Assets/Images/Games/witcher3.webp',       genre: 'RPG',         year: '2015' },
         { id: 'skyrim',         title: 'The Elder Scrolls V: Skyrim',  cover: 'Assets/Images/Games/skyrim.webp',         genre: 'RPG',         year: '2011' },
+        { id: 'destiny2',       title: 'Destiny 2',                    cover: 'Assets/Images/Games/destiny2.webp',       genre: 'FPS / MMO',   year: '2017' },
     ],
 
     currentlyPlaying: [
