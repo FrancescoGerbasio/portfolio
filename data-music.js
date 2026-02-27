@@ -146,7 +146,7 @@ const musicData = {
         {
             id: 'lucho-rk',
             name: 'Lucho RK',
-            image: 'Assets/Images/Music/Artists/lucho-rk.jpg',
+            image: 'Assets/Images/Music/Artists/lucho-rk.webp',
             albums: []
         }
     ]
