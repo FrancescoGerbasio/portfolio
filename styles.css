@@ -1961,7 +1961,7 @@ html {
     height: 100%;
     overflow: hidden;
     border-radius: 20px;
-    /* Clip image to rounded corners since card no longer has overflow:hidden */
+    z-index: 1;
     -webkit-mask-image: -webkit-radial-gradient(white, black);
 }
 
@@ -1981,14 +1981,14 @@ html {
 /* ── Layer 2: Gradient overlay ── */
 .artist-overlay {
     border-radius: 20px;
-    overflow: hidden;
+    z-index: 2;
     background: linear-gradient(
         to bottom,
         transparent      0%,
         transparent      30%,
         rgba(0,0,0,0.30) 50%,
-        rgba(0,0,0,0.80) 72%,
-        rgba(0,0,0,0.96) 100%
+        rgba(0,0,0,0.82) 72%,
+        rgba(0,0,0,0.97) 100%
     );
     pointer-events: none;
 }
@@ -1996,8 +1996,7 @@ html {
 /* ── Layer 3: Info — aligned to bottom via Grid ── */
 .artist-info {
     align-self: end;
-    border-radius: 0 0 20px 20px;
-    overflow: hidden;
+    z-index: 3;
     padding: 20px 14px 16px;
     display: flex;
     flex-direction: column;
@@ -2013,9 +2012,8 @@ html {
     line-height: 1.2;
     margin: 0;
     text-shadow:
-        0 1px 3px rgba(0,0,0,0.8),
-        0 2px 8px rgba(0,0,0,0.6),
-        0 4px 16px rgba(0,0,0,0.4);
+        0 1px 3px rgba(0,0,0,0.9),
+        0 2px 8px rgba(0,0,0,0.7);
 }
 
 /* ── Spotify pill ── */

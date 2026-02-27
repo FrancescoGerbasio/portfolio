@@ -366,7 +366,7 @@ async function loadFavoriteArtists() {
 
         // Set src directly in template — simple and reliable
         grid.innerHTML = artists.map((artist, i) => `
-            <div class="artist-card" data-index="${i}" style="animation-delay: ${i * 45}ms">
+            <div class="artist-card" data-index="${i}">
                 <div class="artist-image">
                     ${artist.image
                         ? `<img src="${artist.image}" alt="${artist.name}" onerror="this.style.display='none'">`
