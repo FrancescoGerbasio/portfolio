@@ -85,7 +85,7 @@ const musicData = {
         {
             id: 'bad-bunny',
             name: 'Bad Bunny',
-            image: 'Assets/Images/Music/Artists/bad-bunny.jpg',
+            image: 'Assets/Images/Music/Artists/bad-bunny.webp',
             albums: [
                 { name: 'Un Verano Sin Ti', cover: 'Assets/Images/Albums/bb-verano.jpg' },
                 { name: 'Nadie Sabe Lo Que Va a Pasar Mañana', cover: 'Assets/Images/Albums/bb-nadie.jpg' }
@@ -94,7 +94,7 @@ const musicData = {
         {
             id: 'j-balvin',
             name: 'J Balvin',
-            image: 'Assets/Images/Music/Artists/j-balvin.jpg',
+            image: 'Assets/Images/Music/Artists/j-balvin.webp',
             albums: [
                 { name: 'Jose', cover: 'Assets/Images/Albums/jbalvin-jose.jpg' }
             ]
@@ -102,31 +102,31 @@ const musicData = {
         {
             id: 'arcangel',
             name: 'Arcángel',
-            image: 'Assets/Images/Music/Artists/arcangel.jpg',
+            image: 'Assets/Images/Music/Artists/arcangel.webp',
             albums: []
         },
         {
             id: 'young-miko',
             name: 'Young Miko',
-            image: 'Assets/Images/Music/Artists/young-miko.jpg',
+            image: 'Assets/Images/Music/Artists/young-miko.webp',
             albums: []
         },
         {
             id: 'guaynaa',
             name: 'Guaynaa',
-            image: 'Assets/Images/Music/Artists/guaynaa.jpg',
+            image: 'Assets/Images/Music/Artists/guaynaa.webp',
             albums: []
         },
         {
             id: 'jhayco',
             name: 'Jhayco',
-            image: 'Assets/Images/Music/Artists/jhayco.jpg',
+            image: 'Assets/Images/Music/Artists/jhayco.webp',
             albums: []
         },
         {
             id: 'rauw-alejandro',
             name: 'Rauw Alejandro',
-            image: 'Assets/Images/Music/Artists/rauw-alejandro.jpg',
+            image: 'Assets/Images/Music/Artists/rauw-alejandro.webp',
             albums: [
                 { name: 'Saturno', cover: 'Assets/Images/Albums/rauw-saturno.jpg' }
             ]
@@ -134,13 +134,13 @@ const musicData = {
         {
             id: 'lyanno',
             name: 'Lyanno',
-            image: 'Assets/Images/Music/Artists/lyanno.jpg',
+            image: 'Assets/Images/Music/Artists/lyanno.webp',
             albums: []
         },
         {
             id: 'quevedo',
             name: 'Quevedo',
-            image: 'Assets/Images/Music/Artists/quevedo.jpg',
+            image: 'Assets/Images/Music/Artists/quevedo.webp',
             albums: []
         },
         {
