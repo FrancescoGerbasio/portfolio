@@ -3,10 +3,10 @@ const gamesData = {
     featured: [
         { id: 'ac-brotherhood', title: "Assassin's Creed Brotherhood", cover: 'Assets/Images/Games/ac-brotherhood.webp', genre: 'Action RPG', year: '2010' },
         { id: 'godfather',      title: 'The Godfather',                cover: 'Assets/Images/Games/godfather.webp',      genre: 'Action',     year: '2006' },
-        { id: 'halo4',          title: 'Halo 4',                       cover: 'Assets/Images/Games/halo4.webp',          genre: 'FPS',         year: '2012' },
-        { id: 'witcher3',       title: 'The Witcher 3',                cover: 'Assets/Images/Games/witcher3.webp',       genre: 'RPG',         year: '2015' },
+        { id: 'halo4',          title: 'Halo IV',                       cover: 'Assets/Images/Games/halo4.webp',          genre: 'FPS',         year: '2012' },
+        { id: 'witcher3',       title: 'The Witcher III',                cover: 'Assets/Images/Games/witcher3.webp',       genre: 'RPG',         year: '2015' },
         { id: 'skyrim',         title: 'The Elder Scrolls V: Skyrim',  cover: 'Assets/Images/Games/skyrim.webp',         genre: 'RPG',         year: '2011' },
-        { id: 'destiny2',       title: 'Destiny 2',                    cover: 'Assets/Images/Games/destiny2.webp',       genre: 'FPS / MMO',   year: '2017' },
+        { id: 'destiny2',       title: 'Destiny II',                    cover: 'Assets/Images/Games/destiny2.webp',       genre: 'FPS / MMO',   year: '2017' },
     ],
 
     currentlyPlaying: [
