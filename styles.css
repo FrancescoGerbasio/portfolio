@@ -2068,19 +2068,19 @@ html {
 }
 
 @media (max-width: 768px) {
-    .artists-grid { grid-template-columns: repeat(3, 1fr); gap: 10px; }
+    .artists-grid { grid-template-columns: repeat(3, 1fr); gap: 20px 10px; }
 
     /* Disable hover lift on mobile */
     .artist-card:hover { transform: none; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.12)) drop-shadow(0 8px 20px rgba(0,0,0,0.12)); }
 
     /* Two keyframes — up and down */
     @keyframes artistFloatUp {
-        0%, 100% { transform: translateY(0);    }
-        50%       { transform: translateY(-10px); }
+        0%, 100% { transform: translateY(0);   }
+        50%       { transform: translateY(-6px); }
     }
     @keyframes artistFloatDown {
-        0%, 100% { transform: translateY(0);   }
-        50%       { transform: translateY(10px); }
+        0%, 100% { transform: translateY(0);  }
+        50%       { transform: translateY(6px); }
     }
 
     /* Grid is 3 columns — rows: 1,4,7 float UP | rows: 2,5,8 float DOWN | rows: 3,6,9 float UP */
