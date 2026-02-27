@@ -2058,8 +2058,16 @@ html {
 }
 
 @keyframes artistReveal {
-    from { opacity: 0; transform: translateY(24px) scale(0.96); }
-    to   { opacity: 1; transform: translateY(0)    scale(1);    }
+    from {
+        opacity: 0;
+        transform: translateY(24px) scale(0.96);
+        filter: drop-shadow(0 2px 4px rgba(0,0,0,0.12)) drop-shadow(0 8px 20px rgba(0,0,0,0.12));
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+        filter: drop-shadow(0 2px 4px rgba(0,0,0,0.12)) drop-shadow(0 8px 20px rgba(0,0,0,0.12));
+    }
 }
 
 /* Responsive */
@@ -2075,12 +2083,12 @@ html {
 
     /* Two keyframes — up and down */
     @keyframes artistFloatUp {
-        0%, 100% { transform: translateY(0);   }
-        50%       { transform: translateY(-6px); }
+        0%, 100% { transform: translateY(0);   filter: drop-shadow(0 2px 4px rgba(0,0,0,0.12)) drop-shadow(0 8px 20px rgba(0,0,0,0.12)); }
+        50%       { transform: translateY(-6px); filter: drop-shadow(0 4px 8px rgba(0,0,0,0.14)) drop-shadow(0 12px 28px rgba(0,0,0,0.14)); }
     }
     @keyframes artistFloatDown {
-        0%, 100% { transform: translateY(0);  }
-        50%       { transform: translateY(6px); }
+        0%, 100% { transform: translateY(0);  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.12)) drop-shadow(0 8px 20px rgba(0,0,0,0.12)); }
+        50%       { transform: translateY(6px); filter: drop-shadow(0 1px 2px rgba(0,0,0,0.10)) drop-shadow(0 4px 12px rgba(0,0,0,0.10)); }
     }
 
     /* Grid is 3 columns — rows: 1,4,7 float UP | rows: 2,5,8 float DOWN | rows: 3,6,9 float UP */
