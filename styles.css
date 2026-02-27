@@ -2000,13 +2000,7 @@ html {
     display: flex;
     flex-direction: column;
     gap: 6px;
-    transform: translateY(4px);
-    transition: transform 0.4s cubic-bezier(0.34, 1.20, 0.64, 1);
     pointer-events: none;
-}
-
-.artist-card:hover .artist-info {
-    transform: translateY(0);
 }
 
 .artist-name {
@@ -2081,37 +2075,36 @@ html {
 @media (max-width: 768px) {
     .artists-grid { grid-template-columns: repeat(3, 1fr); gap: 20px 10px; }
 
-    .artist-card:hover { transform: none; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.12)) drop-shadow(0 8px 20px rgba(0,0,0,0.12)); }
+    .artist-card:hover { transform: none; }
 
-    @keyframes artistFloatUp {
-        0%, 100% { transform: translateY(0);   filter: drop-shadow(0 2px 4px rgba(0,0,0,0.12)) drop-shadow(0 8px 20px rgba(0,0,0,0.12)); }
-        50%       { transform: translateY(-6px); filter: drop-shadow(0 4px 8px rgba(0,0,0,0.14)) drop-shadow(0 12px 28px rgba(0,0,0,0.14)); }
-    }
-    @keyframes artistFloatDown {
-        0%, 100% { transform: translateY(0);  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.12)) drop-shadow(0 8px 20px rgba(0,0,0,0.12)); }
-        50%       { transform: translateY(6px); filter: drop-shadow(0 1px 2px rgba(0,0,0,0.10)) drop-shadow(0 4px 12px rgba(0,0,0,0.10)); }
+    /* Single float keyframe — phase offset makes each card feel independent */
+    @keyframes artistFloat {
+        0%, 100% { transform: translateY(0);   }
+        50%       { transform: translateY(-7px); }
     }
 
-    /* Row 1 (cards 1-3) UP, Row 2 (cards 4-6) DOWN, Row 3 (7-9) UP, Row 4 (10-12) DOWN... */
-    .artist-card:nth-child(n+1):nth-child(-n+3),
-    .artist-card:nth-child(n+7):nth-child(-n+9),
-    .artist-card:nth-child(n+13):nth-child(-n+15),
-    .artist-card:nth-child(n+19):nth-child(-n+21) {
-        animation: artistReveal 0.55s cubic-bezier(0.34, 1.20, 0.64, 1) both,
-                   artistFloatUp 3s ease-in-out infinite;
-    }
-
-    .artist-card:nth-child(n+4):nth-child(-n+6),
-    .artist-card:nth-child(n+10):nth-child(-n+12),
-    .artist-card:nth-child(n+16):nth-child(-n+18) {
-        animation: artistReveal 0.55s cubic-bezier(0.34, 1.20, 0.64, 1) both,
-                   artistFloatDown 3s ease-in-out infinite;
-    }
-
-    /* Phase offsets: each card in a row slightly offset from its neighbours */
-    .artist-card:nth-child(3n+1) { animation-delay: 0s, 0s;    }
-    .artist-card:nth-child(3n+2) { animation-delay: 0s, 0.5s;  }
-    .artist-card:nth-child(3n)   { animation-delay: 0s, 1.0s;  }
+    /* Every card gets its own duration + delay — no two are in sync */
+    .artist-card:nth-child(1)  { animation: artistReveal .55s both, artistFloat 3.1s ease-in-out 0.0s   infinite; }
+    .artist-card:nth-child(2)  { animation: artistReveal .55s both, artistFloat 3.7s ease-in-out 0.6s   infinite; }
+    .artist-card:nth-child(3)  { animation: artistReveal .55s both, artistFloat 2.9s ease-in-out 1.3s   infinite; }
+    .artist-card:nth-child(4)  { animation: artistReveal .55s both, artistFloat 3.5s ease-in-out 0.9s   infinite; }
+    .artist-card:nth-child(5)  { animation: artistReveal .55s both, artistFloat 2.7s ease-in-out 1.8s   infinite; }
+    .artist-card:nth-child(6)  { animation: artistReveal .55s both, artistFloat 3.3s ease-in-out 0.3s   infinite; }
+    .artist-card:nth-child(7)  { animation: artistReveal .55s both, artistFloat 4.1s ease-in-out 1.1s   infinite; }
+    .artist-card:nth-child(8)  { animation: artistReveal .55s both, artistFloat 3.0s ease-in-out 0.5s   infinite; }
+    .artist-card:nth-child(9)  { animation: artistReveal .55s both, artistFloat 2.8s ease-in-out 2.0s   infinite; }
+    .artist-card:nth-child(10) { animation: artistReveal .55s both, artistFloat 3.6s ease-in-out 0.7s   infinite; }
+    .artist-card:nth-child(11) { animation: artistReveal .55s both, artistFloat 3.2s ease-in-out 1.5s   infinite; }
+    .artist-card:nth-child(12) { animation: artistReveal .55s both, artistFloat 2.6s ease-in-out 0.2s   infinite; }
+    .artist-card:nth-child(13) { animation: artistReveal .55s both, artistFloat 3.8s ease-in-out 1.0s   infinite; }
+    .artist-card:nth-child(14) { animation: artistReveal .55s both, artistFloat 3.4s ease-in-out 1.7s   infinite; }
+    .artist-card:nth-child(15) { animation: artistReveal .55s both, artistFloat 2.5s ease-in-out 0.8s   infinite; }
+    .artist-card:nth-child(16) { animation: artistReveal .55s both, artistFloat 4.0s ease-in-out 0.4s   infinite; }
+    .artist-card:nth-child(17) { animation: artistReveal .55s both, artistFloat 3.1s ease-in-out 1.2s   infinite; }
+    .artist-card:nth-child(18) { animation: artistReveal .55s both, artistFloat 2.9s ease-in-out 2.2s   infinite; }
+    .artist-card:nth-child(19) { animation: artistReveal .55s both, artistFloat 3.5s ease-in-out 0.1s   infinite; }
+    .artist-card:nth-child(20) { animation: artistReveal .55s both, artistFloat 3.9s ease-in-out 1.6s   infinite; }
+    .artist-card:nth-child(21) { animation: artistReveal .55s both, artistFloat 2.7s ease-in-out 0.9s   infinite; }
 }
 
 /* ===================================
