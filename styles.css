@@ -1917,32 +1917,34 @@ html {
     animation: artistReveal 0.55s cubic-bezier(0.34, 1.20, 0.64, 1) both;
 }
 
-/* Shadow via filter — paints outside the element, fully GPU composited, zero delay */
+/* ── Artist Card ── */
 .artist-card {
     border-radius: 20px;
     cursor: pointer;
     aspect-ratio: 3/4;
     background: #111;
     position: relative;
+    will-change: transform;
 
     display: grid;
     grid-template-rows: 1fr;
     grid-template-columns: 1fr;
 
-    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.12))
-            drop-shadow(0 8px 20px rgba(0,0,0,0.12));
+    box-shadow:
+        0 2px 4px  rgba(0,0,0,0.12),
+        0 8px 20px rgba(0,0,0,0.14);
 
-    transition:
-        transform 0.45s cubic-bezier(0.34, 1.30, 0.64, 1),
-        filter    0.15s ease;
+    /* Only transition transform — box-shadow snaps instantly */
+    transition: transform 0.45s cubic-bezier(0.34, 1.30, 0.64, 1);
 
     animation: artistReveal 0.55s cubic-bezier(0.34, 1.20, 0.64, 1) both;
 }
 
 .artist-card:hover {
     transform: translateY(-8px) scale(1.03);
-    filter: drop-shadow(0 8px 16px rgba(0,0,0,0.16))
-            drop-shadow(0 24px 48px rgba(0,0,0,0.18));
+    box-shadow:
+        0 8px 16px  rgba(0,0,0,0.16),
+        0 24px 48px rgba(0,0,0,0.18);
 }
 
 /* All three layers share the same grid cell */
@@ -2055,16 +2057,8 @@ html {
 }
 
 @keyframes artistReveal {
-    from {
-        opacity: 0;
-        transform: translateY(24px) scale(0.96);
-        filter: drop-shadow(0 2px 4px rgba(0,0,0,0.12)) drop-shadow(0 8px 20px rgba(0,0,0,0.12));
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0) scale(1);
-        filter: drop-shadow(0 2px 4px rgba(0,0,0,0.12)) drop-shadow(0 8px 20px rgba(0,0,0,0.12));
-    }
+    from { opacity: 0; transform: translateY(24px) scale(0.96); }
+    to   { opacity: 1; transform: translateY(0)    scale(1);    }
 }
 
 /* Responsive */
