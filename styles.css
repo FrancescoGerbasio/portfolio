@@ -1625,30 +1625,16 @@ html {
    ═══════════════════════════════════════ */
 
 .editorial-grid {
-    position: static !important;
-    height: auto !important;
+    position: relative !important;
+    height: auto;
 }
 
-/* Masonry-style column layout */
-.editorial-strip-all {
-    columns: 4;
-    column-gap: 10px;
-}
-
-@media (max-width: 1400px) { .editorial-strip-all { columns: 3; } }
-@media (max-width: 1024px) { .editorial-strip-all { columns: 2; } }
-@media (max-width: 600px)  { .editorial-strip-all { columns: 2; } }
-
+/* Cards absolutely positioned by JS — same engine as masonry */
 .editorial-card-all {
-    break-inside: avoid;
-    display: block;
-    position: relative;
+    position: absolute;
     border-radius: 14px;
     overflow: hidden;
     cursor: pointer;
-    margin-bottom: 10px;
-
-    /* Hidden until revealed */
     opacity: 0;
     transform: scale(0.93) translateY(14px);
     transition: box-shadow 0.3s ease;
@@ -1661,22 +1647,23 @@ html {
 
 .editorial-card-all img {
     width: 100%;
-    height: auto;
+    height: 100%;
+    object-fit: cover;
     display: block;
     transition: transform 0.55s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
 .editorial-card-all:hover {
     box-shadow:
-        0 8px 20px  rgba(0,0,0,0.10),
+        0 8px  20px rgba(0,0,0,0.10),
         0 20px 48px rgba(0,0,0,0.12);
+    z-index: 5;
 }
 
 .editorial-card-all:hover img {
     transform: scale(1.05);
 }
 
-/* Location label — appears on hover */
 .editorial-card-all-overlay {
     position: absolute;
     inset: 0;
