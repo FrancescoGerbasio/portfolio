@@ -231,8 +231,10 @@ function displayMasonry(grid, country) {
     grid.className = 'masonry-grid';
     grid.style.opacity = '0';
     grid.style.height = '';
+    grid.style.position = 'relative';
+
     grid.innerHTML = filtered.map(photo => `
-        <div class="travel-card" data-country="${photo.country}">
+        <div class="travel-card" data-country="${photo.country}" style="visibility:hidden;">
             <img src="${photo.image}" alt="${photo.location}" loading="lazy">
             <div class="travel-card-location">
                 <span class="flag">${photo.flag}</span>
@@ -267,18 +269,24 @@ function shuffleArray(array) {
 function layoutMasonry() {
     const grid = document.getElementById('travelGrid');
     const cards = Array.from(grid.querySelectorAll('.travel-card'));
-    const gap = 20;
+    const gap = 12;
     const w = window.innerWidth;
-    const columns = w > 1400 ? 4 : w > 1024 ? 3 : w > 768 ? 2 : 1;
+    const columns = w > 1400 ? 4 : w > 1024 ? 3 : w > 768 ? 2 : 2;
+
     const imagePromises = cards.map(card => {
         const img = card.querySelector('img');
-        return new Promise(r => { if (img.complete) r(); else { img.onload = r; img.onerror = r; } });
+        return new Promise(r => {
+            if (img.complete && img.naturalWidth) r();
+            else { img.onload = r; img.onerror = r; }
+        });
     });
+
     Promise.all(imagePromises).then(() => {
         const gridWidth = grid.offsetWidth;
         const colW = (gridWidth - gap * (columns - 1)) / columns;
         const colHeights = Array(columns).fill(0);
         let allSame = true, firstAspect = null;
+
         cards.forEach((card, i) => {
             const img = card.querySelector('img');
             const iw = img.naturalWidth || img.width;
@@ -293,20 +301,41 @@ function layoutMasonry() {
                 h *= 1 + (s / 100) * 0.3 - 0.15;
             }
             const col = colHeights.indexOf(Math.min(...colHeights));
-            card.style.cssText = `position:absolute;left:${col*(colW+gap)}px;top:${colHeights[col]}px;width:${colW}px;height:${h}px;`;
+            // Preserve visibility:hidden until reveal, just update position/size
+            const wasHidden = card.style.visibility === 'hidden';
+            card.style.cssText = `
+                position: absolute;
+                left: ${col * (colW + gap)}px;
+                top: ${colHeights[col]}px;
+                width: ${colW}px;
+                height: ${h}px;
+                visibility: visible;
+            `;
             const ci = card.querySelector('img');
             if (ci) { ci.style.height = h + 'px'; ci.style.objectFit = 'cover'; }
             colHeights[col] += h + gap;
         });
+
         grid.style.height = Math.max(...colHeights) + 'px';
-        setTimeout(() => { grid.style.opacity = '1'; }, 50);
+
+        // Reveal only after all cards are in position
+        requestAnimationFrame(() => {
+            grid.style.transition = 'opacity 0.35s ease';
+            grid.style.opacity = '1';
+        });
     });
 }
 
 let resizeTimer;
 window.addEventListener('resize', () => {
     clearTimeout(resizeTimer);
-    resizeTimer = setTimeout(() => { if (travelData.length > 0) layoutMasonry(); }, 250);
+    resizeTimer = setTimeout(() => {
+        const grid = document.getElementById('travelGrid');
+        if (grid && grid.querySelector('.travel-card')) {
+            grid.style.opacity = '0';
+            layoutMasonry();
+        }
+    }, 250);
 });
 
 // ===================================
