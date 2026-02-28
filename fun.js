@@ -71,7 +71,8 @@ async function loadTravelPhotos(country = 'all') {
                     image: `${folderPath}/${i}.webp`,
                     location: destination.location,
                     country: destination.country,
-                    flag: destination.flag
+                    flag: destination.flag,
+                    ar: 1.3337   // all photos are 800×1067px
                 });
             }
         }
@@ -159,7 +160,7 @@ function displayEditorial(grid) {
     const photos = shuffleArray([...travelData]);
 
     grid.innerHTML = photos.map((photo, i) => `
-        <div class="travel-card" data-country="${photo.country}" style="--card-i:${i}">
+        <div class="travel-card" data-country="${photo.country}" data-ar="${photo.ar || 1.25}" style="--card-i:${i}">
             <img src="${photo.image}" alt="${photo.location}" loading="lazy">
             <div class="travel-card-location">
                 <span class="flag">${photo.flag}</span>
@@ -219,7 +220,7 @@ function displayMasonry(grid, country) {
     grid.style.position = 'relative';
 
     grid.innerHTML = filtered.map((photo, i) => `
-        <div class="travel-card" data-country="${photo.country}" style="--card-i:${i}">
+        <div class="travel-card" data-country="${photo.country}" data-ar="${photo.ar || 1.25}" style="--card-i:${i}">
             <img src="${photo.image}" alt="${photo.location}" loading="lazy">
             <div class="travel-card-location">
                 <span class="flag">${photo.flag}</span>
@@ -259,19 +260,12 @@ function layoutMasonry() {
     const columns = w > 1400 ? 4 : w > 1024 ? 3 : 2;
     const gridWidth = grid.offsetWidth;
     const colW = (gridWidth - gap * (columns - 1)) / columns;
-
-    // ── Step 1: Layout immediately with placeholder aspect ratio ──
-    // No waiting for decode — cards get positioned right away
     const colHeights = Array(columns).fill(0);
-    const placeholderAR = 1.25; // sensible default before real dimensions known
 
+    // All photos are 800×1067 — AR is always exact, layout is instant and final
     cards.forEach((card, i) => {
-        const img = card.querySelector('img');
-        // Use real dimensions if already known (cached), else placeholder
-        const iw = img.naturalWidth;
-        const ih = img.naturalHeight;
-        const ar = (iw && ih) ? ih / iw : placeholderAR;
-        const h = colW * ar;
+        const ar  = 1.3337;
+        const h   = colW * ar;
         const col = colHeights.indexOf(Math.min(...colHeights));
         card.style.cssText = `
             position: absolute;
@@ -281,16 +275,16 @@ function layoutMasonry() {
             height: ${h}px;
             --card-i: ${i};
         `;
-        const ci = card.querySelector('img');
-        if (ci) { ci.style.height = h + 'px'; ci.style.objectFit = 'cover'; }
+        const img = card.querySelector('img');
+        if (img) { img.style.height = h + 'px'; img.style.objectFit = 'cover'; }
         colHeights[col] += h + gap;
     });
-    grid.style.height = Math.max(...colHeights) + 'px';
 
-    // ── Step 2: Reveal grid, animate cards already in viewport ──
+    grid.style.height = Math.max(...colHeights) + 'px';
     grid.style.transition = 'opacity 0.25s ease';
     grid.style.opacity = '1';
 
+    // Reveal in-viewport cards immediately, rest animate in as they scroll in
     function revealCard(card) {
         if (card.dataset.animDone) return;
         card.dataset.animDone = '1';
@@ -303,15 +297,11 @@ function layoutMasonry() {
         }, { once: true });
     }
 
-    // Reveal cards in viewport immediately (staggered by --card-i)
     const viewH = window.innerHeight;
     cards.forEach(card => {
-        const rect = card.getBoundingClientRect();
-        if (rect.top < viewH + 100) revealCard(card);
+        if (card.getBoundingClientRect().top < viewH + 100) revealCard(card);
     });
 
-    // Reveal remaining cards as they scroll in — large rootMargin so
-    // images have time to load before animation plays
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
@@ -319,43 +309,9 @@ function layoutMasonry() {
                 observer.unobserve(entry.target);
             }
         });
-    }, { threshold: 0, rootMargin: '0px 0px 200px 0px' });
+    }, { threshold: 0, rootMargin: '0px 0px 300px 0px' });
 
-    cards.forEach(card => {
-        if (!card.dataset.animDone) observer.observe(card);
-    });
-
-    // ── Step 3: Correct layout after real images load ──
-    // Silently reposition without re-animating
-    const unloaded = cards.filter(c => {
-        const img = c.querySelector('img');
-        return !img.naturalWidth;
-    });
-    if (unloaded.length === 0) return;
-
-    let corrected = 0;
-    unloaded.forEach(card => {
-        const img = card.querySelector('img');
-        img.addEventListener('load', () => {
-            corrected++;
-            if (corrected === unloaded.length) {
-                // All loaded — silently redo layout, no animation
-                const colH2 = Array(columns).fill(0);
-                cards.forEach(c => {
-                    const im = c.querySelector('img');
-                    const ar2 = im.naturalHeight / im.naturalWidth || placeholderAR;
-                    const h2 = colW * ar2;
-                    const col2 = colH2.indexOf(Math.min(...colH2));
-                    c.style.left   = col2 * (colW + gap) + 'px';
-                    c.style.top    = colH2[col2] + 'px';
-                    c.style.height = h2 + 'px';
-                    im.style.height = h2 + 'px';
-                    colH2[col2] += h2 + gap;
-                });
-                grid.style.height = Math.max(...colH2) + 'px';
-            }
-        }, { once: true });
-    });
+    cards.forEach(card => { if (!card.dataset.animDone) observer.observe(card); });
 }
 
 let resizeTimer;
