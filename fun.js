@@ -190,10 +190,8 @@ function layoutEditorial(grid, photos) {
 
     const imagePromises = cards.map(card => {
         const img = card.querySelector('img');
-        return new Promise(r => {
-            if (img.complete && img.naturalWidth > 0) r();
-            else { img.onload = r; img.onerror = r; }
-        });
+        // img.decode() is the reliable cross-browser way to know dimensions are ready
+        return img.decode().catch(() => {});
     });
 
     Promise.all(imagePromises).then(() => {
@@ -299,7 +297,7 @@ function displayMasonry(grid, country) {
 
     grid.innerHTML = filtered.map((photo, i) => `
         <div class="travel-card" data-country="${photo.country}" style="--card-i:${i}">
-            <img src="${photo.image}" alt="${photo.location}" loading="lazy">
+            <img src="${photo.image}" alt="${photo.location}">
             <div class="travel-card-location">
                 <span class="flag">${photo.flag}</span>
                 <span class="location-name">${photo.location}</span>
@@ -339,17 +337,7 @@ function layoutMasonry() {
 
     const imagePromises = cards.map(card => {
         const img = card.querySelector('img');
-        return new Promise(r => {
-            // Always wait for decode — img.complete can be true with naturalWidth=0 on lazy images
-            if (img.complete && img.naturalWidth > 0) {
-                r();
-            } else {
-                img.onload  = r;
-                img.onerror = r;
-                // Also set src without lazy if browser hasn't fetched it yet
-                if (img.loading === 'lazy') img.loading = 'eager';
-            }
-        });
+        return img.decode().catch(() => {});
     });
 
     Promise.all(imagePromises).then(() => {
