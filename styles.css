@@ -1708,6 +1708,12 @@ html {
         box-shadow 0.3s ease;
 }
 
+/* Once animation is done, never go invisible again */
+.travel-card[data-anim-done] {
+    opacity: 1;
+    transform: none;
+}
+
 /* Reveal animation — triggered by JS adding .revealed */
 @keyframes card-reveal {
     0% {

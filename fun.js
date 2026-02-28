@@ -257,73 +257,104 @@ function layoutMasonry() {
     const gap = 12;
     const w = window.innerWidth;
     const columns = w > 1400 ? 4 : w > 1024 ? 3 : 2;
+    const gridWidth = grid.offsetWidth;
+    const colW = (gridWidth - gap * (columns - 1)) / columns;
 
-    // Wait only for images that are already loaded (above fold / cached)
-    // Others will be positioned with estimated aspect ratio and corrected on load
-    const imagePromises = cards.map(card => {
+    // ── Step 1: Layout immediately with placeholder aspect ratio ──
+    // No waiting for decode — cards get positioned right away
+    const colHeights = Array(columns).fill(0);
+    const placeholderAR = 1.25; // sensible default before real dimensions known
+
+    cards.forEach((card, i) => {
         const img = card.querySelector('img');
-        if (img.complete && img.naturalWidth > 0) return Promise.resolve();
-        return img.decode().catch(() => {});
+        // Use real dimensions if already known (cached), else placeholder
+        const iw = img.naturalWidth;
+        const ih = img.naturalHeight;
+        const ar = (iw && ih) ? ih / iw : placeholderAR;
+        const h = colW * ar;
+        const col = colHeights.indexOf(Math.min(...colHeights));
+        card.style.cssText = `
+            position: absolute;
+            left: ${col * (colW + gap)}px;
+            top: ${colHeights[col]}px;
+            width: ${colW}px;
+            height: ${h}px;
+            --card-i: ${i};
+        `;
+        const ci = card.querySelector('img');
+        if (ci) { ci.style.height = h + 'px'; ci.style.objectFit = 'cover'; }
+        colHeights[col] += h + gap;
+    });
+    grid.style.height = Math.max(...colHeights) + 'px';
+
+    // ── Step 2: Reveal grid, animate cards already in viewport ──
+    grid.style.transition = 'opacity 0.25s ease';
+    grid.style.opacity = '1';
+
+    function revealCard(card) {
+        if (card.dataset.animDone) return;
+        card.dataset.animDone = '1';
+        void card.offsetWidth;
+        card.classList.add('revealed');
+        card.addEventListener('animationend', () => {
+            card.style.opacity = '1';
+            card.style.transform = 'none';
+            card.classList.remove('revealed');
+        }, { once: true });
+    }
+
+    // Reveal cards in viewport immediately (staggered by --card-i)
+    const viewH = window.innerHeight;
+    cards.forEach(card => {
+        const rect = card.getBoundingClientRect();
+        if (rect.top < viewH + 100) revealCard(card);
     });
 
-    Promise.all(imagePromises).then(() => {
-        const gridWidth = grid.offsetWidth;
-        const colW = (gridWidth - gap * (columns - 1)) / columns;
-        const colHeights = Array(columns).fill(0);
-        let allSame = true, firstAspect = null;
-
-        cards.forEach((card, i) => {
-            const img = card.querySelector('img');
-            const iw = img.naturalWidth || img.width;
-            const ih = img.naturalHeight || img.height;
-            // Fallback aspect ratio for images not yet loaded (portrait-ish)
-            const ar = (iw && ih) ? ih / iw : 1.3;
-            if (firstAspect === null) firstAspect = ar;
-            else if (Math.abs(ar - firstAspect) > 0.01) allSame = false;
-            let h = colW * ar;
-            if (allSame && columns > 1) {
-                const s = (i * 7919) % 100;
-                h *= 1 + (s / 100) * 0.3 - 0.15;
+    // Reveal remaining cards as they scroll in — large rootMargin so
+    // images have time to load before animation plays
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                revealCard(entry.target);
+                observer.unobserve(entry.target);
             }
-            const col = colHeights.indexOf(Math.min(...colHeights));
-            card.style.cssText = `
-                position: absolute;
-                left: ${col * (colW + gap)}px;
-                top: ${colHeights[col]}px;
-                width: ${colW}px;
-                height: ${h}px;
-                --card-i: ${i};
-            `;
-            const ci = card.querySelector('img');
-            if (ci) { ci.style.height = h + 'px'; ci.style.objectFit = 'cover'; }
-            colHeights[col] += h + gap;
         });
+    }, { threshold: 0, rootMargin: '0px 0px 200px 0px' });
 
-        grid.style.height = Math.max(...colHeights) + 'px';
+    cards.forEach(card => {
+        if (!card.dataset.animDone) observer.observe(card);
+    });
 
-        // Reveal grid immediately — cards animate in via IntersectionObserver
-        grid.style.transition = 'opacity 0.25s ease';
-        grid.style.opacity = '1';
+    // ── Step 3: Correct layout after real images load ──
+    // Silently reposition without re-animating
+    const unloaded = cards.filter(c => {
+        const img = c.querySelector('img');
+        return !img.naturalWidth;
+    });
+    if (unloaded.length === 0) return;
 
-        // Use IntersectionObserver so cards animate as they scroll into view
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (!entry.isIntersecting) return;
-                const card = entry.target;
-                if (card.classList.contains('revealed') || card.dataset.animDone) return;
-                card.dataset.animDone = '1';
-                void card.offsetWidth;
-                card.classList.add('revealed');
-                card.addEventListener('animationend', () => {
-                    card.style.opacity = '1';
-                    card.style.transform = 'scale(1) translateY(0)';
-                    card.classList.remove('revealed');
-                }, { once: true });
-                observer.unobserve(card);
-            });
-        }, { threshold: 0.05, rootMargin: '0px 0px 60px 0px' });
-
-        cards.forEach(card => observer.observe(card));
+    let corrected = 0;
+    unloaded.forEach(card => {
+        const img = card.querySelector('img');
+        img.addEventListener('load', () => {
+            corrected++;
+            if (corrected === unloaded.length) {
+                // All loaded — silently redo layout, no animation
+                const colH2 = Array(columns).fill(0);
+                cards.forEach(c => {
+                    const im = c.querySelector('img');
+                    const ar2 = im.naturalHeight / im.naturalWidth || placeholderAR;
+                    const h2 = colW * ar2;
+                    const col2 = colH2.indexOf(Math.min(...colH2));
+                    c.style.left   = col2 * (colW + gap) + 'px';
+                    c.style.top    = colH2[col2] + 'px';
+                    c.style.height = h2 + 'px';
+                    im.style.height = h2 + 'px';
+                    colH2[col2] += h2 + gap;
+                });
+                grid.style.height = Math.max(...colH2) + 'px';
+            }
+        }, { once: true });
     });
 }
 
