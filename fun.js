@@ -149,109 +149,43 @@ function displayTravelPhotos(country) {
     }
 }
 
-// ── Editorial layout — "All" view ─────────────────────────
+// ── "All" view — unified cinematic horizontal scroll ──────
 function displayEditorial(grid) {
     grid.style.opacity = '0';
     grid.className = 'masonry-grid editorial-grid';
-
-    // Group photos by country, preserving destination order
-    const grouped = {};
-    const order = [];
-    travelData.forEach(photo => {
-        if (!grouped[photo.country]) {
-            grouped[photo.country] = [];
-            order.push(photo.country);
-        }
-        grouped[photo.country].push(photo);
-    });
-
-    grid.style.position = 'relative';
+    grid.style.position = 'static';
     grid.style.height = 'auto';
 
-    grid.innerHTML = order.map(countryCode => {
-        const photos = grouped[countryCode];
-        const sample = photos[0];
-        return `
-            <div class="editorial-row" data-country="${countryCode}">
-                <div class="editorial-row-header">
-                    <span class="editorial-flag">${sample.flag}</span>
-                    <h3 class="editorial-country">${sample.location}</h3>
-                    <span class="editorial-count">${photos.length}</span>
-                    <span class="editorial-arrow">→</span>
-                </div>
-                <div class="editorial-strip-wrapper">
-                    <div class="editorial-strip" data-country="${countryCode}">
-                        ${photos.map((photo, i) => `
-                            <div class="editorial-card" data-country="${photo.country}" style="--i:${i}">
-                                <img src="${photo.image}" alt="${photo.location}" loading="lazy">
-                                <div class="editorial-card-overlay">
-                                    <span class="editorial-card-num">${String(i + 1).padStart(2, '0')}</span>
-                                </div>
-                            </div>
-                        `).join('')}
+    const photos = shuffleArray([...travelData]);
+
+    grid.innerHTML = `
+        <div class="editorial-strip-all">
+            ${photos.map((photo, i) => `
+                <div class="editorial-card-all" data-country="${photo.country}" style="--i:${i}">
+                    <img src="${photo.image}" alt="${photo.location}" loading="lazy">
+                    <div class="editorial-card-all-overlay">
+                        <span class="editorial-card-all-flag">${photo.flag}</span>
+                        <span class="editorial-card-all-loc">${photo.location}</span>
                     </div>
                 </div>
-            </div>
-        `;
-    }).join('');
-
-    // Row header click → filter to that country
-    grid.querySelectorAll('.editorial-row-header').forEach(header => {
-        header.addEventListener('click', () => {
-            const c = header.closest('.editorial-row').getAttribute('data-country');
-            const flagNav = document.getElementById('flagNavigation');
-            const pill = document.getElementById('flagNavPill');
-            document.querySelectorAll('.flag-btn').forEach(btn => {
-                btn.classList.remove('active');
-                if (btn.getAttribute('data-country') === c) {
-                    btn.classList.add('active');
-                    btn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
-                    if (pill && flagNav) {
-                        requestAnimationFrame(() => {
-                            const navRect = flagNav.getBoundingClientRect();
-                            const btnRect = btn.getBoundingClientRect();
-                            pill.style.left  = (btnRect.left - navRect.left + flagNav.scrollLeft) + 'px';
-                            pill.style.width = btnRect.width + 'px';
-                        });
-                    }
-                }
-            });
-            currentCountry = c;
-            displayMasonry(document.getElementById('travelGrid'), c);
-        });
-    });
+            `).join('')}
+        </div>
+    `;
 
     // Card click → filter to country
-    grid.querySelectorAll('.editorial-card').forEach(card => {
+    grid.querySelectorAll('.editorial-card-all').forEach(card => {
         card.addEventListener('click', () => {
             const c = card.getAttribute('data-country');
-            const flagNav = document.getElementById('flagNavigation');
-            const pill = document.getElementById('flagNavPill');
-            document.querySelectorAll('.flag-btn').forEach(btn => {
-                btn.classList.remove('active');
-                if (btn.getAttribute('data-country') === c) {
-                    btn.classList.add('active');
-                    btn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
-                    if (pill && flagNav) {
-                        requestAnimationFrame(() => {
-                            const navRect = flagNav.getBoundingClientRect();
-                            const btnRect = btn.getBoundingClientRect();
-                            pill.style.left  = (btnRect.left - navRect.left + flagNav.scrollLeft) + 'px';
-                            pill.style.width = btnRect.width + 'px';
-                        });
-                    }
-                }
-            });
-            currentCountry = c;
+            activateCountryFilter(c);
             displayMasonry(document.getElementById('travelGrid'), c);
             document.getElementById('travel-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
         });
     });
 
-    // Scroll-triggered reveal for each row
     requestAnimationFrame(() => {
         grid.style.opacity = '1';
-        const rows = grid.querySelectorAll('.editorial-row');
+        // Stagger cards in as they enter viewport
+        const cards = grid.querySelectorAll('.editorial-card-all');
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
@@ -259,19 +193,31 @@ function displayEditorial(grid) {
                     observer.unobserve(entry.target);
                 }
             });
-        }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
-
-        rows.forEach((row, i) => {
-            row.style.transitionDelay = `${i * 0.06}s`;
-            // If already in viewport on load, reveal immediately
-            const rect = row.getBoundingClientRect();
-            if (rect.top < window.innerHeight) {
-                setTimeout(() => row.classList.add('reveal'), i * 60);
-            } else {
-                observer.observe(row);
-            }
-        });
+        }, { threshold: 0.05 });
+        cards.forEach(card => observer.observe(card));
     });
+}
+
+// ── Shared: update flag nav pill to a country ─────────────
+function activateCountryFilter(country) {
+    const flagNav = document.getElementById('flagNavigation');
+    const pill = document.getElementById('flagNavPill');
+    document.querySelectorAll('.flag-btn').forEach(btn => {
+        btn.classList.remove('active');
+        if (btn.getAttribute('data-country') === country) {
+            btn.classList.add('active');
+            btn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+            if (pill && flagNav) {
+                requestAnimationFrame(() => {
+                    const navRect = flagNav.getBoundingClientRect();
+                    const btnRect = btn.getBoundingClientRect();
+                    pill.style.left  = (btnRect.left - navRect.left + flagNav.scrollLeft) + 'px';
+                    pill.style.width = btnRect.width + 'px';
+                });
+            }
+        }
+    });
+    currentCountry = country;
 }
 
 // ── Masonry layout — filtered view ───────────────────────
@@ -298,24 +244,7 @@ function displayMasonry(grid, country) {
     grid.querySelectorAll('.travel-card').forEach(card => {
         card.addEventListener('click', () => {
             const c = card.getAttribute('data-country');
-            const flagNav = document.getElementById('flagNavigation');
-            const pill = document.getElementById('flagNavPill');
-            document.querySelectorAll('.flag-btn').forEach(btn => {
-                btn.classList.remove('active');
-                if (btn.getAttribute('data-country') === c) {
-                    btn.classList.add('active');
-                    btn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
-                    if (pill && flagNav) {
-                        requestAnimationFrame(() => {
-                            const navRect = flagNav.getBoundingClientRect();
-                            const btnRect = btn.getBoundingClientRect();
-                            pill.style.left  = (btnRect.left - navRect.left + flagNav.scrollLeft) + 'px';
-                            pill.style.width = btnRect.width + 'px';
-                        });
-                    }
-                }
-            });
-            currentCountry = c;
+            activateCountryFilter(c);
             displayMasonry(grid, c);
             document.getElementById('travel-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
         });
