@@ -184,13 +184,19 @@ function displayEditorial(grid) {
 
     requestAnimationFrame(() => {
         grid.style.opacity = '1';
-        // Stagger cards in as they enter viewport
         const cards = grid.querySelectorAll('.editorial-card-all');
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
-                    entry.target.classList.add('reveal');
-                    observer.unobserve(entry.target);
+                    const card = entry.target;
+                    void card.offsetWidth;
+                    card.classList.add('reveal');
+                    card.addEventListener('animationend', () => {
+                        card.style.opacity = '1';
+                        card.style.transform = 'scale(1) translateY(0)';
+                        card.classList.remove('reveal');
+                    }, { once: true });
+                    observer.unobserve(card);
                 }
             });
         }, { threshold: 0.05 });
