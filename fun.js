@@ -2,72 +2,48 @@
 // FUN PAGE - LOCAL DATA (NO APIs)
 // ===================================
 
-// Category subtitles (body text descriptions)
 const CATEGORY_SUBTITLES = {
     travel: 'Places I\'ve been and stories from the road. Every journey tells a story, and these are mine captured through moments and memories.',
     music: 'Songs I\'ve created and the artists who inspire me. Music has always been a passion, from producing my own tracks to discovering new sounds.',
     gaming: 'The games I\'m playing and the worlds I\'m exploring. Gaming isn\'t just a hobby—it\'s an art form, a story, and an experience.'
 };
 
-// Current category
 let currentCategory = 'travel';
-
-// ===================================
-// CATEGORY NAVIGATION
-// ===================================
 
 function switchCategory(category) {
     currentCategory = category;
-    
-    // Update subtitle
     const subtitle = document.getElementById('categorySubtitle');
     subtitle.style.opacity = '0';
     setTimeout(() => {
         subtitle.textContent = CATEGORY_SUBTITLES[category];
         subtitle.style.opacity = '1';
     }, 150);
-    
-    // Update active button
-    document.querySelectorAll('.category-btn').forEach(btn => {
-        btn.classList.remove('active');
-    });
+    document.querySelectorAll('.category-btn').forEach(btn => btn.classList.remove('active'));
     document.querySelector(`[data-category="${category}"]`).classList.add('active');
-    
-    // Show active section
-    document.querySelectorAll('.category-section').forEach(section => {
-        section.classList.remove('active');
-    });
+    document.querySelectorAll('.category-section').forEach(s => s.classList.remove('active'));
     document.getElementById(`${category}-section`).classList.add('active');
-    
-    // Load data for the category if not already loaded
+
     if (category === 'travel' && !travelDataLoaded) {
-        loadTravelPhotos('all');
-        travelDataLoaded = true;
+        loadTravelPhotos('all'); travelDataLoaded = true;
     } else if (category === 'music' && !musicDataLoaded) {
-        loadMySong();
-        loadFavoriteArtists();
-        musicDataLoaded = true;
+        loadMySong(); loadFavoriteArtists(); musicDataLoaded = true;
     } else if (category === 'gaming' && !gamingDataLoaded) {
-        loadGames();
-        gamingDataLoaded = true;
+        loadGames(); gamingDataLoaded = true;
     }
 }
 
-// Track what's been loaded
 let travelDataLoaded = false;
-let musicDataLoaded = false;
+let musicDataLoaded  = false;
 let gamingDataLoaded = false;
 
-// Category button listeners
 document.querySelectorAll('.category-btn').forEach(btn => {
     btn.addEventListener('click', function() {
-        const category = this.getAttribute('data-category');
-        switchCategory(category);
+        switchCategory(this.getAttribute('data-category'));
     });
 });
 
 // ===================================
-// TRAVEL SECTION - Auto-load from Folders
+// TRAVEL
 // ===================================
 
 let currentCountry = 'all';
@@ -77,35 +53,19 @@ let travelConfig = null;
 async function loadTravelPhotos(country = 'all') {
     const grid = document.getElementById('travelGrid');
     grid.innerHTML = '<div class="loading-state"><div class="spinner"></div><p>Loading travel moments...</p></div>';
-    
     try {
-        // Load config if not already loaded
         if (!travelConfig) {
             const response = await fetch('data-travel.js');
             const scriptText = await response.text();
-            
-            // Extract travelConfig from the script
             const tempFunc = new Function(scriptText + '; return travelConfig;');
             travelConfig = tempFunc();
-            
-            if (!travelConfig || !travelConfig.destinations) {
-                throw new Error('Invalid travel config');
-            }
-            
-            console.log('Loaded destinations:', travelConfig.destinations.length);
-            
-            // Generate flag buttons from destinations
+            if (!travelConfig || !travelConfig.destinations) throw new Error('Invalid travel config');
             generateFlagButtons();
         }
-        
-        // Build photo list from config
         const allPhotos = [];
-        
         for (const destination of travelConfig.destinations) {
             const folderPath = `Assets/Images/Travel/${destination.folder}`;
-            const photoCount = destination.photoCount || 0;
-            
-            for (let i = 1; i <= photoCount; i++) {
+            for (let i = 1; i <= (destination.photoCount || 0); i++) {
                 allPhotos.push({
                     id: `${destination.folder}-${i}`,
                     image: `${folderPath}/${i}.webp`,
@@ -115,235 +75,162 @@ async function loadTravelPhotos(country = 'all') {
                 });
             }
         }
-        
-        console.log('Total photos:', allPhotos.length);
-        
         travelData = allPhotos;
         displayTravelPhotos(country);
-        
     } catch (error) {
         console.error('Error loading travel photos:', error);
-        travelData = [];
-        grid.innerHTML = `<div class="loading-state"><p>Error: ${error.message}<br>Check console for details.</p></div>`;
+        grid.innerHTML = `<div class="loading-state"><p>Error: ${error.message}</p></div>`;
     }
 }
 
-// Generate flag navigation buttons from destinations
 function generateFlagButtons() {
     const flagNav = document.getElementById('flagNavigation');
-    
-    // Detect Windows (emoji support is poor)
     const isWindows = navigator.platform.toLowerCase().includes('win');
-    
-    // Get unique countries
     const countries = {};
     travelConfig.destinations.forEach(dest => {
         if (!countries[dest.country]) {
             countries[dest.country] = {
                 name: dest.country.charAt(0).toUpperCase() + dest.country.slice(1),
                 flag: dest.flag,
-                code: dest.country.toUpperCase().substring(0, 2),
                 countryCode: dest.country
             };
         }
     });
-    
-    // Build buttons HTML
-    let buttonsHTML = `
-        <button class="flag-btn active" data-country="all">
-            All
-        </button>
-    `;
-    
-    Object.values(countries).forEach(country => {
-        const displayText = isWindows 
-            ? country.name
-            : `${country.flag} ${country.name}`;
-        
-        buttonsHTML += `
-            <button class="flag-btn" data-country="${country.countryCode}">
-                ${displayText}
-            </button>
-        `;
+
+    let html = `<div class="flag-nav-pill" id="flagNavPill"></div>`;
+    html += `<button class="flag-btn active" data-country="all">All</button>`;
+    Object.values(countries).forEach(c => {
+        const label = isWindows ? c.name : `${c.flag} ${c.name}`;
+        html += `<button class="flag-btn" data-country="${c.countryCode}">${label}</button>`;
     });
-    
-    flagNav.innerHTML = buttonsHTML;
-    
-    // Re-attach click listeners
+    flagNav.innerHTML = html;
+
+    const pill = document.getElementById('flagNavPill');
+
+    function movePill(btn) {
+        const navRect = flagNav.getBoundingClientRect();
+        const btnRect = btn.getBoundingClientRect();
+        const scrollLeft = flagNav.scrollLeft;
+        pill.style.left  = (btnRect.left - navRect.left + scrollLeft) + 'px';
+        pill.style.width = btnRect.width + 'px';
+    }
+
+    // Position pill on first active button after layout
+    requestAnimationFrame(() => {
+        const active = flagNav.querySelector('.flag-btn.active');
+        if (active) movePill(active);
+    });
+
     flagNav.querySelectorAll('.flag-btn').forEach(btn => {
         btn.addEventListener('click', function() {
-            // Update active state
             flagNav.querySelectorAll('.flag-btn').forEach(b => b.classList.remove('active'));
             this.classList.add('active');
-            
-            // Scroll button into view (centered)
+            movePill(this);
             this.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
-            
-            // Load photos for selected country
-            const country = this.getAttribute('data-country');
-            currentCountry = country;
-            displayTravelPhotos(country);
+            currentCountry = this.getAttribute('data-country');
+            displayTravelPhotos(currentCountry);
         });
     });
-}
 
-function isMobile() {
-    return window.innerWidth <= 768;
+    // Keep pill in sync when scrolling (for overflow containers)
+    flagNav.addEventListener('scroll', () => {
+        const active = flagNav.querySelector('.flag-btn.active');
+        if (active) movePill(active);
+    });
 }
 
 function displayTravelPhotos(country) {
-    if (isMobile()) {
-        displayTravelPhotosMobile(country);
-    } else {
-        displayTravelPhotosDesktop(country);
-    }
-}
-
-// ===================================
-// MOBILE TRAVEL LAYOUT
-// "All" → grouped destination carousels (Apple Photos style)
-// Filtered → tight 2-column grid
-// ===================================
-
-function displayTravelPhotosMobile(country) {
     const grid = document.getElementById('travelGrid');
 
-    // Reset
-    grid.style.opacity = '0';
-    grid.style.height = '';
-    grid.innerHTML = '';
-    grid.classList.add('mobile-layout');
-
     if (country === 'all') {
-        // ── Grouped carousels by destination ──
-        // Order by config order (not shuffled — destinations feel like chapters)
-        const groups = [];
-        travelConfig.destinations.forEach(dest => {
-            const photos = travelData.filter(p => p.location === dest.location);
-            if (photos.length > 0) groups.push({ dest, photos });
-        });
-
-        grid.innerHTML = groups.map((g, gi) => `
-            <div class="mobile-destination-group" data-group-index="${gi}">
-                <div class="mobile-dest-header">
-                    <span class="mobile-dest-flag">${g.dest.flag}</span>
-                    <span class="mobile-dest-name">${g.dest.location}</span>
-                    <span class="mobile-dest-count">${g.photos.length}</span>
-                </div>
-                <div class="mobile-carousel" data-country="${g.dest.country}">
-                    ${g.photos.map((photo, pi) => `
-                        <div class="mobile-carousel-card" style="--i:${pi}" data-country="${photo.country}">
-                            <img src="${photo.image}" alt="${photo.location}" loading="lazy">
-                        </div>
-                    `).join('')}
-                </div>
-                <button class="mobile-see-all-btn" data-country="${g.dest.country}" data-name="${g.dest.location}" data-flag="${g.dest.flag}">
-                    See all ${g.photos.length} photos
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
-                </button>
-            </div>
-        `).join('');
-
-        // "See all" button → filter to that country
-        grid.querySelectorAll('.mobile-see-all-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                const c = btn.getAttribute('data-country');
-                currentCountry = c;
-                syncFlagButtons(c);
-                displayTravelPhotosMobile(c);
-            });
-        });
-
-        // Stagger group entrance
-        requestAnimationFrame(() => {
-            grid.style.opacity = '1';
-            grid.querySelectorAll('.mobile-destination-group').forEach((group, i) => {
-                group.style.animationDelay = `${i * 60}ms`;
-                group.classList.add('group-enter');
-            });
-        });
-
+        displayEditorial(grid);
     } else {
-        // ── Filtered: 2-column photo grid ──
-        const filtered = travelData.filter(p => p.country === country);
-        const dest = travelConfig.destinations.find(d => d.country === country);
-
-        if (filtered.length === 0) {
-            grid.innerHTML = '<div class="loading-state"><p>No photos yet.</p></div>';
-            grid.style.opacity = '1';
-            return;
-        }
-
-        grid.innerHTML = `
-            <div class="mobile-filter-header">
-                <button class="mobile-back-btn" id="mobileBackBtn">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
-                    All places
-                </button>
-                <span class="mobile-filter-label">${dest ? dest.flag : ''} ${dest ? dest.location : country}</span>
-            </div>
-            <div class="mobile-two-col-grid">
-                ${filtered.map((photo, i) => `
-                    <div class="mobile-grid-card" style="--i:${i}" data-country="${photo.country}">
-                        <img src="${photo.image}" alt="${photo.location}" loading="lazy">
-                    </div>
-                `).join('')}
-            </div>
-        `;
-
-        // Back button
-        document.getElementById('mobileBackBtn').addEventListener('click', () => {
-            currentCountry = 'all';
-            syncFlagButtons('all');
-            displayTravelPhotosMobile('all');
-        });
-
-        // Stagger cards
-        requestAnimationFrame(() => {
-            grid.style.opacity = '1';
-            grid.querySelectorAll('.mobile-grid-card').forEach((card, i) => {
-                card.style.animationDelay = `${Math.min(i * 30, 300)}ms`;
-                card.classList.add('card-enter');
-            });
-        });
+        displayMasonry(grid, country);
     }
 }
 
-function syncFlagButtons(country) {
+// ── "All" view — unified cinematic horizontal scroll ──────
+function displayEditorial(grid) {
+    grid.style.opacity = '0';
+    grid.className = 'masonry-grid editorial-grid';
+    grid.style.position = 'static';
+    grid.style.height = 'auto';
+
+    const photos = shuffleArray([...travelData]);
+
+    grid.innerHTML = `
+        <div class="editorial-strip-all">
+            ${photos.map((photo, i) => `
+                <div class="editorial-card-all" data-country="${photo.country}" style="--i:${i}">
+                    <img src="${photo.image}" alt="${photo.location}" loading="lazy">
+                    <div class="editorial-card-all-overlay">
+                        <span class="editorial-card-all-flag">${photo.flag}</span>
+                        <span class="editorial-card-all-loc">${photo.location}</span>
+                    </div>
+                </div>
+            `).join('')}
+        </div>
+    `;
+
+    // Card click → filter to country
+    grid.querySelectorAll('.editorial-card-all').forEach(card => {
+        card.addEventListener('click', () => {
+            const c = card.getAttribute('data-country');
+            activateCountryFilter(c);
+            displayMasonry(document.getElementById('travelGrid'), c);
+            document.getElementById('travel-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+    });
+
+    requestAnimationFrame(() => {
+        grid.style.opacity = '1';
+        // Stagger cards in as they enter viewport
+        const cards = grid.querySelectorAll('.editorial-card-all');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('reveal');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.05 });
+        cards.forEach(card => observer.observe(card));
+    });
+}
+
+// ── Shared: update flag nav pill to a country ─────────────
+function activateCountryFilter(country) {
+    const flagNav = document.getElementById('flagNavigation');
+    const pill = document.getElementById('flagNavPill');
     document.querySelectorAll('.flag-btn').forEach(btn => {
         btn.classList.remove('active');
         if (btn.getAttribute('data-country') === country) {
             btn.classList.add('active');
             btn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+            if (pill && flagNav) {
+                requestAnimationFrame(() => {
+                    const navRect = flagNav.getBoundingClientRect();
+                    const btnRect = btn.getBoundingClientRect();
+                    pill.style.left  = (btnRect.left - navRect.left + flagNav.scrollLeft) + 'px';
+                    pill.style.width = btnRect.width + 'px';
+                });
+            }
         }
     });
+    currentCountry = country;
 }
 
-// ===================================
-// DESKTOP TRAVEL LAYOUT (unchanged)
-// ===================================
-
-function displayTravelPhotosDesktop(country) {
-    const grid = document.getElementById('travelGrid');
-    grid.classList.remove('mobile-layout');
-
-    let filtered = country === 'all' 
-        ? travelData 
-        : travelData.filter(photo => photo.country === country);
-    
+// ── Masonry layout — filtered view ───────────────────────
+function displayMasonry(grid, country) {
+    const filtered = travelData.filter(p => p.country === country);
     if (filtered.length === 0) {
         grid.innerHTML = '<div class="loading-state"><p>No photos for this location yet.</p></div>';
         return;
     }
-    
-    if (country === 'all') {
-        filtered = shuffleArray([...filtered]);
-    }
-    
+
+    grid.className = 'masonry-grid';
     grid.style.opacity = '0';
     grid.style.height = '';
-    grid.innerHTML = '';
-
     grid.innerHTML = filtered.map(photo => `
         <div class="travel-card" data-country="${photo.country}">
             <img src="${photo.image}" alt="${photo.location}" loading="lazy">
@@ -353,288 +240,213 @@ function displayTravelPhotosDesktop(country) {
             </div>
         </div>
     `).join('');
-    
+
     grid.querySelectorAll('.travel-card').forEach(card => {
         card.addEventListener('click', () => {
-            const clickedCountry = card.getAttribute('data-country');
-            
-            if (currentCountry === clickedCountry) {
-                currentCountry = 'all';
-                syncFlagButtons('all');
-                displayTravelPhotosDesktop('all');
-                return;
-            }
-
-            currentCountry = clickedCountry;
-            syncFlagButtons(clickedCountry);
-            displayTravelPhotosDesktop(clickedCountry);
+            const c = card.getAttribute('data-country');
+            activateCountryFilter(c);
+            displayMasonry(grid, c);
+            document.getElementById('travel-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
         });
     });
-    
-    requestAnimationFrame(() => {
-        layoutMasonry();
-    });
+
+    layoutMasonry();
 }
 
-// Fisher-Yates shuffle algorithm (deterministic with seed)
 function shuffleArray(array) {
     const shuffled = [...array];
     let seed = 12345;
-    
     for (let i = shuffled.length - 1; i > 0; i--) {
         seed = (seed * 9301 + 49297) % 233280;
-        const random = seed / 233280;
-        const j = Math.floor(random * (i + 1));
+        const j = Math.floor((seed / 233280) * (i + 1));
         [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
     }
-    
     return shuffled;
 }
 
-// Masonry layout function
 function layoutMasonry() {
     const grid = document.getElementById('travelGrid');
     const cards = Array.from(grid.querySelectorAll('.travel-card'));
-
-    if (cards.length === 0) return;
-
     const gap = 20;
-    
-    // Responsive column count
-    const windowWidth = window.innerWidth;
-    let columns;
-    if (windowWidth > 1400) {
-        columns = 4;
-    } else if (windowWidth > 1024) {
-        columns = 3;
-    } else if (windowWidth > 768) {
-        columns = 2;
-    } else {
-        columns = 1;
-    }
-    
-    console.log('Masonry layout:', columns, 'columns for width', windowWidth);
-    
-    // *** FIX: Reset all card positions before recalculating ***
-    cards.forEach(card => {
-        card.style.position = '';
-        card.style.left = '';
-        card.style.top = '';
-        card.style.width = '';
-        card.style.height = '';
-        const img = card.querySelector('img');
-        if (img) {
-            img.style.height = '';
-            img.style.objectFit = '';
-        }
-    });
-
-    // Wait for images to load
+    const w = window.innerWidth;
+    const columns = w > 1400 ? 4 : w > 1024 ? 3 : w > 768 ? 2 : 1;
     const imagePromises = cards.map(card => {
         const img = card.querySelector('img');
-        return new Promise(resolve => {
-            if (img.complete && img.naturalWidth > 0) {
-                resolve();
-            } else {
-                img.onload = () => resolve();
-                img.onerror = () => resolve();
-            }
-        });
+        return new Promise(r => { if (img.complete) r(); else { img.onload = r; img.onerror = r; } });
     });
-    
     Promise.all(imagePromises).then(() => {
-        // *** FIX: Re-query cards after promises resolve (DOM may have changed) ***
-        const freshCards = Array.from(grid.querySelectorAll('.travel-card'));
-        if (freshCards.length === 0) return;
-
-        // Calculate column width
         const gridWidth = grid.offsetWidth;
-        const columnWidth = (gridWidth - (gap * (columns - 1))) / columns;
-        
-        // Track height of each column
-        const columnHeights = Array(columns).fill(0);
-        
-        // Check if all images have same aspect ratio
-        let allSameAspect = true;
-        let firstAspect = null;
-        
-        freshCards.forEach((card, index) => {
+        const colW = (gridWidth - gap * (columns - 1)) / columns;
+        const colHeights = Array(columns).fill(0);
+        let allSame = true, firstAspect = null;
+        cards.forEach((card, i) => {
             const img = card.querySelector('img');
-            const imgWidth = img.naturalWidth || img.width;
-            const imgHeight = img.naturalHeight || img.height;
-            
-            if (!imgWidth || !imgHeight) {
-                console.warn('Image dimensions not available for card', index);
-                return;
+            const iw = img.naturalWidth || img.width;
+            const ih = img.naturalHeight || img.height;
+            if (!iw || !ih) return;
+            const ar = ih / iw;
+            if (firstAspect === null) firstAspect = ar;
+            else if (Math.abs(ar - firstAspect) > 0.01) allSame = false;
+            let h = colW * ar;
+            if (allSame && columns > 1) {
+                const s = (i * 7919) % 100;
+                h *= 1 + (s / 100) * 0.3 - 0.15;
             }
-            
-            const aspectRatio = imgHeight / imgWidth;
-            
-            if (firstAspect === null) {
-                firstAspect = aspectRatio;
-            } else if (Math.abs(aspectRatio - firstAspect) > 0.01) {
-                allSameAspect = false;
-            }
-            
-            let cardHeight = columnWidth * aspectRatio;
-            
-            // If all same aspect, add random variation for visual interest
-            if (allSameAspect && columns > 1) {
-                const seed = (index * 7919) % 100;
-                const variation = (seed / 100) * 0.3 - 0.15;
-                cardHeight = cardHeight * (1 + variation);
-            }
-            
-            // Find shortest column
-            const shortestColumn = columnHeights.indexOf(Math.min(...columnHeights));
-            
-            // Position card
-            const left = shortestColumn * (columnWidth + gap);
-            const top = columnHeights[shortestColumn];
-            
-            card.style.position = 'absolute';
-            card.style.left = left + 'px';
-            card.style.top = top + 'px';
-            card.style.width = columnWidth + 'px';
-            card.style.height = cardHeight + 'px';
-            
-            const cardImg = card.querySelector('img');
-            if (cardImg) {
-                cardImg.style.height = cardHeight + 'px';
-                cardImg.style.objectFit = 'cover';
-            }
-            
-            // Update column height
-            columnHeights[shortestColumn] += cardHeight + gap;
+            const col = colHeights.indexOf(Math.min(...colHeights));
+            card.style.cssText = `position:absolute;left:${col*(colW+gap)}px;top:${colHeights[col]}px;width:${colW}px;height:${h}px;`;
+            const ci = card.querySelector('img');
+            if (ci) { ci.style.height = h + 'px'; ci.style.objectFit = 'cover'; }
+            colHeights[col] += h + gap;
         });
-        
-        // Set grid height to tallest column
-        const maxHeight = Math.max(...columnHeights);
-        grid.style.height = maxHeight + 'px';
-        
-        // Fade in grid after layout is complete
-        setTimeout(() => {
-            grid.style.opacity = '1';
-        }, 50);
-        
-        console.log('Column heights:', columnHeights.map(h => h.toFixed(0)));
-        console.log('All same aspect ratio:', allSameAspect);
+        grid.style.height = Math.max(...colHeights) + 'px';
+        setTimeout(() => { grid.style.opacity = '1'; }, 50);
     });
 }
 
-// Re-layout on window resize
 let resizeTimer;
 window.addEventListener('resize', () => {
     clearTimeout(resizeTimer);
-    resizeTimer = setTimeout(() => {
-        if (travelData.length > 0) {
-            displayTravelPhotos(currentCountry);
-        }
-    }, 250);
+    resizeTimer = setTimeout(() => { if (travelData.length > 0) layoutMasonry(); }, 250);
 });
 
 // ===================================
-// MUSIC SECTION - Local Data
+// MUSIC — Apple-grade flipping card
 // ===================================
 
 async function loadMySong() {
     const container = document.getElementById('myMusicContainer');
-    
     try {
-        const response = await fetch('data-music.js');
+        const response   = await fetch('data-music.js');
         const scriptText = await response.text();
-        
-        const tempFunc = new Function(scriptText + '; return musicData;');
-        const musicData = tempFunc();
-        
+        const tempFunc   = new Function(scriptText + '; return musicData;');
+        const musicData  = tempFunc();
         const song = musicData?.mySong;
-        
         if (!song) throw new Error('No song data');
-        
-        const isOnline = navigator.onLine;
-        
+
+        const videoId    = song.youtubeEmbedId;
+        const isOnline   = navigator.onLine;
+        const canPreview = isOnline && videoId;
+        const artworkSrc = song.artwork || `https://i.ytimg.com/vi/${videoId}/maxresdefault.jpg`;
+
         container.innerHTML = `
-            <div class="song-card" id="songCard" data-youtube-id="${song.youtubeEmbedId || ''}" data-online="${isOnline}">
-                <div class="song-artwork" id="songArtwork">
-                    <img src="${song.artwork}" alt="${song.title}" onerror="this.src='https://via.placeholder.com/500x500?text=BRONX'">
-                    <div class="play-overlay">
-                        <svg class="play-icon" viewBox="0 0 24 24" fill="white">
-                            <path d="M8 5v14l11-7z"/>
-                        </svg>
+            <div class="song-card" id="songCard">
+                <div class="song-card-inner">
+
+                    <div class="song-card-front">
+                        <div class="song-card-artwork">
+                            <img src="${artworkSrc}" alt="${song.title}"
+                                 onerror="this.src='https://i.ytimg.com/vi/${videoId}/hqdefault.jpg'">
+                        </div>
+                        <div class="song-card-info">
+                            <div class="song-card-waveform">
+                                <span></span><span></span><span></span><span></span>
+                            </div>
+                            <div class="song-card-text">
+                                <p class="song-card-title">${song.title}</p>
+                                <p class="song-card-artist">${song.artist}</p>
+                                <p class="song-card-producer">${song.producer}</p>
+                            </div>
+                            <div class="song-card-play-btn">
+                                <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                            </div>
+                        </div>
                     </div>
-                    ${isOnline ? `
-                        <iframe 
-                            id="youtubePreview"
-                            style="display:none; position:absolute; top:0; left:0; width:100%; height:100%;"
-                            src=""
-                            frameborder="0"
-                            allow="autoplay; encrypted-media"
-                            allowfullscreen>
-                        </iframe>
-                    ` : ''}
-                </div>
-                <div class="song-info">
-                    <h4 class="song-title">${song.title}</h4>
-                    <p class="song-artist">${song.artist}</p>
-                    <p class="song-producer">${song.producer}</p>
+
+                    <div class="song-card-back">
+                        ${canPreview ? `
+                            <iframe id="youtubePreview" src="" frameborder="0"
+                                allow="autoplay; encrypted-media" allowfullscreen tabindex="-1">
+                            </iframe>
+                        ` : `
+                            <img src="https://i.ytimg.com/vi/${videoId}/hqdefault.jpg"
+                                 alt="${song.title}" style="width:100%;height:100%;object-fit:cover;">
+                        `}
+                        <div class="song-card-back-overlay">
+                            <p class="song-card-back-title">${song.title}</p>
+                            ${canPreview ? `
+                                <div class="preview-badge">
+                                    <span class="preview-dot"></span>Preview
+                                </div>
+                            ` : ''}
+                        </div>
+                    </div>
+
                 </div>
             </div>
         `;
-        
-        if (isOnline && song.youtubeEmbedId) {
-            const songCard = document.getElementById('songCard');
-            const artwork = document.getElementById('songArtwork');
-            const iframe = document.getElementById('youtubePreview');
-            
-            let hoverTimeout;
-            
-            songCard.addEventListener('mouseenter', () => {
-                hoverTimeout = setTimeout(() => {
-                    if (iframe) {
-                        iframe.src = `https://www.youtube.com/embed/${song.youtubeEmbedId}?autoplay=1&mute=1&controls=0&modestbranding=1&rel=0`;
-                        artwork.querySelector('img').style.opacity = '0';
-                        artwork.querySelector('.play-overlay').style.opacity = '0';
-                        iframe.style.display = 'block';
-                    }
-                }, 500);
-            });
-            
-            songCard.addEventListener('mouseleave', () => {
-                clearTimeout(hoverTimeout);
-                if (iframe) {
-                    iframe.style.display = 'none';
-                    iframe.src = '';
-                    artwork.querySelector('img').style.opacity = '1';
-                    artwork.querySelector('.play-overlay').style.opacity = '1';
-                }
-            });
-            
-            songCard.addEventListener('click', () => {
-                window.open(song.youtubeUrl, '_blank');
-            });
-        } else {
-            const songCard = document.getElementById('songCard');
-            songCard.addEventListener('click', () => {
+
+        const songCard   = document.getElementById('songCard');
+        const artwork    = songCard.querySelector('.song-card-artwork');
+        const infoBar    = songCard.querySelector('.song-card-info');
+
+        let isFlipping = false;
+
+        function flip() {
+            if (isFlipping) return;
+            isFlipping = true;
+            songCard.classList.add('flipped');
+            if (canPreview) {
+                const iframe = document.getElementById('youtubePreview');
+                setTimeout(() => { iframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&controls=0&modestbranding=1&rel=0&iv_load_policy=3&playsinline=1`; }, 350);
+            }
+            // Unlock after transition completes
+            setTimeout(() => { isFlipping = false; }, 700);
+        }
+
+        function unflip() {
+            if (isFlipping) return;
+            isFlipping = true;
+            songCard.classList.remove('flipped');
+            if (canPreview) {
+                const iframe = document.getElementById('youtubePreview');
+                iframe.src = '';
+            }
+            setTimeout(() => { isFlipping = false; }, 700);
+        }
+
+        // Only flip when entering the artwork — info bar is a safe zone
+        artwork.addEventListener('mouseenter', flip);
+        songCard.addEventListener('mouseleave', unflip);
+
+        // Play button clicks open YouTube directly
+        const playBtn = songCard.querySelector('.song-card-play-btn');
+        if (playBtn) {
+            playBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
                 window.open(song.youtubeUrl, '_blank');
             });
         }
-        
+
+        songCard.addEventListener('click', () => window.open(song.youtubeUrl, '_blank'));
+
     } catch (error) {
         console.error('Error loading song:', error);
         container.innerHTML = `
-            <div class="song-card" onclick="window.open('https://youtu.be/N4ygYzmWhVk', '_blank')">
-                <div class="song-artwork">
-                    <img src="https://via.placeholder.com/500x500?text=BRONX" alt="BRONX">
-                    <div class="play-overlay">
-                        <svg class="play-icon" viewBox="0 0 24 24" fill="white">
-                            <path d="M8 5v14l11-7z"/>
-                        </svg>
+            <div class="song-card" onclick="window.open('https://youtu.be/d2nUN5jcyfE','_blank')">
+                <div class="song-card-inner">
+                    <div class="song-card-front">
+                        <div class="song-card-artwork">
+                            <img src="https://i.ytimg.com/vi/d2nUN5jcyfE/hqdefault.jpg" alt="BRONX">
+                        </div>
+                        <div class="song-card-info">
+                            <div class="song-card-waveform"><span></span><span></span><span></span><span></span></div>
+                            <div class="song-card-text">
+                                <p class="song-card-title">BRONX</p>
+                                <p class="song-card-artist">Giovane Soldato feat. Cashmoneynobaby & K3Y</p>
+                                <p class="song-card-producer">Produced by Francesco Gerbasio</p>
+                            </div>
+                            <div class="song-card-play-btn">
+                                <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                            </div>
+                        </div>
                     </div>
-                </div>
-                <div class="song-info">
-                    <h4 class="song-title">BRONX</h4>
-                    <p class="song-artist">Giovane Soldato feat. Cashmoneynobaby & K3Y</p>
-                    <p class="song-producer">Produced by Francesco Gerbasio</p>
+                    <div class="song-card-back">
+                        <img src="https://i.ytimg.com/vi/d2nUN5jcyfE/hqdefault.jpg" alt="BRONX"
+                             style="width:100%;height:100%;object-fit:cover;">
+                        <div class="song-card-back-overlay">
+                            <p class="song-card-back-title">BRONX</p>
+                        </div>
+                    </div>
                 </div>
             </div>
         `;
@@ -642,94 +454,210 @@ async function loadMySong() {
 }
 
 // ===================================
-// MUSIC SECTION - Favorite Artists (Local Data)
+// MUSIC — Favorite Artists
 // ===================================
 
 async function loadFavoriteArtists() {
     const grid = document.getElementById('artistsGrid');
     grid.innerHTML = '<div class="loading-state"><div class="spinner"></div><p>Loading artists...</p></div>';
-    
+
     try {
-        const response = await fetch('data-music.js');
+        const response   = await fetch('data-music.js');
         const scriptText = await response.text();
-        
-        const tempFunc = new Function(scriptText + '; return musicData;');
-        const musicData = tempFunc();
-        
-        const artists = musicData?.artists || [];
-        
+        const tempFunc   = new Function(scriptText + '; return musicData;');
+        const musicData  = tempFunc();
+        const artists    = musicData?.artists || [];
         if (artists.length === 0) throw new Error('No artists data');
-        
-        grid.innerHTML = artists.map(artist => `
-            <div class="artist-card">
+
+        // Set src directly in template — simple and reliable
+        grid.innerHTML = artists.map((artist, i) => `
+            <div class="artist-card" data-index="${i}">
                 <div class="artist-image">
-                    <img src="${artist.image}" alt="${artist.name}" onerror="this.src='https://via.placeholder.com/240x240?text=${encodeURIComponent(artist.name)}'">
+                    ${artist.image
+                        ? `<img src="${artist.image}" alt="${artist.name}" onerror="this.style.display='none'">`
+                        : ''
+                    }
                 </div>
-                <h4 class="artist-name">${artist.name}</h4>
+                <div class="artist-overlay"></div>
+                <div class="artist-info">
+                    <h4 class="artist-name">${artist.name}</h4>
+                    <span class="artist-spotify-pill">Open in Spotify</span>
+                </div>
             </div>
         `).join('');
-        
+
+        // Click opens Spotify search
+        grid.querySelectorAll('.artist-card').forEach((card, i) => {
+            card.addEventListener('click', () => {
+                window.open(`https://open.spotify.com/search/${encodeURIComponent(artists[i].name)}`, '_blank');
+            });
+        });
+
     } catch (error) {
         console.error('Error loading artists:', error);
-        grid.innerHTML = `
-            <div class="loading-state">
-                <p>Add your favorite artists in data-music.js!</p>
-            </div>
-        `;
+        grid.innerHTML = `<div class="loading-state"><p>Add your favorite artists in data-music.js!</p></div>`;
     }
 }
+
+// ===================================
+// GAMING
+// ===================================
 
 // ===================================
 // GAMING SECTION
 // ===================================
 
-function loadGames() {
-    const grid = document.getElementById('gamesGrid');
-    
-    const mockGames = [
-        {
-            title: 'Game Title 1',
-            platform: 'PC, PlayStation 5',
-            cover: 'https://via.placeholder.com/250x333'
-        },
-        {
-            title: 'Game Title 2',
-            platform: 'Xbox Series X, PC',
-            cover: 'https://via.placeholder.com/250x333'
-        },
-        {
-            title: 'Game Title 3',
-            platform: 'Nintendo Switch',
-            cover: 'https://via.placeholder.com/250x333'
-        }
-    ];
-    
-    grid.innerHTML = mockGames.map(game => `
-        <div class="game-card">
-            <div class="game-image">
-                <img src="${game.cover}" alt="${game.title}">
+async function loadGames() {
+    const section = document.getElementById('gaming-section');
+    try {
+        const response  = await fetch('data-games.js');
+        const scriptText = await response.text();
+        const tempFunc  = new Function(scriptText + '; return gamesData;');
+        const gamesData = tempFunc();
+
+        section.innerHTML = `
+            <!-- Featured Hero -->
+            <div class="games-featured" id="gamesFeatured"></div>
+
+            <!-- Currently Playing -->
+            <div class="games-subsection">
+                <h3 class="games-subsection-title">
+                    <span class="games-subsection-dot playing"></span>
+                    Currently Playing
+                </h3>
+                <div class="games-grid small" id="gamesPlaying"></div>
             </div>
-            <div class="game-info">
-                <h4 class="game-title">${game.title}</h4>
-                <p class="game-platform">${game.platform}</p>
+
+            <!-- All-Time Favourites -->
+            <div class="games-subsection">
+                <h3 class="games-subsection-title">All‑Time Favourites</h3>
+                <div class="games-grid" id="gamesFavourites"></div>
             </div>
+        `;
+
+        buildFeatured(gamesData.featured);
+        buildGrid(document.getElementById('gamesPlaying'),    gamesData.currentlyPlaying);
+        buildGrid(document.getElementById('gamesFavourites'), gamesData.favorites);
+
+    } catch (err) {
+        console.error('Error loading games:', err);
+    }
+}
+
+// ── Featured carousel ──────────────────────────────────────
+function buildFeatured(games) {
+    const container = document.getElementById('gamesFeatured');
+    let current = 0;
+    let autoTimer;
+
+    container.innerHTML = `
+        <div class="gf-track" id="gfTrack">
+            ${games.map((g, i) => `
+                <div class="gf-slide ${i === 0 ? 'active' : ''}" data-index="${i}">
+                    <div class="gf-bg">
+                        <img src="${g.cover}" alt="${g.title}" class="gf-bg-img">
+                        <div class="gf-bg-overlay"></div>
+                    </div>
+                    <div class="gf-content">
+                        <span class="gf-genre">${g.genre}</span>
+                        <h2 class="gf-title">${g.title}</h2>
+                        <span class="gf-year">${g.year}</span>
+                    </div>
+                </div>
+            `).join('')}
         </div>
-    `).join('');
+        <div class="gf-dots">
+            ${games.map((_, i) => `
+                <button class="gf-dot ${i === 0 ? 'active' : ''}" data-i="${i}"></button>
+            `).join('')}
+        </div>
+        <button class="gf-arrow gf-prev" aria-label="Previous">‹</button>
+        <button class="gf-arrow gf-next" aria-label="Next">›</button>
+    `;
+
+    const slides = container.querySelectorAll('.gf-slide');
+    const dots   = container.querySelectorAll('.gf-dot');
+
+    function goTo(n) {
+        slides[current].classList.remove('active');
+        dots[current].classList.remove('active');
+        current = (n + games.length) % games.length;
+        slides[current].classList.add('active');
+        dots[current].classList.add('active');
+    }
+
+    function startAuto() { autoTimer = setInterval(() => goTo(current + 1), 5000); }
+    function stopAuto()  { clearInterval(autoTimer); }
+
+    container.querySelector('.gf-next').addEventListener('click', () => { stopAuto(); goTo(current + 1); startAuto(); });
+    container.querySelector('.gf-prev').addEventListener('click', () => { stopAuto(); goTo(current - 1); startAuto(); });
+    dots.forEach(d => d.addEventListener('click', () => { stopAuto(); goTo(+d.dataset.i); startAuto(); }));
+
+    startAuto();
+}
+
+// ── Game grid ──────────────────────────────────────────────
+function buildGrid(container, games) {
+    container.innerHTML = games.map(g => {
+        if (g.isSaga) {
+            return `
+                <div class="game-card saga-card" data-id="${g.id}">
+                    <div class="game-cover">
+                        <img src="${g.cover}" alt="${g.title}" loading="lazy">
+                        <div class="game-cover-overlay"></div>
+                        <div class="saga-badge">${g.games.length} games</div>
+                    </div>
+                    <div class="game-meta">
+                        <span class="game-genre-tag">${g.genre}</span>
+                        <h4 class="game-name">${g.title}</h4>
+                    </div>
+                    <div class="saga-drawer" id="drawer-${g.id}">
+                        <ul class="saga-list">
+                            ${g.games.map(entry => `
+                                <li class="saga-list-item">
+                                    <span class="saga-list-title">${entry.title}</span>
+                                    <span class="saga-list-year">${entry.year}</span>
+                                </li>
+                            `).join('')}
+                        </ul>
+                    </div>
+                </div>
+            `;
+        }
+        return `
+            <div class="game-card" data-id="${g.id}">
+                <div class="game-cover">
+                    <img src="${g.cover}" alt="${g.title}" loading="lazy">
+                    <div class="game-cover-overlay"></div>
+                </div>
+                <div class="game-meta">
+                    <span class="game-genre-tag">${g.genre}</span>
+                    <h4 class="game-name">${g.title}</h4>
+                </div>
+            </div>
+        `;
+    }).join('');
+
+    // Saga expand/collapse
+    container.querySelectorAll('.saga-card').forEach(card => {
+        card.addEventListener('click', () => {
+            const isOpen = card.classList.contains('open');
+            // Close all open sagas in this grid first
+            container.querySelectorAll('.saga-card.open').forEach(c => c.classList.remove('open'));
+            if (!isOpen) card.classList.add('open');
+        });
+    });
 }
 
 // ===================================
-// INITIALIZATION
+// INIT
 // ===================================
 
 document.addEventListener('DOMContentLoaded', function() {
-    // ===================================
-    // MOBILE HAMBURGER MENU
-    // ===================================
-    
-    const hamburgerBtn = document.getElementById('hamburgerBtn');
-    const mobileMenu = document.getElementById('mobileMenu');
+    const hamburgerBtn   = document.getElementById('hamburgerBtn');
+    const mobileMenu     = document.getElementById('mobileMenu');
     const mobileNavLinks = document.querySelectorAll('.mobile-menu .nav-link');
-    
+
     if (hamburgerBtn) {
         hamburgerBtn.addEventListener('click', function(e) {
             e.stopPropagation();
@@ -737,45 +665,28 @@ document.addEventListener('DOMContentLoaded', function() {
             mobileMenu.classList.toggle('active');
         });
     }
-    
     document.addEventListener('click', function(e) {
-        if (mobileMenu && mobileMenu.classList.contains('active')) {
+        if (mobileMenu?.classList.contains('active')) {
             if (!mobileMenu.contains(e.target) && !hamburgerBtn.contains(e.target)) {
                 hamburgerBtn.classList.remove('active');
                 mobileMenu.classList.remove('active');
             }
         }
     });
-    
     mobileNavLinks.forEach(link => {
-        link.addEventListener('click', function() {
+        link.addEventListener('click', () => {
             hamburgerBtn.classList.remove('active');
             mobileMenu.classList.remove('active');
         });
     });
-    
-    // ===================================
-    // NAVIGATION SCROLL EFFECT
-    // ===================================
-    
+
     const navigation = document.querySelector('.navigation');
-    
     function handleScroll() {
-        const currentScrollY = window.scrollY;
-        if (currentScrollY > 20) {
-            navigation.classList.add('scrolled');
-        } else {
-            navigation.classList.remove('scrolled');
-        }
+        navigation.classList.toggle('scrolled', window.scrollY > 20);
     }
-    
     window.addEventListener('scroll', handleScroll);
     handleScroll();
-    
-    // Load travel section on init
+
     loadTravelPhotos('all');
-    travelDataLoaded = true;
-    
-    // Set initial subtitle
-    document.getElementById('categorySubtitle').textContent = CATEGORY_SUBTITLES.travel;
+    travelDataLoaded = true;    document.getElementById('categorySubtitle').textContent = CATEGORY_SUBTITLES.travel;
 });
