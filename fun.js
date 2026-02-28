@@ -184,7 +184,19 @@ function displayEditorial(grid) {
 
     requestAnimationFrame(() => {
         grid.style.opacity = '1';
-        const cards = grid.querySelectorAll('.editorial-card-all');
+        const cards = Array.from(grid.querySelectorAll('.editorial-card-all'));
+
+        // Sort by top offset so stagger goes left→right, row by row
+        const withPos = cards.map(card => ({
+            card,
+            top:  card.getBoundingClientRect().top,
+            left: card.getBoundingClientRect().left
+        }));
+        withPos.sort((a, b) => a.top - b.top || a.left - b.left);
+        withPos.forEach(({ card }, idx) => {
+            card.style.setProperty('--i', idx);
+        });
+
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
