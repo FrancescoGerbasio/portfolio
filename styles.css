@@ -1700,6 +1700,7 @@ html {
     border-radius: 12px;
     overflow: hidden;
     cursor: pointer;
+    background: #1a1a1a;
     /* Base state — invisible until revealed */
     opacity: 0;
     transform: scale(0.92) translateY(12px);
@@ -1747,6 +1748,20 @@ html {
     display: block;
     vertical-align: bottom;
     transition: transform 0.3s ease;
+    background: #1a1a1a;
+}
+
+/* Shimmer while image is loading */
+.travel-card img:not([src]),
+.travel-card img[src=""] {
+    background: linear-gradient(90deg, #1a1a1a 25%, #2a2a2a 50%, #1a1a1a 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.4s ease infinite;
+}
+
+@keyframes shimmer {
+    0%   { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
 }
 
 .travel-card:hover img {
