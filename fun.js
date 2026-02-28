@@ -152,113 +152,36 @@ function displayTravelPhotos(country) {
 // ── "All" view — JS masonry, same engine as filtered view ─
 function displayEditorial(grid) {
     grid.style.opacity = '0';
-    grid.className = 'masonry-grid editorial-grid';
+    grid.className = 'masonry-grid';
     grid.style.position = 'relative';
     grid.style.height = '';
 
     const photos = shuffleArray([...travelData]);
 
     grid.innerHTML = photos.map((photo, i) => `
-        <div class="editorial-card-all" data-country="${photo.country}" style="--i:${i}">
-            <img src="${photo.image}" alt="${photo.location}" loading="eager">
-            <div class="editorial-card-all-overlay">
-                <span class="editorial-card-all-flag">${photo.flag}</span>
-                <span class="editorial-card-all-loc">${photo.location}</span>
+        <div class="travel-card" data-country="${photo.country}" style="--card-i:${i}">
+            <img src="${photo.image}" alt="${photo.location}">
+            <div class="travel-card-location">
+                <span class="flag">${photo.flag}</span>
+                <span class="location-name">${photo.location}</span>
             </div>
         </div>
     `).join('');
 
-    // Card click → filter to country
-    grid.querySelectorAll('.editorial-card-all').forEach(card => {
+    grid.querySelectorAll('.travel-card').forEach(card => {
         card.addEventListener('click', () => {
             const c = card.getAttribute('data-country');
             activateCountryFilter(c);
-            displayMasonry(document.getElementById('travelGrid'), c);
+            displayMasonry(grid, c);
             document.getElementById('travel-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
         });
     });
 
-    layoutEditorial(grid, photos);
+    layoutMasonry();
 }
 
 // ── Layout engine for "All" editorial grid ────────────────
-function layoutEditorial(grid, photos) {
-    const cards = Array.from(grid.querySelectorAll('.editorial-card-all'));
-    const gap = 12;
-    const w = window.innerWidth;
-    const columns = w > 1400 ? 4 : w > 1024 ? 3 : w > 768 ? 2 : 2;
 
-    const imagePromises = cards.map(card => {
-        const img = card.querySelector('img');
-        // img.decode() is the reliable cross-browser way to know dimensions are ready
-        return img.decode().catch(() => {});
-    });
-
-    Promise.all(imagePromises).then(() => {
-        const gridWidth = grid.offsetWidth;
-        const colW = (gridWidth - gap * (columns - 1)) / columns;
-        const colHeights = Array(columns).fill(0);
-
-        // Place cards, track their column for left→right stagger
-        const cardPositions = [];
-        cards.forEach((card, i) => {
-            const img = card.querySelector('img');
-            const iw = img.naturalWidth || img.width;
-            const ih = img.naturalHeight || img.height;
-            if (!iw || !ih) return;
-            const ar = ih / iw;
-            const h = colW * ar;
-            const col = colHeights.indexOf(Math.min(...colHeights));
-            card.style.cssText = `
-                position: absolute;
-                left: ${col * (colW + gap)}px;
-                top: ${colHeights[col]}px;
-                width: ${colW}px;
-                height: ${h}px;
-                --i: ${i};
-            `;
-            const ci = card.querySelector('img');
-            if (ci) { ci.style.height = h + 'px'; ci.style.objectFit = 'cover'; }
-            cardPositions.push({ card, col, top: colHeights[col] });
-            colHeights[col] += h + gap;
-        });
-
-        grid.style.height = Math.max(...colHeights) + 'px';
-
-        // Reassign --i by visual position (left→right, top→bottom)
-        cardPositions
-            .sort((a, b) => {
-                const rowA = Math.round(a.top / 20);
-                const rowB = Math.round(b.top / 20);
-                return rowA !== rowB ? rowA - rowB : a.col - b.col;
-            })
-            .forEach(({ card }, idx) => card.style.setProperty('--i', idx));
-
-        // Reveal with staggered animation
-        requestAnimationFrame(() => {
-            grid.style.transition = 'opacity 0.2s ease';
-            grid.style.opacity = '1';
-
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        const card = entry.target;
-                        void card.offsetWidth;
-                        card.classList.add('reveal');
-                        card.addEventListener('animationend', () => {
-                            card.style.opacity = '1';
-                            card.style.transform = 'scale(1) translateY(0)';
-                            card.classList.remove('reveal');
-                        }, { once: true });
-                        observer.unobserve(card);
-                    }
-                });
-            }, { threshold: 0.05 });
-
-            cards.forEach(card => observer.observe(card));
-        });
-    });
-}
 
 
 function activateCountryFilter(country) {
