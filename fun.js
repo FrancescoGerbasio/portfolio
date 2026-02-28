@@ -254,9 +254,36 @@ function shuffleArray(array) {
 function layoutMasonry() {
     const grid = document.getElementById('travelGrid');
     const cards = Array.from(grid.querySelectorAll('.travel-card'));
-    const gap = 12;
     const w = window.innerWidth;
-    const columns = w > 1400 ? 4 : w > 1024 ? 3 : w > 768 ? 2 : 2;
+
+    // ── Mobile: CSS columns — no decode wait, no absolute positioning ──
+    if (w <= 768) {
+        grid.style.position = 'static';
+        grid.style.height   = 'auto';
+        grid.style.cssText  = 'position:static;height:auto;opacity:0;';
+        grid.classList.add('masonry-css');
+
+        // Let images load lazily as user scrolls — just reveal grid
+        requestAnimationFrame(() => {
+            grid.style.transition = 'opacity 0.35s ease';
+            grid.style.opacity    = '1';
+            cards.forEach((card, i) => {
+                card.style.cssText = `--card-i:${i};`;
+                void card.offsetWidth;
+                card.classList.add('revealed');
+                card.addEventListener('animationend', () => {
+                    card.style.opacity   = '1';
+                    card.style.transform = 'scale(1) translateY(0)';
+                    card.classList.remove('revealed');
+                }, { once: true });
+            });
+        });
+        return;
+    }
+
+    // ── Desktop: JS absolute positioning ──
+    const gap = 12;
+    const columns = w > 1400 ? 4 : w > 1024 ? 3 : 2;
 
     const imagePromises = cards.map(card => {
         const img = card.querySelector('img');
@@ -283,7 +310,6 @@ function layoutMasonry() {
                 h *= 1 + (s / 100) * 0.3 - 0.15;
             }
             const col = colHeights.indexOf(Math.min(...colHeights));
-            const cardI = card.style.getPropertyValue('--card-i') || i;
             card.style.cssText = `
                 position: absolute;
                 left: ${col * (colW + gap)}px;
@@ -299,15 +325,13 @@ function layoutMasonry() {
 
         grid.style.height = Math.max(...colHeights) + 'px';
 
-        // Trigger staggered card reveal after all are positioned
         requestAnimationFrame(() => {
             grid.style.opacity = '1';
             grid.querySelectorAll('.travel-card').forEach(card => {
-                void card.offsetWidth; // force reflow
+                void card.offsetWidth;
                 card.classList.add('revealed');
-                // Once animation finishes, lock final state so hover transform works
                 card.addEventListener('animationend', () => {
-                    card.style.opacity = '1';
+                    card.style.opacity   = '1';
                     card.style.transform = 'scale(1) translateY(0)';
                     card.classList.remove('revealed');
                 }, { once: true });
@@ -321,13 +345,11 @@ window.addEventListener('resize', () => {
     clearTimeout(resizeTimer);
     resizeTimer = setTimeout(() => {
         const grid = document.getElementById('travelGrid');
-        if (!grid) return;
+        if (!grid || !grid.querySelector('.travel-card')) return;
+        // Remove CSS columns class before re-layout so desktop path works clean
+        grid.classList.remove('masonry-css');
         grid.style.opacity = '0';
-        if (grid.querySelector('.travel-card')) {
-            layoutMasonry();
-        } else if (grid.querySelector('.editorial-card-all')) {
-            layoutEditorial(grid, travelData);
-        }
+        layoutMasonry();
     }, 250);
 });
 

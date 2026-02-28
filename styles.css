@@ -1695,8 +1695,28 @@ html {
     line-height: 1;
 }
 
-.travel-card {
-    position: absolute;
+/* Mobile masonry — CSS columns, no JS positioning */
+.masonry-grid.masonry-css {
+    column-count: 2;
+    column-gap: 10px;
+}
+
+.masonry-grid.masonry-css .travel-card {
+    position: relative !important;
+    left: auto !important;
+    top: auto !important;
+    width: 100% !important;
+    height: auto !important;
+    display: inline-block;
+    break-inside: avoid;
+    margin-bottom: 10px;
+}
+
+.masonry-grid.masonry-css .travel-card img {
+    height: auto !important;
+    width: 100%;
+    object-fit: cover;
+}
     border-radius: 12px;
     overflow: hidden;
     cursor: pointer;
