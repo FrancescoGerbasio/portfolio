@@ -141,13 +141,150 @@ function generateFlagButtons() {
 
 function displayTravelPhotos(country) {
     const grid = document.getElementById('travelGrid');
-    let filtered = country === 'all' ? travelData : travelData.filter(p => p.country === country);
+
+    if (country === 'all') {
+        displayEditorial(grid);
+    } else {
+        displayMasonry(grid, country);
+    }
+}
+
+// ── Editorial layout — "All" view ─────────────────────────
+function displayEditorial(grid) {
+    grid.style.opacity = '0';
+    grid.className = 'masonry-grid editorial-grid';
+
+    // Group photos by country, preserving destination order
+    const grouped = {};
+    const order = [];
+    travelData.forEach(photo => {
+        if (!grouped[photo.country]) {
+            grouped[photo.country] = [];
+            order.push(photo.country);
+        }
+        grouped[photo.country].push(photo);
+    });
+
+    grid.style.position = 'relative';
+    grid.style.height = 'auto';
+
+    grid.innerHTML = order.map(countryCode => {
+        const photos = grouped[countryCode];
+        const sample = photos[0];
+        return `
+            <div class="editorial-row" data-country="${countryCode}">
+                <div class="editorial-row-header">
+                    <span class="editorial-flag">${sample.flag}</span>
+                    <h3 class="editorial-country">${sample.location}</h3>
+                    <span class="editorial-count">${photos.length}</span>
+                    <span class="editorial-arrow">→</span>
+                </div>
+                <div class="editorial-strip-wrapper">
+                    <div class="editorial-strip" data-country="${countryCode}">
+                        ${photos.map((photo, i) => `
+                            <div class="editorial-card" data-country="${photo.country}" style="--i:${i}">
+                                <img src="${photo.image}" alt="${photo.location}" loading="lazy">
+                                <div class="editorial-card-overlay">
+                                    <span class="editorial-card-num">${String(i + 1).padStart(2, '0')}</span>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            </div>
+        `;
+    }).join('');
+
+    // Row header click → filter to that country
+    grid.querySelectorAll('.editorial-row-header').forEach(header => {
+        header.addEventListener('click', () => {
+            const c = header.closest('.editorial-row').getAttribute('data-country');
+            const flagNav = document.getElementById('flagNavigation');
+            const pill = document.getElementById('flagNavPill');
+            document.querySelectorAll('.flag-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.getAttribute('data-country') === c) {
+                    btn.classList.add('active');
+                    btn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+                    if (pill && flagNav) {
+                        requestAnimationFrame(() => {
+                            const navRect = flagNav.getBoundingClientRect();
+                            const btnRect = btn.getBoundingClientRect();
+                            pill.style.left  = (btnRect.left - navRect.left + flagNav.scrollLeft) + 'px';
+                            pill.style.width = btnRect.width + 'px';
+                        });
+                    }
+                }
+            });
+            currentCountry = c;
+            displayMasonry(document.getElementById('travelGrid'), c);
+        });
+    });
+
+    // Card click → filter to country
+    grid.querySelectorAll('.editorial-card').forEach(card => {
+        card.addEventListener('click', () => {
+            const c = card.getAttribute('data-country');
+            const flagNav = document.getElementById('flagNavigation');
+            const pill = document.getElementById('flagNavPill');
+            document.querySelectorAll('.flag-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.getAttribute('data-country') === c) {
+                    btn.classList.add('active');
+                    btn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+                    if (pill && flagNav) {
+                        requestAnimationFrame(() => {
+                            const navRect = flagNav.getBoundingClientRect();
+                            const btnRect = btn.getBoundingClientRect();
+                            pill.style.left  = (btnRect.left - navRect.left + flagNav.scrollLeft) + 'px';
+                            pill.style.width = btnRect.width + 'px';
+                        });
+                    }
+                }
+            });
+            currentCountry = c;
+            displayMasonry(document.getElementById('travelGrid'), c);
+            document.getElementById('travel-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+    });
+
+    // Scroll-triggered reveal for each row
+    requestAnimationFrame(() => {
+        grid.style.opacity = '1';
+        const rows = grid.querySelectorAll('.editorial-row');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('reveal');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+
+        rows.forEach((row, i) => {
+            row.style.transitionDelay = `${i * 0.06}s`;
+            // If already in viewport on load, reveal immediately
+            const rect = row.getBoundingClientRect();
+            if (rect.top < window.innerHeight) {
+                setTimeout(() => row.classList.add('reveal'), i * 60);
+            } else {
+                observer.observe(row);
+            }
+        });
+    });
+}
+
+// ── Masonry layout — filtered view ───────────────────────
+function displayMasonry(grid, country) {
+    const filtered = travelData.filter(p => p.country === country);
     if (filtered.length === 0) {
         grid.innerHTML = '<div class="loading-state"><p>No photos for this location yet.</p></div>';
         return;
     }
-    if (country === 'all') filtered = shuffleArray([...filtered]);
+
+    grid.className = 'masonry-grid';
     grid.style.opacity = '0';
+    grid.style.height = '';
     grid.innerHTML = filtered.map(photo => `
         <div class="travel-card" data-country="${photo.country}">
             <img src="${photo.image}" alt="${photo.location}" loading="lazy">
@@ -157,6 +294,7 @@ function displayTravelPhotos(country) {
             </div>
         </div>
     `).join('');
+
     grid.querySelectorAll('.travel-card').forEach(card => {
         card.addEventListener('click', () => {
             const c = card.getAttribute('data-country');
@@ -177,10 +315,12 @@ function displayTravelPhotos(country) {
                     }
                 }
             });
-            displayTravelPhotos(c);
+            currentCountry = c;
+            displayMasonry(grid, c);
             document.getElementById('travel-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
         });
     });
+
     layoutMasonry();
 }
 
@@ -619,6 +759,5 @@ document.addEventListener('DOMContentLoaded', function() {
     handleScroll();
 
     loadTravelPhotos('all');
-    travelDataLoaded = true;
-    document.getElementById('categorySubtitle').textContent = CATEGORY_SUBTITLES.travel;
+    travelDataLoaded = true;    document.getElementById('categorySubtitle').textContent = CATEGORY_SUBTITLES.travel;
 });
