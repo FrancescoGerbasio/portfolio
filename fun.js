@@ -233,8 +233,8 @@ function displayMasonry(grid, country) {
     grid.style.height = '';
     grid.style.position = 'relative';
 
-    grid.innerHTML = filtered.map(photo => `
-        <div class="travel-card" data-country="${photo.country}" style="visibility:hidden;">
+    grid.innerHTML = filtered.map((photo, i) => `
+        <div class="travel-card" data-country="${photo.country}" style="--card-i:${i}">
             <img src="${photo.image}" alt="${photo.location}" loading="lazy">
             <div class="travel-card-location">
                 <span class="flag">${photo.flag}</span>
@@ -301,15 +301,14 @@ function layoutMasonry() {
                 h *= 1 + (s / 100) * 0.3 - 0.15;
             }
             const col = colHeights.indexOf(Math.min(...colHeights));
-            // Preserve visibility:hidden until reveal, just update position/size
-            const wasHidden = card.style.visibility === 'hidden';
+            const cardI = card.style.getPropertyValue('--card-i') || i;
             card.style.cssText = `
                 position: absolute;
                 left: ${col * (colW + gap)}px;
                 top: ${colHeights[col]}px;
                 width: ${colW}px;
                 height: ${h}px;
-                visibility: visible;
+                --card-i: ${i};
             `;
             const ci = card.querySelector('img');
             if (ci) { ci.style.height = h + 'px'; ci.style.objectFit = 'cover'; }
@@ -318,10 +317,19 @@ function layoutMasonry() {
 
         grid.style.height = Math.max(...colHeights) + 'px';
 
-        // Reveal only after all cards are in position
+        // Trigger staggered card reveal after all are positioned
         requestAnimationFrame(() => {
-            grid.style.transition = 'opacity 0.35s ease';
             grid.style.opacity = '1';
+            grid.querySelectorAll('.travel-card').forEach(card => {
+                void card.offsetWidth; // force reflow
+                card.classList.add('revealed');
+                // Once animation finishes, lock final state so hover transform works
+                card.addEventListener('animationend', () => {
+                    card.style.opacity = '1';
+                    card.style.transform = 'scale(1) translateY(0)';
+                    card.classList.remove('revealed');
+                }, { once: true });
+            });
         });
     });
 }
