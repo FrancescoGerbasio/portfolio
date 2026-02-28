@@ -575,7 +575,7 @@ function buildFeatured(games) {
     container.innerHTML = `
         <div class="gf-track" id="gfTrack">
             ${games.map((g, i) => `
-                <div class="gf-slide ${i === 0 ? 'active' : ''}" data-index="${i}">
+                <div class="gf-slide" data-index="${i}">
                     <div class="gf-bg">
                         <img src="${g.cover}" alt="${g.title}" class="gf-bg-img">
                         <div class="gf-bg-overlay"></div>
@@ -590,7 +590,7 @@ function buildFeatured(games) {
         </div>
         <div class="gf-dots">
             ${games.map((_, i) => `
-                <button class="gf-dot ${i === 0 ? 'active' : ''}" data-i="${i}"></button>
+                <button class="gf-dot" data-i="${i}"></button>
             `).join('')}
         </div>
         <button class="gf-arrow gf-prev" aria-label="Previous">‹</button>
@@ -599,6 +599,14 @@ function buildFeatured(games) {
 
     const slides = container.querySelectorAll('.gf-slide');
     const dots   = container.querySelectorAll('.gf-dot');
+
+    // Add active after paint so the opacity transition actually plays on first slide
+    requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+            slides[0].classList.add('active');
+            dots[0].classList.add('active');
+        });
+    });
 
     function goTo(n) {
         slides[current].classList.remove('active');
