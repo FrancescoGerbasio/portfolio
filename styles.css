@@ -811,16 +811,38 @@ a {
     }
 
     .project-list-item {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        grid-template-rows: auto auto;
+        align-items: center;
         padding: 13px 0;
-        gap: 8px;
+        gap: 2px 12px;
     }
 
     .project-name {
         font-size: 14px;
+        grid-column: 1;
+        grid-row: 1;
     }
 
     .project-studio {
+        font-size: 12px;
+        grid-column: 1;
+        grid-row: 2;
+        opacity: 0.6;
+    }
+
+    .project-year {
         font-size: 13px;
+        grid-column: 2;
+        grid-row: 1 / 3;
+        align-self: center;
+        white-space: nowrap;
+    }
+
+    /* Hide divider dots on mobile */
+    .project-divider {
+        display: none;
     }
 }
 
