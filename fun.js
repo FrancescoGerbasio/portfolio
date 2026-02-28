@@ -187,8 +187,146 @@ function generateFlagButtons() {
     });
 }
 
+function isMobile() {
+    return window.innerWidth <= 768;
+}
+
 function displayTravelPhotos(country) {
+    if (isMobile()) {
+        displayTravelPhotosMobile(country);
+    } else {
+        displayTravelPhotosDesktop(country);
+    }
+}
+
+// ===================================
+// MOBILE TRAVEL LAYOUT
+// "All" → grouped destination carousels (Apple Photos style)
+// Filtered → tight 2-column grid
+// ===================================
+
+function displayTravelPhotosMobile(country) {
     const grid = document.getElementById('travelGrid');
+
+    // Reset
+    grid.style.opacity = '0';
+    grid.style.height = '';
+    grid.innerHTML = '';
+    grid.classList.add('mobile-layout');
+
+    if (country === 'all') {
+        // ── Grouped carousels by destination ──
+        // Order by config order (not shuffled — destinations feel like chapters)
+        const groups = [];
+        travelConfig.destinations.forEach(dest => {
+            const photos = travelData.filter(p => p.location === dest.location);
+            if (photos.length > 0) groups.push({ dest, photos });
+        });
+
+        grid.innerHTML = groups.map((g, gi) => `
+            <div class="mobile-destination-group" data-group-index="${gi}">
+                <div class="mobile-dest-header">
+                    <span class="mobile-dest-flag">${g.dest.flag}</span>
+                    <span class="mobile-dest-name">${g.dest.location}</span>
+                    <span class="mobile-dest-count">${g.photos.length}</span>
+                </div>
+                <div class="mobile-carousel" data-country="${g.dest.country}">
+                    ${g.photos.map((photo, pi) => `
+                        <div class="mobile-carousel-card" style="--i:${pi}" data-country="${photo.country}">
+                            <img src="${photo.image}" alt="${photo.location}" loading="lazy">
+                        </div>
+                    `).join('')}
+                </div>
+                <button class="mobile-see-all-btn" data-country="${g.dest.country}" data-name="${g.dest.location}" data-flag="${g.dest.flag}">
+                    See all ${g.photos.length} photos
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+                </button>
+            </div>
+        `).join('');
+
+        // "See all" button → filter to that country
+        grid.querySelectorAll('.mobile-see-all-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const c = btn.getAttribute('data-country');
+                currentCountry = c;
+                syncFlagButtons(c);
+                displayTravelPhotosMobile(c);
+            });
+        });
+
+        // Stagger group entrance
+        requestAnimationFrame(() => {
+            grid.style.opacity = '1';
+            grid.querySelectorAll('.mobile-destination-group').forEach((group, i) => {
+                group.style.animationDelay = `${i * 60}ms`;
+                group.classList.add('group-enter');
+            });
+        });
+
+    } else {
+        // ── Filtered: 2-column photo grid ──
+        const filtered = travelData.filter(p => p.country === country);
+        const dest = travelConfig.destinations.find(d => d.country === country);
+
+        if (filtered.length === 0) {
+            grid.innerHTML = '<div class="loading-state"><p>No photos yet.</p></div>';
+            grid.style.opacity = '1';
+            return;
+        }
+
+        grid.innerHTML = `
+            <div class="mobile-filter-header">
+                <button class="mobile-back-btn" id="mobileBackBtn">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+                    All places
+                </button>
+                <span class="mobile-filter-label">${dest ? dest.flag : ''} ${dest ? dest.location : country}</span>
+            </div>
+            <div class="mobile-two-col-grid">
+                ${filtered.map((photo, i) => `
+                    <div class="mobile-grid-card" style="--i:${i}" data-country="${photo.country}">
+                        <img src="${photo.image}" alt="${photo.location}" loading="lazy">
+                    </div>
+                `).join('')}
+            </div>
+        `;
+
+        // Back button
+        document.getElementById('mobileBackBtn').addEventListener('click', () => {
+            currentCountry = 'all';
+            syncFlagButtons('all');
+            displayTravelPhotosMobile('all');
+        });
+
+        // Stagger cards
+        requestAnimationFrame(() => {
+            grid.style.opacity = '1';
+            grid.querySelectorAll('.mobile-grid-card').forEach((card, i) => {
+                card.style.animationDelay = `${Math.min(i * 30, 300)}ms`;
+                card.classList.add('card-enter');
+            });
+        });
+    }
+}
+
+function syncFlagButtons(country) {
+    document.querySelectorAll('.flag-btn').forEach(btn => {
+        btn.classList.remove('active');
+        if (btn.getAttribute('data-country') === country) {
+            btn.classList.add('active');
+            btn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+        }
+    });
+}
+
+// ===================================
+// DESKTOP TRAVEL LAYOUT (unchanged)
+// ===================================
+
+function displayTravelPhotosDesktop(country) {
+    const grid = document.getElementById('travelGrid');
+    grid.classList.remove('mobile-layout');
+
     let filtered = country === 'all' 
         ? travelData 
         : travelData.filter(photo => photo.country === country);
@@ -198,17 +336,14 @@ function displayTravelPhotos(country) {
         return;
     }
     
-    // Shuffle photos when "all" is selected
     if (country === 'all') {
         filtered = shuffleArray([...filtered]);
     }
     
-    // *** FIX: Reset grid completely before re-rendering ***
     grid.style.opacity = '0';
-    grid.style.height = '';   // Clear stale height from previous layout
-    grid.innerHTML = '';       // Clear old cards immediately (no stale absolutes)
+    grid.style.height = '';
+    grid.innerHTML = '';
 
-    // Create cards
     grid.innerHTML = filtered.map(photo => `
         <div class="travel-card" data-country="${photo.country}">
             <img src="${photo.image}" alt="${photo.location}" loading="lazy">
@@ -219,43 +354,23 @@ function displayTravelPhotos(country) {
         </div>
     `).join('');
     
-    // Add click listeners to cards
     grid.querySelectorAll('.travel-card').forEach(card => {
         card.addEventListener('click', () => {
             const clickedCountry = card.getAttribute('data-country');
             
-            // If already showing this country, clicking again goes back to all
             if (currentCountry === clickedCountry) {
                 currentCountry = 'all';
-                // Update flag buttons
-                document.querySelectorAll('.flag-btn').forEach(btn => {
-                    btn.classList.remove('active');
-                    if (btn.getAttribute('data-country') === 'all') {
-                        btn.classList.add('active');
-                        btn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
-                    }
-                });
-                displayTravelPhotos('all');
+                syncFlagButtons('all');
+                displayTravelPhotosDesktop('all');
                 return;
             }
 
             currentCountry = clickedCountry;
-
-            // Update flag button active state
-            document.querySelectorAll('.flag-btn').forEach(btn => {
-                btn.classList.remove('active');
-                if (btn.getAttribute('data-country') === clickedCountry) {
-                    btn.classList.add('active');
-                    btn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
-                }
-            });
-            
-            // Filter photos by clicked country
-            displayTravelPhotos(clickedCountry);
+            syncFlagButtons(clickedCountry);
+            displayTravelPhotosDesktop(clickedCountry);
         });
     });
     
-    // *** FIX: Use requestAnimationFrame to ensure DOM has settled before measuring ***
     requestAnimationFrame(() => {
         layoutMasonry();
     });
@@ -413,7 +528,7 @@ window.addEventListener('resize', () => {
     clearTimeout(resizeTimer);
     resizeTimer = setTimeout(() => {
         if (travelData.length > 0) {
-            layoutMasonry();
+            displayTravelPhotos(currentCountry);
         }
     }, 250);
 });
