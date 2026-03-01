@@ -169,7 +169,7 @@
         }
 
         .stat-number {
-            font-family: var(--font-heading);
+            font-family: var(--font-body);
             font-size: clamp(36px, 4vw, 56px);
             font-weight: 700;
             line-height: 1;
@@ -320,11 +320,12 @@
             letter-spacing: -0.01em;
             margin: 0 0 10px 0;
             color: var(--color-text);
-            transition: letter-spacing 0.3s ease;
+            transition: opacity 0.3s ease, transform 0.35s cubic-bezier(0.34, 1.2, 0.64, 1);
         }
 
         .value-item:hover .value-name {
-            letter-spacing: 0.02em;
+            opacity: 0.6;
+            transform: translateX(6px);
         }
 
         .value-desc {
@@ -772,9 +773,9 @@
         <div class="about-grid scroll-reveal" id="storyGrid">
             <div class="about-story">
                 <span class="section-label">The story</span>
-                <p>Born in <strong>Italy</strong>, shaped by curiosity. I grew up surrounded by design without knowing it — from the way a Roman arch frames a corridor to the rhythm of a well-typed page. Design wasn't a choice; it was the language I already spoke.</p>
+                <p>I grew up in <strong>Abruzzo, Italy</strong> — a region most people can't place on a map, which probably explains why I've always been drawn to making things clearer. I got into design the hard way: by using software that frustrated me until I figured out how to fix it myself. No design school, no epiphany — just a low tolerance for bad interfaces and a Computer Science background that made me dangerous with code.</p>
                 <p>I moved to <strong>Madrid</strong> and built a career at the crossroads of two disciplines: UX/UI design and Localization QA. One asks me to think in systems and empathy; the other asks me to think in precision and edge cases. Together, they make me unusually good at catching what shouldn't ship.</p>
-                <p>Outside the screen, I'm chasing good music, rewatching the same games I've loved for fifteen years, and photographing corners of cities most people walk past.</p>
+                <p>Outside the screen, I'm producing music, rewatching the same games I've loved for fifteen years, and photographing corners of cities most people walk past.</p>
             </div>
 
             <div class="about-image-block">
@@ -798,7 +799,7 @@
                 <div class="stat-label">Languages spoken fluently</div>
             </div>
             <div class="stat-item">
-                <div class="stat-number">5+</div>
+                <div class="stat-number">2+</div>
                 <div class="stat-label">Years of design practice</div>
             </div>
         </div>
@@ -898,25 +899,41 @@
                 <div class="timeline-item">
                     <div class="timeline-year">2025 →</div>
                     <div class="timeline-content">
-                        <p class="timeline-role">Localization QA Specialist</p>
-                        <p class="timeline-company">Universally Speaking</p>
-                        <p class="timeline-desc">Working on Italian localization for major game titles including Red Dead Redemption, Dragon Ball: Sparking! Zero, and more. Ensuring linguistic accuracy, cultural resonance, and franchise consistency.</p>
+                        <p class="timeline-role">Localization QA Tester</p>
+                        <p class="timeline-company">Universally Speaking · Madrid</p>
+                        <p class="timeline-desc">End-to-end Italian LQA for major game titles including Red Dead Redemption, Dragon Ball: Sparking! Zero, and more. Using Bonsai and JIRA to identify, document, and validate linguistic and functional issues across full regression cycles.</p>
                     </div>
                 </div>
                 <div class="timeline-item">
-                    <div class="timeline-year">2023 →</div>
+                    <div class="timeline-year">2024</div>
                     <div class="timeline-content">
                         <p class="timeline-role">UX/UI Designer</p>
-                        <p class="timeline-company">Freelance</p>
-                        <p class="timeline-desc">Designed end-to-end digital products for clients across entertainment, transport, and lifestyle — from concept through high-fidelity prototypes. Projects include Cines Callao, QuickCheckout, and Abruzzo Experience.</p>
+                        <p class="timeline-company">Freelance · Italy</p>
+                        <p class="timeline-desc">End-to-end design for clients across entertainment, transport, and lifestyle. Conducted user interviews and usability testing, delivering wireframes through high-fidelity Figma prototypes. One project reduced user navigation time by 30% through clearer information architecture.</p>
                     </div>
                 </div>
                 <div class="timeline-item">
-                    <div class="timeline-year">2020 →</div>
+                    <div class="timeline-year">2024</div>
                     <div class="timeline-content">
-                        <p class="timeline-role">Self-directed study</p>
-                        <p class="timeline-company">Design + Development</p>
-                        <p class="timeline-desc">Deep dives into interaction design, front-end development, and music production. The foundation period where curiosity met craft.</p>
+                        <p class="timeline-role">UX/UI Design Course</p>
+                        <p class="timeline-company">Talent Garden</p>
+                        <p class="timeline-desc">Formal training in UX process, design systems, and prototyping — the structured foundation that gave shape to years of self-taught practice.</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-year">2019–22</div>
+                    <div class="timeline-content">
+                        <p class="timeline-role">Music Producer</p>
+                        <p class="timeline-company">BeatStars · Independent</p>
+                        <p class="timeline-desc">Produced and released original tracks independently. Where the obsession with craft, sound design, and audience feeling first took hold — long before it had a design name.</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-year">2014–19</div>
+                    <div class="timeline-content">
+                        <p class="timeline-role">Computer Science & Telecommunications</p>
+                        <p class="timeline-company">I.I.S E. Alessandrini · Abruzzo</p>
+                        <p class="timeline-desc">The technical foundation. Five years of IT that taught me to think in systems, debug obsessively, and never trust something just because it compiles.</p>
                     </div>
                 </div>
             </div>
@@ -969,7 +986,7 @@
                 <a href="https://www.linkedin.com/in/francesco-gerbasio" target="_blank" class="btn-primary">
                     LinkedIn →
                 </a>
-                <a href="mailto:francescogerbasio@icloud.com" class="btn-secondary">
+                <a href="mailto:francesco.gerbasio00@gmail.com" class="btn-secondary">
                     Email me
                 </a>
             </div>
@@ -982,7 +999,7 @@
         v1.0.0
     </div>
 
-    <script src="location-config.js"></script>
+    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="location-config.js"></script>
     <script>
     // ===================================
     // NAVIGATION
