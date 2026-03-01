@@ -6,667 +6,490 @@
     <title>About — Francesco Gerbasio</title>
     <link rel="stylesheet" href="styles.css">
     <style>
-
-        /* ===================================
-           ABOUT PAGE — APPLE-GRADE
-           =================================== */
-
-        /* ── Section entrance animations ── */
         @keyframes fadeUp {
-            from { opacity: 0; transform: translateY(32px); }
+            from { opacity: 0; transform: translateY(28px); }
             to   { opacity: 1; transform: translateY(0); }
         }
-
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to   { opacity: 1; }
+        @keyframes lineGrow {
+            from { transform: scaleX(0); }
+            to   { transform: scaleX(1); }
         }
 
-        @keyframes slideInLeft {
-            from { opacity: 0; transform: translateX(-24px); }
-            to   { opacity: 1; transform: translateX(0); }
-        }
-
-        @keyframes scaleIn {
-            from { opacity: 0; transform: scale(0.92); }
-            to   { opacity: 1; transform: scale(1); }
-        }
-
-        /* ── Page wrapper ── */
-        .about-page {
-            padding-top: clamp(80px, 10vw, 140px);
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        /* ── Hero intro ── */
         .about-hero {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: clamp(40px, 6vw, 100px);
-            align-items: start;
-            margin-bottom: clamp(80px, 10vw, 140px);
-            opacity: 0;
-            animation: fadeUp 0.7s cubic-bezier(0.34, 1.20, 0.64, 1) 0.1s forwards;
+            padding-top: clamp(80px, 12vw, 160px);
+            padding-bottom: clamp(60px, 8vw, 120px);
+            max-width: 1100px;
         }
-
-        .about-hero-left {
-            position: sticky;
-            top: 120px;
-        }
-
-        .about-label {
-            font-size: 11px;
+        .about-eyebrow {
+            font-size: clamp(11px, 0.9vw, 13px);
             font-weight: 600;
-            letter-spacing: 0.12em;
+            letter-spacing: 0.14em;
             text-transform: uppercase;
             color: var(--color-text-light);
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
+            margin-bottom: 24px;
+            opacity: 0;
+            animation: fadeUp 0.6s cubic-bezier(0.34, 1.2, 0.64, 1) 0.1s forwards;
         }
-
-        .about-label::before {
-            content: '';
-            display: block;
-            width: 24px;
-            height: 1px;
-            background: var(--color-text-light);
-        }
-
-        .about-hero-title {
+        .about-headline {
             font-family: var(--font-heading);
-            font-size: clamp(40px, 5vw, 72px);
+            font-size: clamp(36px, 5vw, 80px);
             font-weight: 700;
             line-height: 1.05;
             letter-spacing: -0.02em;
-            margin-bottom: 32px;
-        }
-
-        .about-hero-title em {
-            font-style: normal;
-            color: var(--color-text-light);
-        }
-
-        .about-avatar-wrap {
-            position: relative;
-            width: fit-content;
-            margin-bottom: 32px;
-        }
-
-        .about-avatar {
-            width: clamp(120px, 14vw, 180px);
-            height: clamp(120px, 14vw, 180px);
-            border-radius: 36px;
-            object-fit: cover;
-            object-position: top;
-            display: block;
-        }
-
-        .about-avatar-badge {
-            position: absolute;
-            bottom: -12px;
-            right: -12px;
-            background: #000;
-            color: #fff;
-            font-size: 11px;
-            font-weight: 600;
-            letter-spacing: 0.04em;
-            padding: 6px 12px;
-            border-radius: 20px;
-            white-space: nowrap;
-            border: 2px solid var(--color-bg);
-        }
-
-        .about-available-dot {
-            width: 7px;
-            height: 7px;
-            background: #30d158;
-            border-radius: 50%;
-            display: inline-block;
-            margin-right: 6px;
-            animation: pulse-dot 2s ease-in-out infinite;
-        }
-
-        @keyframes pulse-dot {
-            0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(48,209,88,0.4); }
-            50%       { opacity: 0.7; box-shadow: 0 0 0 4px rgba(48,209,88,0); }
-        }
-
-        /* Right column: bio text */
-        .about-hero-right {
-            padding-top: 4px;
-        }
-
-        .about-bio-lead {
-            font-family: var(--font-heading);
-            font-size: clamp(22px, 2.4vw, 32px);
-            font-weight: 700;
-            line-height: 1.3;
-            letter-spacing: -0.01em;
-            margin-bottom: 28px;
             color: var(--color-text);
+            margin: 0 0 32px 0;
+            opacity: 0;
+            animation: fadeUp 0.7s cubic-bezier(0.34, 1.2, 0.64, 1) 0.2s forwards;
         }
-
-        .about-bio-body {
-            font-size: clamp(16px, 1.4vw, 19px);
-            line-height: 1.7;
-            color: var(--color-text-light);
-            margin-bottom: 20px;
-        }
-
-        .about-bio-body strong {
+        .about-headline .highlight { color: var(--color-text-light); }
+        .about-intro-text {
+            font-size: clamp(17px, 1.6vw, 22px);
+            line-height: 1.65;
             color: var(--color-text);
-            font-weight: 600;
+            max-width: 680px;
+            margin: 0;
+            opacity: 0;
+            animation: fadeUp 0.7s cubic-bezier(0.34, 1.2, 0.64, 1) 0.35s forwards;
         }
 
-        /* ── Divider ── */
         .about-divider {
             width: 100%;
             height: 1px;
-            background: rgba(0,0,0,0.10);
-            margin: clamp(60px, 8vw, 100px) 0;
+            background: var(--color-text);
+            transform-origin: left;
+            transform: scaleX(0);
+            margin: 0 0 80px 0;
+        }
+        .about-divider.animate {
+            animation: lineGrow 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
         }
 
-        /* ── Section header ── */
-        .about-section {
-            margin-bottom: clamp(60px, 8vw, 100px);
-            opacity: 0;
-            transform: translateY(24px);
-            transition: opacity 0.6s cubic-bezier(0.34, 1.20, 0.64, 1), transform 0.6s cubic-bezier(0.34, 1.20, 0.64, 1);
-        }
-
-        .about-section.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .about-section-header {
-            display: flex;
-            align-items: baseline;
-            gap: 16px;
-            margin-bottom: clamp(28px, 3vw, 40px);
-        }
-
-        .about-section-title {
-            font-family: var(--font-heading);
-            font-size: clamp(28px, 3vw, 40px);
-            font-weight: 700;
-            letter-spacing: -0.02em;
-        }
-
-        .about-section-count {
-            font-size: 13px;
-            font-weight: 500;
-            color: var(--color-text-light);
-            background: rgba(0,0,0,0.06);
-            padding: 2px 10px;
-            border-radius: 20px;
-        }
-
-        /* ── Values grid ── */
-        .values-grid {
+        .about-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 16px;
+            grid-template-columns: 1fr 1fr;
+            gap: clamp(40px, 6vw, 100px);
+            margin-bottom: 100px;
+            align-items: start;
+        }
+        @media (max-width: 900px) {
+            .about-grid { grid-template-columns: 1fr; gap: 48px; }
         }
 
-        .value-card {
-            background: rgba(0,0,0,0.03);
-            border: 1px solid rgba(0,0,0,0.07);
-            border-radius: 18px;
-            padding: 28px;
-            transition: background 0.3s ease, border-color 0.3s ease, transform 0.3s cubic-bezier(0.34, 1.30, 0.64, 1);
-            cursor: default;
-        }
-
-        .value-card:hover {
-            background: rgba(0,0,0,0.055);
-            border-color: rgba(0,0,0,0.13);
-            transform: translateY(-3px);
-        }
-
-        .value-emoji {
-            font-size: 28px;
-            margin-bottom: 16px;
+        .section-label {
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: var(--color-text-light);
+            margin-bottom: 20px;
             display: block;
         }
 
-        .value-title {
-            font-size: 17px;
-            font-weight: 700;
-            margin-bottom: 8px;
+        .about-story p {
+            font-size: clamp(15px, 1.3vw, 18px);
+            line-height: 1.75;
             color: var(--color-text);
+            opacity: 0.75;
+            margin: 0 0 20px 0;
         }
+        .about-story p:last-child { margin: 0; }
+        .about-story strong { color: var(--color-text); font-weight: 600; opacity: 1; }
 
-        .value-desc {
-            font-size: 14px;
-            line-height: 1.6;
-            color: var(--color-text-light);
-        }
-
-        /* ── Timeline / Experience ── */
-        .timeline {
-            position: relative;
-            padding-left: 28px;
-        }
-
-        .timeline::before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 8px;
-            bottom: 8px;
-            width: 1px;
-            background: rgba(0,0,0,0.10);
-        }
-
-        .timeline-item {
-            position: relative;
-            padding-bottom: clamp(28px, 3vw, 40px);
-            opacity: 0;
-            transform: translateX(-12px);
-            transition: opacity 0.5s ease, transform 0.5s cubic-bezier(0.34, 1.20, 0.64, 1);
-        }
-
-        .timeline-item.visible {
-            opacity: 1;
-            transform: translateX(0);
-        }
-
-        .timeline-item:last-child {
-            padding-bottom: 0;
-        }
-
-        .timeline-dot {
-            position: absolute;
-            left: -34px;
-            top: 6px;
-            width: 11px;
-            height: 11px;
-            border-radius: 50%;
-            background: var(--color-bg);
-            border: 2px solid rgba(0,0,0,0.25);
-            transition: border-color 0.3s ease, background 0.3s ease;
-        }
-
-        .timeline-item:hover .timeline-dot {
-            border-color: var(--color-text);
-            background: var(--color-text);
-        }
-
-        .timeline-item.current .timeline-dot {
-            background: #30d158;
-            border-color: #30d158;
-            box-shadow: 0 0 0 3px rgba(48,209,88,0.25);
-        }
-
-        .timeline-meta {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 6px;
-            flex-wrap: wrap;
-        }
-
-        .timeline-date {
-            font-size: 12px;
-            font-weight: 600;
-            letter-spacing: 0.06em;
-            text-transform: uppercase;
-            color: var(--color-text-light);
-        }
-
-        .timeline-badge {
-            font-size: 10px;
-            font-weight: 600;
-            letter-spacing: 0.06em;
-            text-transform: uppercase;
-            padding: 2px 8px;
+        .about-photo {
+            width: 100%;
+            aspect-ratio: 4/5;
             border-radius: 20px;
-            border: 1px solid rgba(0,0,0,0.15);
-            color: var(--color-text-light);
+            overflow: hidden;
+            background: rgba(0,0,0,0.06);
         }
-
-        .timeline-badge.current {
-            color: #30d158;
-            border-color: rgba(48,209,88,0.4);
-            background: rgba(48,209,88,0.08);
+        .about-photo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: top center;
+            filter: grayscale(15%);
+            transition: filter 0.4s ease, transform 0.6s ease;
         }
-
-        .timeline-role {
-            font-size: clamp(18px, 1.8vw, 22px);
-            font-weight: 700;
-            margin-bottom: 4px;
-            letter-spacing: -0.01em;
-        }
-
-        .timeline-company {
-            font-size: 15px;
+        .about-photo:hover img { filter: grayscale(0%); transform: scale(1.03); }
+        .photo-caption {
+            font-size: 12px;
             font-weight: 500;
             color: var(--color-text-light);
-            margin-bottom: 12px;
+            margin-top: 12px;
+            letter-spacing: 0.03em;
         }
 
-        .timeline-desc {
-            font-size: 14px;
-            line-height: 1.65;
-            color: var(--color-text-light);
-            max-width: 640px;
-        }
-
-        /* ── Skills ── */
-        .skills-grid {
+        .about-stats {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 12px;
+            grid-template-columns: repeat(3, 1fr);
+            margin-bottom: 100px;
+            border-top: 1px solid var(--color-text);
+            border-bottom: 1px solid var(--color-text);
+        }
+        .stat-item {
+            padding: 32px 24px;
+            border-right: 1px solid rgba(0,0,0,0.12);
+            opacity: 0;
+            transform: translateY(16px);
+            transition: opacity 0.5s ease, transform 0.5s cubic-bezier(0.34, 1.2, 0.64, 1);
+        }
+        .stat-item:last-child { border-right: none; }
+        .stat-item.visible { opacity: 1; transform: translateY(0); }
+        .stat-number {
+            font-family: var(--font-body);
+            font-size: clamp(36px, 4vw, 56px);
+            font-weight: 700;
+            line-height: 1;
+            letter-spacing: -0.03em;
+            color: var(--color-text);
+            margin-bottom: 8px;
+        }
+        .stat-label {
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--color-text-light);
+            line-height: 1.4;
+        }
+        @media (max-width: 768px) {
+            .stat-item { padding: 24px 12px; }
+            .stat-number { font-size: 28px; }
         }
 
-        .skill-group {
-            background: rgba(0,0,0,0.03);
-            border: 1px solid rgba(0,0,0,0.06);
-            border-radius: 14px;
-            padding: 20px;
-            transition: transform 0.3s cubic-bezier(0.34, 1.30, 0.64, 1), background 0.3s ease;
-        }
-
-        .skill-group:hover {
-            transform: translateY(-2px);
-            background: rgba(0,0,0,0.05);
-        }
-
+        .skills-block { display: flex; flex-direction: column; gap: 40px; }
         .skill-group-title {
             font-size: 11px;
-            font-weight: 700;
-            letter-spacing: 0.10em;
+            font-weight: 600;
+            letter-spacing: 0.14em;
             text-transform: uppercase;
             color: var(--color-text-light);
-            margin-bottom: 12px;
+            margin-bottom: 16px;
         }
-
-        .skill-tags {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 6px;
-        }
-
+        .skill-tags { display: flex; flex-wrap: wrap; gap: 8px; }
         .skill-tag {
             font-size: 13px;
             font-weight: 500;
-            padding: 4px 12px;
-            background: rgba(0,0,0,0.06);
-            border-radius: 20px;
             color: var(--color-text);
-            border: 1px solid transparent;
-            transition: border-color 0.2s ease, background 0.2s ease;
+            background: transparent;
+            border: 1px solid rgba(0,0,0,0.2);
+            padding: 6px 14px;
+            border-radius: 100px;
+            transition: background 0.2s ease, border-color 0.2s ease,
+                        transform 0.2s cubic-bezier(0.34, 1.4, 0.64, 1);
+            cursor: default;
+            opacity: 0;
+            transform: scale(0.88);
+        }
+        .skill-tag.visible { opacity: 1; transform: scale(1); }
+        .skill-tag:hover {
+            background: var(--color-text);
+            color: var(--color-bg);
+            border-color: var(--color-text);
+            transform: scale(1.05);
         }
 
-        .skill-group:hover .skill-tag {
-            border-color: rgba(0,0,0,0.10);
-        }
-
-        /* ── Fun facts ── */
-        .facts-list {
-            display: flex;
-            flex-direction: column;
-            gap: 1px;
-        }
-
-        .fact-item {
+        .values-section { margin-bottom: 100px; }
+        .values-header {
             display: flex;
             align-items: baseline;
-            gap: 20px;
-            padding: 20px 0;
+            gap: 24px;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(0,0,0,0.1);
+        }
+        .values-title {
+            font-family: var(--font-heading);
+            font-size: clamp(28px, 3vw, 44px);
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            margin: 0;
+        }
+        .values-count {
+            font-size: 13px;
+            color: var(--color-text-light);
+            font-weight: 500;
+        }
+        .value-item {
+            display: grid;
+            grid-template-columns: 48px 1fr;
+            gap: 32px;
+            align-items: start;
+            padding: 32px 0;
             border-bottom: 1px solid rgba(0,0,0,0.07);
             opacity: 0;
-            transform: translateY(8px);
-            transition: opacity 0.4s ease, transform 0.4s cubic-bezier(0.34, 1.20, 0.64, 1), padding-left 0.2s ease;
+            transform: translateX(-20px);
+            transition: opacity 0.5s ease, transform 0.5s cubic-bezier(0.34, 1.2, 0.64, 1);
             cursor: default;
         }
-
-        .fact-item:first-child {
-            border-top: 1px solid rgba(0,0,0,0.07);
+        .value-item:last-child { border-bottom: none; }
+        .value-item.visible { opacity: 1; transform: translateX(0); }
+        .value-index {
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            color: var(--color-text-light);
+            padding-top: 5px;
+        }
+        .value-name {
+            font-family: var(--font-heading);
+            font-size: clamp(20px, 2vw, 28px);
+            font-weight: 700;
+            letter-spacing: -0.01em;
+            margin: 0 0 10px 0;
+            color: var(--color-text);
+            transition: opacity 0.3s ease, transform 0.35s cubic-bezier(0.34, 1.2, 0.64, 1);
+        }
+        .value-item:hover .value-name {
+            opacity: 0.6;
+            transform: translateX(6px);
+        }
+        .value-desc {
+            font-size: clamp(14px, 1.2vw, 16px);
+            line-height: 1.65;
+            color: var(--color-text);
+            opacity: 0.6;
+            margin: 0;
         }
 
-        .fact-item.visible {
-            opacity: 1;
-            transform: translateY(0);
+        .timeline-section { margin-bottom: 100px; }
+        .timeline-title {
+            font-family: var(--font-heading);
+            font-size: clamp(28px, 3vw, 44px);
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            margin: 0 0 48px 0;
         }
-
-        .fact-item:hover {
-            padding-left: 8px;
+        .timeline { position: relative; display: flex; flex-direction: column; }
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 80px;
+            top: 10px;
+            bottom: 10px;
+            width: 1px;
+            background: rgba(0,0,0,0.12);
         }
-
-        .fact-num {
+        @media (max-width: 768px) { .timeline::before { left: 20px; } }
+        .timeline-item {
+            display: grid;
+            grid-template-columns: 80px 1fr;
+            gap: 32px;
+            padding: 28px 0;
+            border-bottom: 1px solid rgba(0,0,0,0.06);
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.55s ease, transform 0.55s cubic-bezier(0.34, 1.2, 0.64, 1);
+        }
+        .timeline-item:last-child { border-bottom: none; }
+        .timeline-item.visible { opacity: 1; transform: translateY(0); }
+        @media (max-width: 768px) {
+            .timeline-item { grid-template-columns: 20px 1fr; gap: 24px; }
+        }
+        .timeline-year {
             font-size: 12px;
             font-weight: 600;
+            letter-spacing: 0.06em;
             color: var(--color-text-light);
-            opacity: 0.5;
-            width: 28px;
-            flex-shrink: 0;
+            padding-top: 4px;
+            text-align: right;
+            position: relative;
         }
-
-        .fact-emoji {
-            font-size: 20px;
-            flex-shrink: 0;
-            width: 28px;
-            text-align: center;
+        .timeline-year::after {
+            content: '';
+            position: absolute;
+            right: -20px;
+            top: 7px;
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: var(--color-text);
+            transform: translateX(50%);
         }
-
-        .fact-text {
-            font-size: clamp(15px, 1.4vw, 18px);
-            line-height: 1.5;
+        @media (max-width: 768px) {
+            .timeline-year { text-align: left; font-size: 10px; }
+            .timeline-year::after { right: auto; left: 100%; }
+        }
+        .timeline-role {
+            font-size: clamp(16px, 1.5vw, 20px);
+            font-weight: 600;
             color: var(--color-text);
-            flex: 1;
+            margin: 0 0 4px 0;
         }
-
-        .fact-text strong {
-            font-weight: 700;
-        }
-
-        /* ── Languages ── */
-        .languages-row {
-            display: flex;
-            gap: 16px;
-            flex-wrap: wrap;
-        }
-
-        .lang-card {
-            background: rgba(0,0,0,0.03);
-            border: 1px solid rgba(0,0,0,0.07);
-            border-radius: 14px;
-            padding: 20px 28px;
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-            min-width: 140px;
-            transition: transform 0.3s cubic-bezier(0.34, 1.30, 0.64, 1), background 0.3s ease;
-            cursor: default;
-        }
-
-        .lang-card:hover {
-            transform: translateY(-3px);
-            background: rgba(0,0,0,0.055);
-        }
-
-        .lang-flag {
-            font-size: 22px;
-            margin-bottom: 6px;
-        }
-
-        .lang-name {
-            font-size: 16px;
-            font-weight: 700;
-            color: var(--color-text);
-        }
-
-        .lang-level {
-            font-size: 12px;
+        .timeline-company {
+            font-size: 14px;
             font-weight: 500;
             color: var(--color-text-light);
+            margin: 0 0 10px 0;
+        }
+        .timeline-desc {
+            font-size: 14px;
+            line-height: 1.6;
+            color: var(--color-text);
+            opacity: 0.6;
+            margin: 0;
         }
 
-        /* ── Contact CTA ── */
-        .about-cta {
-            background: #000;
-            border-radius: 24px;
-            padding: clamp(40px, 5vw, 64px);
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-            gap: 24px;
+        .currently-section { margin-bottom: 100px; }
+        .currently-title {
+            font-family: var(--font-heading);
+            font-size: clamp(28px, 3vw, 44px);
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            margin: 0 0 40px 0;
+        }
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 12px;
+        }
+        .bento-card {
+            background: rgba(0,0,0,0.04);
+            border-radius: 18px;
+            padding: 28px;
             opacity: 0;
-            transform: translateY(24px);
-            transition: opacity 0.6s ease, transform 0.6s cubic-bezier(0.34, 1.20, 0.64, 1);
-            margin-bottom: clamp(60px, 8vw, 100px);
+            transform: scale(0.95);
+            transition: opacity 0.5s ease, transform 0.5s cubic-bezier(0.34, 1.2, 0.64, 1), background 0.25s ease;
         }
-
-        .about-cta.visible {
-            opacity: 1;
-            transform: translateY(0);
+        .bento-card:hover { background: rgba(0,0,0,0.07); }
+        .bento-card.visible { opacity: 1; transform: scale(1); }
+        .bento-card:nth-child(1) { grid-column: span 5; }
+        .bento-card:nth-child(2) { grid-column: span 7; }
+        .bento-card:nth-child(3) { grid-column: span 4; }
+        .bento-card:nth-child(4) { grid-column: span 4; }
+        .bento-card:nth-child(5) { grid-column: span 4; }
+        @media (max-width: 900px) {
+            .bento-card:nth-child(1), .bento-card:nth-child(2),
+            .bento-card:nth-child(3), .bento-card:nth-child(4),
+            .bento-card:nth-child(5) { grid-column: span 6; }
         }
-
-        .about-cta-label {
+        @media (max-width: 600px) {
+            .bento-card:nth-child(1), .bento-card:nth-child(2),
+            .bento-card:nth-child(3), .bento-card:nth-child(4),
+            .bento-card:nth-child(5) { grid-column: span 12; }
+        }
+        .bento-emoji { font-size: 28px; margin-bottom: 14px; display: block; }
+        .bento-label {
             font-size: 11px;
             font-weight: 600;
             letter-spacing: 0.12em;
             text-transform: uppercase;
-            color: rgba(255,255,255,0.4);
+            color: var(--color-text-light);
+            margin-bottom: 8px;
+        }
+        .bento-value {
+            font-size: clamp(15px, 1.4vw, 18px);
+            font-weight: 600;
+            color: var(--color-text);
+            line-height: 1.4;
+        }
+        .bento-sub { font-size: 13px; color: var(--color-text-light); margin-top: 4px; }
+        .lang-row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; }
+        .lang-pill {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 6px;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--color-text);
+            background: rgba(0,0,0,0.08);
+            padding: 5px 12px;
+            border-radius: 100px;
+        }
+        .lang-level {
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--color-text-light);
         }
 
-        .about-cta-label::before {
-            content: '';
-            display: block;
-            width: 24px;
-            height: 1px;
-            background: rgba(255,255,255,0.3);
-        }
-
-        .about-cta-title {
-            font-family: var(--font-heading);
-            font-size: clamp(28px, 4vw, 52px);
-            font-weight: 700;
-            color: #fff;
-            letter-spacing: -0.02em;
-            line-height: 1.1;
-            max-width: 600px;
-        }
-
-        .about-cta-subtitle {
-            font-size: clamp(15px, 1.4vw, 18px);
-            color: rgba(255,255,255,0.5);
-            max-width: 500px;
-            line-height: 1.6;
-        }
-
-        .about-cta-links {
+        .about-cta {
             display: flex;
-            gap: 12px;
+            align-items: center;
+            justify-content: space-between;
+            gap: 40px;
+            padding: 60px 0 80px;
+            border-top: 1px solid rgba(0,0,0,0.1);
             flex-wrap: wrap;
-            margin-top: 8px;
         }
-
-        .cta-btn {
+        .cta-text {
+            font-family: var(--font-heading);
+            font-size: clamp(24px, 3vw, 40px);
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            color: var(--color-text);
+            margin: 0;
+        }
+        .cta-text span { color: var(--color-text-light); }
+        .cta-buttons { display: flex; gap: 12px; flex-shrink: 0; }
+        .btn-primary {
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            padding: 12px 24px;
-            border-radius: 50px;
+            padding: 14px 28px;
+            background: var(--color-text);
+            color: var(--color-bg);
             font-size: 15px;
             font-weight: 600;
             font-family: var(--font-body);
+            border: none;
+            border-radius: 100px;
             cursor: pointer;
             text-decoration: none;
-            transition: transform 0.3s cubic-bezier(0.34, 1.30, 0.64, 1), opacity 0.2s ease;
+            transition: transform 0.25s cubic-bezier(0.34, 1.4, 0.64, 1), box-shadow 0.25s ease;
+        }
+        .btn-primary:hover {
+            transform: scale(1.04) translateY(-1px);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.18);
+        }
+        .btn-secondary {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 14px 28px;
+            background: transparent;
+            color: var(--color-text);
+            font-size: 15px;
+            font-weight: 600;
+            font-family: var(--font-body);
+            border: 1px solid rgba(0,0,0,0.2);
+            border-radius: 100px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: transform 0.25s cubic-bezier(0.34, 1.4, 0.64, 1), background 0.2s ease;
+        }
+        .btn-secondary:hover {
+            background: rgba(0,0,0,0.05);
+            transform: scale(1.04) translateY(-1px);
         }
 
-        .cta-btn:hover {
-            transform: translateY(-2px) scale(1.03);
+        .scroll-reveal {
+            opacity: 0;
+            transform: translateY(24px);
+            transition: opacity 0.6s ease, transform 0.6s cubic-bezier(0.34, 1.2, 0.64, 1);
         }
+        .scroll-reveal.visible { opacity: 1; transform: translateY(0); }
 
-        .cta-btn:active {
-            transform: scale(0.97);
+        @media (max-width: 768px) {
+            .about-hero { padding-top: 90px; }
+            .about-cta { flex-direction: column; align-items: flex-start; }
         }
-
-        .cta-btn-primary {
-            background: #fff;
-            color: #000;
-        }
-
-        .cta-btn-secondary {
-            background: rgba(255,255,255,0.10);
-            color: #fff;
-            border: 1px solid rgba(255,255,255,0.15);
-        }
-
-        .cta-btn-secondary:hover {
-            background: rgba(255,255,255,0.15);
-        }
-
-        /* ── Responsive ── */
-        @media (max-width: 900px) {
-            .about-hero {
-                grid-template-columns: 1fr;
-                gap: 40px;
-            }
-
-            .about-hero-left {
-                position: static;
-            }
-
-            .values-grid {
-                grid-template-columns: 1fr 1fr;
-            }
-        }
-
-        @media (max-width: 600px) {
-            .values-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .skills-grid {
-                grid-template-columns: 1fr 1fr;
-            }
-
-            .fact-item {
-                gap: 12px;
-            }
-
-            .about-cta {
-                border-radius: 18px;
-            }
-
-            .lang-card {
-                flex: 1;
-                min-width: 0;
-            }
-        }
-
     </style>
 </head>
 <body>
 
-    <!-- Navigation -->
-    <nav class="navigation">
+    <nav class="navigation" id="mainNav">
         <a href="index.html#work" class="nav-link">Work</a>
         <a href="fun.html" class="nav-link">Fun</a>
         <a href="about.html" class="nav-link active">About</a>
         <a href="index.html#resume" class="nav-link">Resume</a>
     </nav>
 
-    <!-- Hamburger Button -->
     <button class="hamburger-menu" id="hamburgerBtn">
         <span></span><span></span><span></span>
     </button>
 
-    <!-- Hamburger Fade Zone -->
     <div class="hamburger-fade-zone"></div>
 
-    <!-- Mobile Menu -->
     <div class="mobile-menu" id="mobileMenu">
         <a href="index.html#work" class="nav-link">Work</a>
         <a href="fun.html" class="nav-link">Fun</a>
@@ -675,332 +498,352 @@
     </div>
 
     <div class="container">
-        <div class="about-page">
 
-            <!-- ══ HERO ══ -->
-            <section class="about-hero">
-                <!-- Left: photo + title -->
-                <div class="about-hero-left">
-                    <div class="about-label">About me</div>
-                    <div class="about-avatar-wrap">
-                        <img
-                            class="about-avatar"
-                            src="Assets/Images/Francesco_Gerbasio.webp"
-                            alt="Francesco Gerbasio"
-                        >
-                        <span class="about-avatar-badge">
-                            <span class="about-available-dot"></span>
-                            Open to work
-                        </span>
-                    </div>
-                    <h1 class="about-hero-title">Francesco<br><em>Gerbasio.</em></h1>
-                </div>
+        <section class="about-hero">
+            <p class="about-eyebrow">About me</p>
+            <h1 class="about-headline">
+                Designing clarity<br>
+                <span class="highlight">from chaos.</span>
+            </h1>
+            <p class="about-intro-text">
+                I'm Francesco — a UX/UI designer and Localization QA specialist based in Madrid. I care deeply about the spaces between pixels: the interactions people barely notice but always feel.
+            </p>
+        </section>
 
-                <!-- Right: bio -->
-                <div class="about-hero-right">
-                    <p class="about-bio-lead">
-                        I'm a UX/UI Designer and Localization QA based in Madrid — obsessed with the gap between how things look and how they feel.
-                    </p>
-                    <p class="about-bio-body">
-                        Originally from Italy 🇮🇹, I've been living in Madrid for a few years now — and it's hard to leave when the city is this alive. I started in design because I couldn't stop noticing when things felt off, and I couldn't stop imagining how they could be better.
-                    </p>
-                    <p class="about-bio-body">
-                        By day, I catch the details that <strong>shouldn't ship</strong> — as a Localization QA at Universally Speaking, I make sure games feel native in Italian, not just translated. Before that, I spent time as a freelance UX/UI designer, turning early-stage ideas into polished interfaces.
-                    </p>
-                    <p class="about-bio-body">
-                        I believe good design is invisible. It's the button that doesn't make you think, the animation that feels inevitable, the word choice that sounds like it was always meant to be there.
-                    </p>
-                    <p class="about-bio-body">
-                        Outside of work, you'll find me building playlists I never finish, exploring a new city, or deep in an open-world RPG I'm <strong>definitely</strong> going to 100% complete this time.
-                    </p>
-                </div>
-            </section>
+        <div class="about-divider" id="heroDivider"></div>
 
-            <!-- ══ VALUES ══ -->
-            <section class="about-section" id="section-values">
-                <div class="about-section-header">
-                    <h2 class="about-section-title">What I care about</h2>
-                    <span class="about-section-count">Values</span>
+        <div class="about-grid scroll-reveal" id="storyGrid">
+            <div class="about-story">
+                <span class="section-label">The story</span>
+                <p>I grew up in <strong>Abruzzo, Italy</strong> — a region most people can't place on a map, which probably explains why I've always been drawn to making things clearer. I got into design the hard way: by using software that frustrated me until I figured out how to fix it myself. No epiphany — just a low tolerance for bad interfaces and a Computer Science background that made me dangerous with code.</p>
+                <p>I moved to <strong>Madrid</strong> and built a career at the crossroads of two disciplines: UX/UI design and Localization QA. One asks me to think in systems and empathy; the other asks me to think in precision and edge cases. Together, they make me unusually good at catching what shouldn't ship.</p>
+                <p>Outside the screen, I'm producing music, rewatching the same games I've loved for fifteen years, and photographing corners of cities most people walk past.</p>
+            </div>
+            <div>
+                <div class="about-photo">
+                    <img src="Assets/Images/Francesco_Gerbasio.webp" alt="Francesco Gerbasio"
+                         onerror="this.style.display='none'">
                 </div>
-                <div class="values-grid">
-                    <div class="value-card">
-                        <span class="value-emoji">🎯</span>
-                        <div class="value-title">Precision over perfection</div>
-                        <p class="value-desc">I'd rather ship something that works exactly right than something visually elaborate that confuses people. Every detail should earn its place.</p>
-                    </div>
-                    <div class="value-card">
-                        <span class="value-emoji">🌍</span>
-                        <div class="value-title">Global thinking</div>
-                        <p class="value-desc">Being multilingual shaped how I see design — a UI that works in one language might completely break in another. Localisation is a design problem.</p>
-                    </div>
-                    <div class="value-card">
-                        <span class="value-emoji">🔍</span>
-                        <div class="value-title">Curiosity as a craft</div>
-                        <p class="value-desc">The best design decisions come from asking "why?" one more time than everyone else. I'm genuinely curious about how people experience things.</p>
-                    </div>
-                    <div class="value-card">
-                        <span class="value-emoji">⚡</span>
-                        <div class="value-title">Speed with intention</div>
-                        <p class="value-desc">Moving fast doesn't mean being sloppy. I've learned to iterate quickly while keeping the quality bar high — because momentum and craft aren't opposites.</p>
-                    </div>
-                    <div class="value-card">
-                        <span class="value-emoji">🎮</span>
-                        <div class="value-title">Play is serious work</div>
-                        <p class="value-desc">Gaming, music, travel — they're not distractions from design, they're where I learn the most about storytelling, immersion, and emotional design.</p>
-                    </div>
-                    <div class="value-card">
-                        <span class="value-emoji">🤝</span>
-                        <div class="value-title">Collaboration over ego</div>
-                        <p class="value-desc">The best work I've done has always come from genuine collaboration. I'd rather a great idea come from anyone on the team than defend a mediocre one that's mine.</p>
+                <p class="photo-caption">Madrid, 2025 — between meetings and music</p>
+            </div>
+        </div>
+
+        <div class="about-stats" id="statsRow">
+            <div class="stat-item">
+                <div class="stat-number">11+</div>
+                <div class="stat-label">Shipped titles across LQA &amp; UX</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">3</div>
+                <div class="stat-label">Languages spoken fluently</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">2+</div>
+                <div class="stat-label">Years of design practice</div>
+            </div>
+        </div>
+
+        <div class="about-grid scroll-reveal" id="skillsGrid" style="margin-bottom:100px;">
+            <div class="skills-block" id="skillsBlock">
+                <div>
+                    <p class="skill-group-title">Design</p>
+                    <div class="skill-tags">
+                        <span class="skill-tag">UX Research</span>
+                        <span class="skill-tag">Wireframing</span>
+                        <span class="skill-tag">Prototyping</span>
+                        <span class="skill-tag">Design Systems</span>
+                        <span class="skill-tag">Figma</span>
+                        <span class="skill-tag">Interaction Design</span>
+                        <span class="skill-tag">Accessibility · WCAG</span>
                     </div>
                 </div>
-            </section>
-
-            <!-- ══ EXPERIENCE ══ -->
-            <section class="about-section" id="section-experience">
-                <div class="about-section-header">
-                    <h2 class="about-section-title">Experience</h2>
-                    <span class="about-section-count">Timeline</span>
-                </div>
-                <div class="timeline">
-
-                    <div class="timeline-item current" id="tl-0">
-                        <div class="timeline-dot"></div>
-                        <div class="timeline-meta">
-                            <span class="timeline-date">2024 — Present</span>
-                            <span class="timeline-badge current">Current</span>
-                        </div>
-                        <div class="timeline-role">Localization QA</div>
-                        <div class="timeline-company">Universally Speaking · Madrid, Spain</div>
-                        <p class="timeline-desc">Testing and validating Italian localizations for major game titles — from AAA releases to mobile. Ensuring linguistic accuracy, cultural consistency, and bug-free experiences that feel native to Italian players.</p>
-                    </div>
-
-                    <div class="timeline-item" id="tl-1">
-                        <div class="timeline-dot"></div>
-                        <div class="timeline-meta">
-                            <span class="timeline-date">2022 — 2024</span>
-                        </div>
-                        <div class="timeline-role">UX/UI Designer</div>
-                        <div class="timeline-company">Freelance · Remote</div>
-                        <p class="timeline-desc">Designed end-to-end digital products for clients across Italy and Spain. Projects ranged from mobile app concepts to full website redesigns — always starting from user research and ending at a polished, production-ready design.</p>
-                    </div>
-
-                    <div class="timeline-item" id="tl-2">
-                        <div class="timeline-dot"></div>
-                        <div class="timeline-meta">
-                            <span class="timeline-date">2020 — 2022</span>
-                        </div>
-                        <div class="timeline-role">Music Producer</div>
-                        <div class="timeline-company">Independent · Italy</div>
-                        <p class="timeline-desc">Produced original tracks and collaborated with emerging Italian artists. Released BRONX alongside Giovane Soldato, Cashmoneynobaby & K3Y — an experience that deeply shaped my understanding of creative collaboration and attention to detail.</p>
-                    </div>
-
-                </div>
-            </section>
-
-            <!-- ══ SKILLS ══ -->
-            <section class="about-section" id="section-skills">
-                <div class="about-section-header">
-                    <h2 class="about-section-title">Skills & Tools</h2>
-                    <span class="about-section-count">Toolbox</span>
-                </div>
-                <div class="skills-grid">
-                    <div class="skill-group">
-                        <div class="skill-group-title">Design</div>
-                        <div class="skill-tags">
-                            <span class="skill-tag">Figma</span>
-                            <span class="skill-tag">Prototyping</span>
-                            <span class="skill-tag">Design Systems</span>
-                            <span class="skill-tag">Wireframing</span>
-                        </div>
-                    </div>
-                    <div class="skill-group">
-                        <div class="skill-group-title">Frontend</div>
-                        <div class="skill-tags">
-                            <span class="skill-tag">HTML</span>
-                            <span class="skill-tag">CSS</span>
-                            <span class="skill-tag">JavaScript</span>
-                        </div>
-                    </div>
-                    <div class="skill-group">
-                        <div class="skill-group-title">Research</div>
-                        <div class="skill-tags">
-                            <span class="skill-tag">User Testing</span>
-                            <span class="skill-tag">Interviews</span>
-                            <span class="skill-tag">Competitive Analysis</span>
-                        </div>
-                    </div>
-                    <div class="skill-group">
-                        <div class="skill-group-title">QA</div>
-                        <div class="skill-tags">
-                            <span class="skill-tag">Localization Testing</span>
-                            <span class="skill-tag">Bug Reporting</span>
-                            <span class="skill-tag">Functional QA</span>
-                        </div>
-                    </div>
-                    <div class="skill-group">
-                        <div class="skill-group-title">Other</div>
-                        <div class="skill-tags">
-                            <span class="skill-tag">Music Production</span>
-                            <span class="skill-tag">Ableton</span>
-                            <span class="skill-tag">Video Editing</span>
-                        </div>
+                <div>
+                    <p class="skill-group-title">Quality &amp; Localization</p>
+                    <div class="skill-tags">
+                        <span class="skill-tag">LQA</span>
+                        <span class="skill-tag">Functional QA</span>
+                        <span class="skill-tag">JIRA · Bonsai</span>
+                        <span class="skill-tag">Italian ↔ English</span>
+                        <span class="skill-tag">Spanish</span>
+                        <span class="skill-tag">Regression Testing</span>
                     </div>
                 </div>
-            </section>
-
-            <!-- ══ LANGUAGES ══ -->
-            <section class="about-section" id="section-languages">
-                <div class="about-section-header">
-                    <h2 class="about-section-title">Languages</h2>
-                </div>
-                <div class="languages-row">
-                    <div class="lang-card">
-                        <span class="lang-flag">🇮🇹</span>
-                        <div class="lang-name">Italian</div>
-                        <div class="lang-level">Native</div>
+                <div>
+                    <p class="skill-group-title">Development &amp; Tools</p>
+                    <div class="skill-tags">
+                        <span class="skill-tag">HTML / CSS</span>
+                        <span class="skill-tag">JavaScript</span>
+                        <span class="skill-tag">Framer</span>
+                        <span class="skill-tag">Adobe Creative Suite</span>
+                        <span class="skill-tag">Web Animation</span>
                     </div>
-                    <div class="lang-card">
-                        <span class="lang-flag">🇬🇧</span>
-                        <div class="lang-name">English</div>
-                        <div class="lang-level">Fluent — C1/C2</div>
-                    </div>
-                    <div class="lang-card">
-                        <span class="lang-flag">🇪🇸</span>
-                        <div class="lang-name">Spanish</div>
-                        <div class="lang-level">Conversational — B1/B2</div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- ══ FUN FACTS ══ -->
-            <section class="about-section" id="section-facts">
-                <div class="about-section-header">
-                    <h2 class="about-section-title">A few other things</h2>
-                    <span class="about-section-count">Fun facts</span>
-                </div>
-                <div class="facts-list">
-                    <div class="fact-item" id="fact-0">
-                        <span class="fact-num">01</span>
-                        <span class="fact-emoji">🎮</span>
-                        <span class="fact-text">I've played through <strong>every Assassin's Creed game</strong> — all 14 of them. It's less of a hobby and more of a commitment at this point.</span>
-                    </div>
-                    <div class="fact-item" id="fact-1">
-                        <span class="fact-num">02</span>
-                        <span class="fact-emoji">🎵</span>
-                        <span class="fact-text">I produced and co-released a hip-hop track called <strong>BRONX</strong>. The hardest part wasn't the music — it was choosing the tracklist order.</span>
-                    </div>
-                    <div class="fact-item" id="fact-2">
-                        <span class="fact-num">03</span>
-                        <span class="fact-emoji">✈️</span>
-                        <span class="fact-text">I've been to <strong>Croatia, Nice, Monaco, Bologna, Rome, Sevilla, Wrocław</strong>, and — obviously — Madrid. Each city gets its own photo roll.</span>
-                    </div>
-                    <div class="fact-item" id="fact-3">
-                        <span class="fact-num">04</span>
-                        <span class="fact-emoji">🌙</span>
-                        <span class="fact-text"><strong>Dark mode is non-negotiable.</strong> Every device, every app, every OS. I've never willingly chosen light mode for anything that mattered.</span>
-                    </div>
-                    <div class="fact-item" id="fact-4">
-                        <span class="fact-num">05</span>
-                        <span class="fact-emoji">🔲</span>
-                        <span class="fact-text">I notice misaligned pixels in the wild. Menus, apps, street signage — if something is 2px off, I will find it. It's a gift and a curse.</span>
-                    </div>
-                    <div class="fact-item" id="fact-5">
-                        <span class="fact-num">06</span>
-                        <span class="fact-emoji">🎧</span>
-                        <span class="fact-text">My Spotify playlist is a carefully curated mix of <strong>Italian rap, reggaeton, and Witcher 3 OST</strong>. Yes, all three. It makes sense if you know me.</span>
-                    </div>
-                </div>
-            </section>
-
-            <!-- ══ CTA ══ -->
-            <div class="about-cta" id="about-cta">
-                <div class="about-cta-label">Let's connect</div>
-                <h2 class="about-cta-title">Want to work together or just say hi?</h2>
-                <p class="about-cta-subtitle">I'm always happy to chat about design, games, music, or opportunities. My inbox is open.</p>
-                <div class="about-cta-links">
-                    <a href="https://www.linkedin.com/in/francesco-gerbasio" target="_blank" rel="noopener noreferrer" class="cta-btn cta-btn-primary">
-                        LinkedIn →
-                    </a>
-                    <a href="https://www.instagram.com/gerbasio_francesco/" target="_blank" rel="noopener noreferrer" class="cta-btn cta-btn-secondary">
-                        Instagram
-                    </a>
                 </div>
             </div>
+            <div>
+                <span class="section-label">What I bring</span>
+                <p style="font-size:clamp(15px,1.3vw,18px);line-height:1.75;opacity:0.7;color:var(--color-text);margin:0 0 24px 0;">
+                    I don't just make things look good — I make them make sense. My background in both design and QA gives me a rare lens: I build interfaces with an eye for what breaks, what confuses, and what quietly delights.
+                </p>
+                <p style="font-size:clamp(15px,1.3vw,18px);line-height:1.75;opacity:0.7;color:var(--color-text);margin:0;">
+                    Working across Italian, English, and Spanish means I also think in multiple registers — understanding how tone, context, and culture shift a user experience before it ever reaches a screen.
+                </p>
+            </div>
+        </div>
 
-        </div><!-- /about-page -->
-    </div><!-- /container -->
+        <section class="values-section scroll-reveal" id="valuesSection">
+            <div class="values-header">
+                <h2 class="values-title">Things I believe in</h2>
+                <span class="values-count">04 principles</span>
+            </div>
+            <div id="valuesList">
+                <div class="value-item">
+                    <span class="value-index">01</span>
+                    <div>
+                        <h3 class="value-name">Details are the design.</h3>
+                        <p class="value-desc">The best interfaces are the ones people don't notice. They just work — and work beautifully. I obsess over the things most people skip: spacing, micro-copy, transition timing, error states.</p>
+                    </div>
+                </div>
+                <div class="value-item">
+                    <span class="value-index">02</span>
+                    <div>
+                        <h3 class="value-name">Questions before answers.</h3>
+                        <p class="value-desc">Great design starts with asking why three more times than feels comfortable. A clear problem statement is worth more than a hundred wireframes.</p>
+                    </div>
+                </div>
+                <div class="value-item">
+                    <span class="value-index">03</span>
+                    <div>
+                        <h3 class="value-name">Ship early, learn faster.</h3>
+                        <p class="value-desc">Perfection is a moving target. I'd rather get something real in front of people and iterate than spend months refining something no one's validated yet.</p>
+                    </div>
+                </div>
+                <div class="value-item">
+                    <span class="value-index">04</span>
+                    <div>
+                        <h3 class="value-name">Context is everything.</h3>
+                        <p class="value-desc">A good solution in one language, culture, or context can be a bad one in another. My multilingual background has taught me to always ask: for whom, and where?</p>
+                    </div>
+                </div>
+            </div>
+        </section>
 
-    <!-- Version indicator -->
-    <div style="position: fixed; bottom: 10px; right: 10px; font-size: 10px; color: rgba(0,0,0,0.3); font-family: monospace; z-index: 9999;">v1.0.0</div>
+        <section class="timeline-section scroll-reveal" id="timelineSection">
+            <h2 class="timeline-title">Journey so far</h2>
+            <div class="timeline" id="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-year">2025 →</div>
+                    <div>
+                        <p class="timeline-role">Localization QA Tester</p>
+                        <p class="timeline-company">Universally Speaking · Madrid</p>
+                        <p class="timeline-desc">End-to-end Italian LQA for major titles including Red Dead Redemption, Dragon Ball: Sparking! Zero, and more. Using Bonsai and JIRA to identify, document, and validate linguistic and functional issues across full regression cycles.</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-year">2024</div>
+                    <div>
+                        <p class="timeline-role">UX/UI Designer</p>
+                        <p class="timeline-company">Freelance · Italy</p>
+                        <p class="timeline-desc">End-to-end design for clients across entertainment, transport, and lifestyle. Conducted user interviews and usability testing, delivering wireframes through high-fidelity Figma prototypes. One project reduced user navigation time by 30% through clearer information architecture.</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-year">2024</div>
+                    <div>
+                        <p class="timeline-role">UX/UI Design Course</p>
+                        <p class="timeline-company">Talent Garden</p>
+                        <p class="timeline-desc">Formal training in UX process, design systems, and prototyping — the structured foundation that gave shape to years of self-taught practice.</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-year">2019–22</div>
+                    <div>
+                        <p class="timeline-role">Music Producer</p>
+                        <p class="timeline-company">BeatStars · Independent</p>
+                        <p class="timeline-desc">Produced and released original tracks independently. Where the obsession with craft, sound design, and feeling first took hold — long before it had a design name.</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-year">2014–19</div>
+                    <div>
+                        <p class="timeline-role">Computer Science &amp; Telecommunications</p>
+                        <p class="timeline-company">I.I.S E. Alessandrini · Abruzzo</p>
+                        <p class="timeline-desc">Five years of IT that taught me to think in systems, debug obsessively, and never trust something just because it compiles.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="currently-section scroll-reveal" id="currentlySection">
+            <h2 class="currently-title">Right now</h2>
+            <div class="bento-grid" id="bentoGrid">
+                <div class="bento-card">
+                    <span class="bento-emoji">📍</span>
+                    <p class="bento-label">Location</p>
+                    <p class="bento-value">Madrid, Spain</p>
+                    <p class="bento-sub">Open to remote &amp; relocation</p>
+                </div>
+                <div class="bento-card">
+                    <span class="bento-emoji">🎮</span>
+                    <p class="bento-label">Currently playing</p>
+                    <p class="bento-value">Stray · Pokémon Legends: Z-A</p>
+                    <p class="bento-sub">Always open to recommendations</p>
+                </div>
+                <div class="bento-card">
+                    <span class="bento-emoji">🎵</span>
+                    <p class="bento-label">On repeat</p>
+                    <p class="bento-value">Italian rap &amp; Latin urbano</p>
+                    <p class="bento-sub">Lazza · Bad Bunny · Rauw Alejandro</p>
+                </div>
+                <div class="bento-card">
+                    <span class="bento-emoji">✈️</span>
+                    <p class="bento-label">Last trip</p>
+                    <p class="bento-value">Wrocław, Poland</p>
+                    <p class="bento-sub">Always planning the next one</p>
+                </div>
+                <div class="bento-card">
+                    <span class="bento-emoji">🌐</span>
+                    <p class="bento-label">Languages</p>
+                    <div class="lang-row">
+                        <span class="lang-pill">🇮🇹 Italian <span class="lang-level">Native</span></span>
+                        <span class="lang-pill">🇬🇧 English <span class="lang-level">Fluent</span></span>
+                        <span class="lang-pill">🇪🇸 Spanish <span class="lang-level">Fluent</span></span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="about-cta scroll-reveal" id="ctaSection">
+            <p class="cta-text">Want to work together?<br><span>Let's talk.</span></p>
+            <div class="cta-buttons">
+                <a href="https://www.linkedin.com/in/francesco-gerbasio" target="_blank" class="btn-primary">LinkedIn →</a>
+                <a href="mailto:francesco.gerbasio00@gmail.com" class="btn-secondary">Email me</a>
+            </div>
+        </div>
+
+    </div>
+
+    <div style="position:fixed;bottom:10px;right:10px;font-size:10px;color:rgba(0,0,0,0.3);font-family:monospace;z-index:9999;">v1.0.0</div>
 
     <script src="location-config.js"></script>
     <script>
+    document.addEventListener('DOMContentLoaded', function () {
 
-        // ── Nav / hamburger (same as other pages) ──
-        document.addEventListener('DOMContentLoaded', function () {
-            const hamburgerBtn = document.getElementById('hamburgerBtn');
-            const mobileMenu   = document.getElementById('mobileMenu');
+        const nav = document.querySelector('.navigation');
+        const hamburgerBtn = document.getElementById('hamburgerBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
 
-            if (hamburgerBtn) {
-                hamburgerBtn.addEventListener('click', function (e) {
-                    e.stopPropagation();
-                    this.classList.toggle('active');
-                    mobileMenu.classList.toggle('active');
-                });
-            }
-
-            document.addEventListener('click', function (e) {
-                if (mobileMenu?.classList.contains('active')) {
-                    if (!mobileMenu.contains(e.target) && !hamburgerBtn?.contains(e.target)) {
-                        hamburgerBtn.classList.remove('active');
-                        mobileMenu.classList.remove('active');
-                    }
-                }
+        if (hamburgerBtn) {
+            hamburgerBtn.addEventListener('click', function (e) {
+                e.stopPropagation();
+                this.classList.toggle('active');
+                mobileMenu.classList.toggle('active');
             });
+        }
 
-            document.querySelectorAll('.mobile-menu .nav-link').forEach(link => {
-                link.addEventListener('click', () => {
+        document.addEventListener('click', function (e) {
+            if (mobileMenu && mobileMenu.classList.contains('active')) {
+                if (!mobileMenu.contains(e.target) && !hamburgerBtn.contains(e.target)) {
                     hamburgerBtn.classList.remove('active');
                     mobileMenu.classList.remove('active');
-                });
-            });
-
-            const navigation = document.querySelector('.navigation');
-            const handleScroll = () => navigation.classList.toggle('scrolled', window.scrollY > 20);
-            window.addEventListener('scroll', handleScroll);
-            handleScroll();
-
-            // ── Scroll-triggered reveals ──
-            const io = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (!entry.isIntersecting) return;
-                    entry.target.classList.add('visible');
-                    io.unobserve(entry.target);
-                });
-            }, { threshold: 0.08, rootMargin: '0px 0px -60px 0px' });
-
-            // Sections
-            document.querySelectorAll('.about-section').forEach(el => io.observe(el));
-
-            // Timeline items — staggered
-            document.querySelectorAll('.timeline-item').forEach((el, i) => {
-                el.style.transitionDelay = `${i * 0.12}s`;
-                io.observe(el);
-            });
-
-            // Fact items — staggered
-            document.querySelectorAll('.fact-item').forEach((el, i) => {
-                el.style.transitionDelay = `${i * 0.07}s`;
-                io.observe(el);
-            });
-
-            // CTA
-            const cta = document.getElementById('about-cta');
-            if (cta) io.observe(cta);
-
+                }
+            }
         });
 
+        document.querySelectorAll('.mobile-menu .nav-link').forEach(l => {
+            l.addEventListener('click', () => {
+                hamburgerBtn.classList.remove('active');
+                mobileMenu.classList.remove('active');
+            });
+        });
+
+        window.addEventListener('scroll', () => {
+            nav.classList.toggle('scrolled', window.scrollY > 20);
+        });
+        nav.classList.toggle('scrolled', window.scrollY > 20);
+
+        setTimeout(() => {
+            const d = document.getElementById('heroDivider');
+            if (d) d.classList.add('animate');
+        }, 600);
+
+        const revealObs = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    revealObs.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+
+        document.querySelectorAll('.scroll-reveal').forEach(el => revealObs.observe(el));
+
+        const statsRow = document.getElementById('statsRow');
+        if (statsRow) {
+            new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.querySelectorAll('.stat-item').forEach((item, i) => {
+                            setTimeout(() => item.classList.add('visible'), i * 120);
+                        });
+                    }
+                });
+            }, { threshold: 0.2 }).observe(statsRow);
+        }
+
+        const skillsBlock = document.getElementById('skillsBlock');
+        if (skillsBlock) {
+            new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.querySelectorAll('.skill-tag').forEach((tag, i) => {
+                            setTimeout(() => tag.classList.add('visible'), i * 55);
+                        });
+                    }
+                });
+            }, { threshold: 0.1 }).observe(skillsBlock);
+        }
+
+        const valuesList = document.getElementById('valuesList');
+        if (valuesList) {
+            new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.querySelectorAll('.value-item').forEach((item, i) => {
+                            setTimeout(() => item.classList.add('visible'), i * 100);
+                        });
+                    }
+                });
+            }, { threshold: 0.1 }).observe(valuesList);
+        }
+
+        const timeline = document.getElementById('timeline');
+        if (timeline) {
+            new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.querySelectorAll('.timeline-item').forEach((item, i) => {
+                            setTimeout(() => item.classList.add('visible'), i * 130);
+                        });
+                    }
+                });
+            }, { threshold: 0.1 }).observe(timeline);
+        }
+
+        const bentoGrid = document.getElementById('bentoGrid');
+        if (bentoGrid) {
+            new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.querySelectorAll('.bento-card').forEach((card, i) => {
+                            setTimeout(() => card.classList.add('visible'), i * 80);
+                        });
+                    }
+                });
+            }, { threshold: 0.1 }).observe(bentoGrid);
+        }
+
+    });
     </script>
+
 </body>
 </html>
