@@ -813,6 +813,7 @@ a {
     .project-list-item {
         display: grid;
         grid-template-columns: 1fr auto;
+        grid-template-rows: 1.4em 1.2em;
         grid-template-areas:
             "name year"
             "studio year";
@@ -821,22 +822,11 @@ a {
         gap: 2px 12px;
     }
 
-    .project-name    { grid-area: name;   font-size: 14px; }
-    .project-studio  { grid-area: studio; font-size: 12px; opacity: 0.6; }
+    .project-name    { grid-area: name;   font-size: 14px; align-self: center; }
+    .project-studio  { grid-area: studio; font-size: 12px; opacity: 0.6; align-self: center; }
     .project-year    { grid-area: year;   font-size: 13px; white-space: nowrap; align-self: center; }
     .project-divider { display: none; }
-
-    /* NDA items — suppress particle containers so they don't inflate row height */
-    .project-list-item.nda-protected-item .nda-hidden-text {
-        display: block;
-        overflow: hidden;
-        height: 1.4em;
-        line-height: 1.4;
-    }
-
-    .project-list-item.nda-protected-item .nda-hidden-text .particle-container {
-        display: none;
-    }
+}
 }
 
 /* ===================================
