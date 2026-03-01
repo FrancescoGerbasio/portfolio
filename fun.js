@@ -262,7 +262,7 @@ function layoutMasonry() {
     const colW = (gridWidth - gap * (columns - 1)) / columns;
     const colHeights = Array(columns).fill(0);
 
-    // All photos are 800×1067 — AR is always exact, layout is instant and final
+    // All photos are 800×1067 — AR always exact, layout instant and final
     cards.forEach((card, i) => {
         const ar  = 1.3337;
         const h   = colW * ar;
@@ -284,38 +284,47 @@ function layoutMasonry() {
     grid.style.transition = 'opacity 0.25s ease';
     grid.style.opacity = '1';
 
-    // Reveal in-viewport cards immediately, rest animate in as they scroll in
-    function revealCard(card) {
+    const viewH = window.innerHeight;
+
+    function revealCard(card, instant) {
         if (card.dataset.animDone) return;
         card.dataset.animDone = '1';
-        void card.offsetWidth;
-        card.classList.add('revealed');
-        card.addEventListener('animationend', () => {
+        if (instant) {
+            // Already in viewport on load — just show, no animation
             card.style.opacity = '1';
             card.style.transform = 'none';
-            card.classList.remove('revealed');
-        }, { once: true });
+        } else {
+            // Scrolled into view — animate in
+            void card.offsetWidth;
+            card.classList.add('revealed');
+            card.addEventListener('animationend', () => {
+                card.style.opacity = '1';
+                card.style.transform = 'none';
+                card.classList.remove('revealed');
+            }, { once: true });
+        }
     }
 
-    const viewH = window.innerHeight;
+    // Cards already visible on load: show instantly, no animation
     cards.forEach(card => {
-        if (card.getBoundingClientRect().top < viewH + 100) revealCard(card);
+        if (card.getBoundingClientRect().top < viewH) revealCard(card, true);
     });
 
+    // Cards below fold: animate in just before they enter viewport
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (!entry.isIntersecting) return;
             const card = entry.target;
             observer.unobserve(card);
-            // Wait for image to decode before animating — no flash
             const img = card.querySelector('img');
+            const doReveal = () => revealCard(card, false);
             if (img && !img.complete) {
-                img.decode().catch(() => {}).then(() => revealCard(card));
+                img.decode().catch(() => {}).then(doReveal);
             } else {
-                revealCard(card);
+                doReveal();
             }
         });
-    }, { threshold: 0, rootMargin: '0px 0px 500px 0px' });
+    }, { threshold: 0, rootMargin: '0px 0px 400px 0px' });
 
     cards.forEach(card => { if (!card.dataset.animDone) observer.observe(card); });
 }

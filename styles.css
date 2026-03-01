@@ -1745,10 +1745,14 @@ html {
     backface-visibility: hidden;
 }
 
-/* Once animation is done, never go invisible again */
+/* Once done — locked visible, hover transitions take over */
 .travel-card[data-anim-done] {
-    opacity: 1;
-    transform: none;
+    opacity: 1 !important;
+    animation: none !important;
+}
+
+.travel-card[data-anim-done]:not(:hover) {
+    transform: none !important;
 }
 
 /* Reveal animation — triggered by JS adding .revealed */
