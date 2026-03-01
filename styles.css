@@ -826,21 +826,16 @@ a {
     .project-year    { grid-area: year;   font-size: 13px; white-space: nowrap; align-self: center; }
     .project-divider { display: none; }
 
-    /* NDA items — collapsed to single row so year aligns with the rest */
-    .project-list-item.nda-protected-item {
-        grid-template-areas:
-            "name year"
-            "name year";
+    /* NDA items — suppress particle containers so they don't inflate row height */
+    .project-list-item.nda-protected-item .nda-hidden-text {
+        display: block;
+        overflow: hidden;
+        height: 1.4em;
+        line-height: 1.4;
     }
 
-    .project-list-item.nda-protected-item .project-studio {
+    .project-list-item.nda-protected-item .nda-hidden-text .particle-container {
         display: none;
-    }
-
-    .project-list-item.nda-protected-item .project-name {
-        min-height: 2.4em; /* match normal 2-row height so rows feel consistent */
-        display: flex;
-        align-items: center;
     }
 }
 
