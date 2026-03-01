@@ -778,6 +778,13 @@ a {
 @media (max-width: 768px) {
     .project-list-item.nda-protected-item .nda-hidden-text {
         display: block;
+        color: transparent !important; /* keep for particle effect */
+        visibility: hidden;            /* hides text but preserves dimensions */
+    }
+    /* Override for already-known selectors to ensure grid rows stay same height */
+    .project-list-item.nda-protected-item .project-name,
+    .project-list-item.nda-protected-item .project-studio {
+        visibility: hidden;
     }
 }
 
