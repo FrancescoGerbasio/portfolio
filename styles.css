@@ -775,6 +775,12 @@ a {
     position: relative;
 }
 
+@media (max-width: 768px) {
+    .project-list-item.nda-protected-item .nda-hidden-text {
+        display: block;
+    }
+}
+
 .project-list-item.nda-protected-item .project-name,
 .project-list-item.nda-protected-item .project-studio {
     position: relative;
