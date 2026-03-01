@@ -764,6 +764,7 @@ a {
     padding-left: 0;
 }
 
+/* ── FIX: NDA hidden text — proper positioning for particles ── */
 .project-list-item.nda-protected-item .nda-hidden-text {
     color: transparent !important;
     user-select: none !important;
@@ -773,19 +774,15 @@ a {
     -ms-user-select: none;
     display: inline-block;
     position: relative;
+    min-width: 80px;   /* guarantees render space so particles are visible */
+    min-height: 1em;
 }
 
-@media (max-width: 768px) {
-    .project-list-item.nda-protected-item .nda-hidden-text {
-        display: block;
-        color: transparent !important; /* keep for particle effect */
-        visibility: hidden;            /* hides text but preserves dimensions */
-    }
-    /* Override for already-known selectors to ensure grid rows stay same height */
-    .project-list-item.nda-protected-item .project-name,
-    .project-list-item.nda-protected-item .project-studio {
-        visibility: hidden;
-    }
+/* Particle container inside list items */
+.project-list-item.nda-protected-item .particle-container {
+    z-index: 1;
+    border-radius: 4px;
+    overflow: visible; /* let particles drift slightly outside */
 }
 
 .project-list-item.nda-protected-item .project-name,
@@ -807,15 +804,21 @@ a {
 .project-divider {
     color: var(--color-text-light);
     opacity: 0.5;
+    flex-shrink: 0;
 }
 
 .project-studio {
     color: var(--color-text-light);
 }
 
+/* ── FIX: Year alignment — always pushed to the right edge ── */
 .project-year {
     color: var(--color-text-light);
     opacity: 0.7;
+    margin-left: auto;   /* pushes year to the far right */
+    flex-shrink: 0;      /* never shrinks or wraps */
+    text-align: right;
+    min-width: 36px;     /* stable width on narrow screens */
 }
 
 @media (max-width: 768px) {
@@ -824,22 +827,17 @@ a {
     }
 
     .project-list-item {
-        display: grid;
-        grid-template-columns: 1fr auto;
-        grid-template-rows: 1.4em 1.2em;
-        grid-template-areas:
-            "name year"
-            "studio year";
-        align-items: center;
         padding: 13px 0;
-        gap: 2px 12px;
+        gap: 8px;
     }
 
-    .project-name    { grid-area: name;   font-size: 14px; align-self: center; }
-    .project-studio  { grid-area: studio; font-size: 12px; opacity: 0.6; align-self: center; }
-    .project-year    { grid-area: year;   font-size: 13px; white-space: nowrap; align-self: center; }
-    .project-divider { display: none; }
-}
+    .project-name {
+        font-size: 14px;
+    }
+
+    .project-studio {
+        font-size: 13px;
+    }
 }
 
 /* ===================================
@@ -1718,10 +1716,6 @@ html {
     border-radius: 12px;
     overflow: hidden;
     cursor: pointer;
-    /* Dark bg visible until image loads — no white flash */
-    background: #1c1c1e;
-    isolation: isolate;
-    will-change: transform;
     /* Base state — invisible until revealed */
     opacity: 0;
     transform: scale(0.92) translateY(12px);
@@ -1730,27 +1724,10 @@ html {
         box-shadow 0.3s ease;
 }
 
-.travel-card img {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-    transition: transform 0.3s ease;
-    /* Force GPU composite layer — no white repaint between frames */
-    transform: translateZ(0);
-    backface-visibility: hidden;
-}
-
-/* Once done — locked visible, hover transitions take over */
+/* Once animation is done, never go invisible again */
 .travel-card[data-anim-done] {
-    opacity: 1 !important;
-    animation: none !important;
-}
-
-.travel-card[data-anim-done]:not(:hover) {
-    transform: none !important;
+    opacity: 1;
+    transform: none;
 }
 
 /* Reveal animation — triggered by JS adding .revealed */
@@ -1780,8 +1757,16 @@ html {
     z-index: 10;
 }
 
+.travel-card img {
+    width: 100%;
+    height: auto;
+    display: block;
+    vertical-align: bottom;
+    transition: transform 0.3s ease;
+}
+
 .travel-card:hover img {
-    transform: scale(1.05) translateZ(0);
+    transform: scale(1.05);
 }
 
 .travel-card-location {
@@ -2033,9 +2018,6 @@ html {
 }
 
 /* ══ BACK FACE ══ */
-/* The back face is pre-rotated 180deg so it's hidden at rest.
-   When the parent flips 180deg, this face becomes visible — and
-   because it was already rotated, the content reads correctly. */
 .song-card-back {
     transform: rotateY(180deg);
     background: #000;
@@ -2055,8 +2037,6 @@ html {
     pointer-events: none;
 }
 
-/* Bottom overlay — no counter-rotation needed, the back face
-   pre-rotation already ensures everything reads correctly */
 .song-card-back-overlay {
     position: absolute;
     bottom: 0;
