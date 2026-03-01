@@ -161,7 +161,7 @@ function displayEditorial(grid) {
 
     grid.innerHTML = photos.map((photo, i) => `
         <div class="travel-card" data-country="${photo.country}" data-ar="${photo.ar || 1.25}" style="--card-i:${i}">
-            <img src="${photo.image}" alt="${photo.location}" loading="lazy">
+            <img src="${photo.image}" alt="${photo.location}" loading="lazy" decoding="async">
             <div class="travel-card-location">
                 <span class="flag">${photo.flag}</span>
                 <span class="location-name">${photo.location}</span>
@@ -221,7 +221,7 @@ function displayMasonry(grid, country) {
 
     grid.innerHTML = filtered.map((photo, i) => `
         <div class="travel-card" data-country="${photo.country}" data-ar="${photo.ar || 1.25}" style="--card-i:${i}">
-            <img src="${photo.image}" alt="${photo.location}" loading="lazy">
+            <img src="${photo.image}" alt="${photo.location}" loading="lazy" decoding="async">
             <div class="travel-card-location">
                 <span class="flag">${photo.flag}</span>
                 <span class="location-name">${photo.location}</span>
@@ -304,12 +304,18 @@ function layoutMasonry() {
 
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                revealCard(entry.target);
-                observer.unobserve(entry.target);
+            if (!entry.isIntersecting) return;
+            const card = entry.target;
+            observer.unobserve(card);
+            // Wait for image to decode before animating — no flash
+            const img = card.querySelector('img');
+            if (img && !img.complete) {
+                img.decode().catch(() => {}).then(() => revealCard(card));
+            } else {
+                revealCard(card);
             }
         });
-    }, { threshold: 0, rootMargin: '0px 0px 300px 0px' });
+    }, { threshold: 0, rootMargin: '0px 0px 500px 0px' });
 
     cards.forEach(card => { if (!card.dataset.animDone) observer.observe(card); });
 }
