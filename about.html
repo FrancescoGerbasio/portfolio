@@ -1,0 +1,1142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About — Francesco Gerbasio</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* ===================================
+           ABOUT PAGE — Apple-grade design
+           =================================== */
+
+        /* ── Page entry animation ── */
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(28px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to   { opacity: 1; }
+        }
+
+        @keyframes lineGrow {
+            from { transform: scaleX(0); }
+            to   { transform: scaleX(1); }
+        }
+
+        @keyframes countUp {
+            from { opacity: 0; transform: translateY(12px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ── Hero ── */
+        .about-hero {
+            padding-top: clamp(80px, 12vw, 160px);
+            padding-bottom: clamp(60px, 8vw, 120px);
+            max-width: 1100px;
+        }
+
+        .about-eyebrow {
+            font-size: clamp(11px, 0.9vw, 13px);
+            font-weight: 600;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: var(--color-text-light);
+            margin-bottom: 24px;
+            opacity: 0;
+            animation: fadeUp 0.6s cubic-bezier(0.34, 1.2, 0.64, 1) 0.1s forwards;
+        }
+
+        .about-headline {
+            font-family: var(--font-heading);
+            font-size: clamp(36px, 5vw, 80px);
+            font-weight: 700;
+            line-height: 1.05;
+            letter-spacing: -0.02em;
+            color: var(--color-text);
+            margin: 0 0 32px 0;
+            opacity: 0;
+            animation: fadeUp 0.7s cubic-bezier(0.34, 1.2, 0.64, 1) 0.2s forwards;
+        }
+
+        .about-headline .highlight {
+            color: var(--color-text-light);
+        }
+
+        .about-intro-text {
+            font-size: clamp(17px, 1.6vw, 22px);
+            line-height: 1.65;
+            color: var(--color-text);
+            opacity: 0.7;
+            max-width: 680px;
+            margin: 0;
+            opacity: 0;
+            animation: fadeUp 0.7s cubic-bezier(0.34, 1.2, 0.64, 1) 0.35s forwards;
+        }
+
+        /* Reuse for the second appearance (after first anim runs) */
+        .about-intro-text.visible {
+            opacity: 0.7;
+        }
+
+        /* ── Divider line ── */
+        .about-divider {
+            width: 100%;
+            height: 1px;
+            background: var(--color-text);
+            transform-origin: left;
+            transform: scaleX(0);
+            margin: 0 0 80px 0;
+        }
+
+        .about-divider.animate {
+            animation: lineGrow 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+
+        /* ── Two-column layout ── */
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: clamp(40px, 6vw, 100px);
+            margin-bottom: 100px;
+            align-items: start;
+        }
+
+        @media (max-width: 900px) {
+            .about-grid {
+                grid-template-columns: 1fr;
+                gap: 48px;
+            }
+        }
+
+        /* ── Section labels ── */
+        .section-label {
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: var(--color-text-light);
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        /* ── Story block ── */
+        .about-story p {
+            font-size: clamp(15px, 1.3vw, 18px);
+            line-height: 1.75;
+            color: var(--color-text);
+            opacity: 0.75;
+            margin: 0 0 20px 0;
+        }
+
+        .about-story p:last-child {
+            margin: 0;
+        }
+
+        .about-story strong {
+            color: var(--color-text);
+            opacity: 1;
+            font-weight: 600;
+        }
+
+        /* ── Stats row ── */
+        .about-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2px;
+            margin-bottom: 100px;
+            border-top: 1px solid var(--color-text);
+            border-bottom: 1px solid var(--color-text);
+        }
+
+        .stat-item {
+            padding: 32px 24px;
+            border-right: 1px solid rgba(0,0,0,0.12);
+            opacity: 0;
+            transform: translateY(16px);
+            transition: opacity 0.5s ease, transform 0.5s cubic-bezier(0.34, 1.2, 0.64, 1);
+        }
+
+        .stat-item:last-child {
+            border-right: none;
+        }
+
+        .stat-item.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .stat-number {
+            font-family: var(--font-heading);
+            font-size: clamp(36px, 4vw, 56px);
+            font-weight: 700;
+            line-height: 1;
+            letter-spacing: -0.03em;
+            color: var(--color-text);
+            margin-bottom: 8px;
+        }
+
+        .stat-label {
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--color-text-light);
+            line-height: 1.4;
+        }
+
+        @media (max-width: 768px) {
+            .about-stats {
+                grid-template-columns: repeat(3, 1fr);
+            }
+            .stat-item {
+                padding: 24px 12px;
+            }
+            .stat-number {
+                font-size: 28px;
+            }
+        }
+
+        /* ── Skills / Tools ── */
+        .skills-block {
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+        }
+
+        .skill-group {}
+
+        .skill-group-title {
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: var(--color-text-light);
+            margin-bottom: 16px;
+        }
+
+        .skill-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .skill-tag {
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--color-text);
+            background: transparent;
+            border: 1px solid rgba(0,0,0,0.2);
+            padding: 6px 14px;
+            border-radius: 100px;
+            transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s cubic-bezier(0.34, 1.4, 0.64, 1);
+            cursor: default;
+            opacity: 0;
+            transform: scale(0.88);
+        }
+
+        .skill-tag.visible {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .skill-tag:hover {
+            background: var(--color-text);
+            color: var(--color-bg);
+            border-color: var(--color-text);
+            transform: scale(1.05);
+        }
+
+        /* ── Values / Beliefs — stacked cards ── */
+        .values-section {
+            margin-bottom: 100px;
+        }
+
+        .values-header {
+            display: flex;
+            align-items: baseline;
+            gap: 24px;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(0,0,0,0.1);
+        }
+
+        .values-title {
+            font-family: var(--font-heading);
+            font-size: clamp(28px, 3vw, 44px);
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            margin: 0;
+        }
+
+        .values-count {
+            font-size: 13px;
+            color: var(--color-text-light);
+            font-weight: 500;
+        }
+
+        .values-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+        }
+
+        .value-item {
+            display: grid;
+            grid-template-columns: 48px 1fr;
+            gap: 32px;
+            align-items: start;
+            padding: 32px 0;
+            border-bottom: 1px solid rgba(0,0,0,0.07);
+            opacity: 0;
+            transform: translateX(-20px);
+            transition: opacity 0.5s ease, transform 0.5s cubic-bezier(0.34, 1.2, 0.64, 1);
+            cursor: default;
+        }
+
+        .value-item.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .value-item:last-child {
+            border-bottom: none;
+        }
+
+        .value-index {
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            color: var(--color-text-light);
+            padding-top: 5px;
+        }
+
+        .value-content {}
+
+        .value-name {
+            font-family: var(--font-heading);
+            font-size: clamp(20px, 2vw, 28px);
+            font-weight: 700;
+            letter-spacing: -0.01em;
+            margin: 0 0 10px 0;
+            color: var(--color-text);
+            transition: letter-spacing 0.3s ease;
+        }
+
+        .value-item:hover .value-name {
+            letter-spacing: 0.02em;
+        }
+
+        .value-desc {
+            font-size: clamp(14px, 1.2vw, 16px);
+            line-height: 1.65;
+            color: var(--color-text);
+            opacity: 0.6;
+            margin: 0;
+        }
+
+        /* ── Timeline / Journey ── */
+        .timeline-section {
+            margin-bottom: 100px;
+        }
+
+        .timeline-header {
+            margin-bottom: 48px;
+        }
+
+        .timeline-title {
+            font-family: var(--font-heading);
+            font-size: clamp(28px, 3vw, 44px);
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            margin: 0;
+        }
+
+        .timeline {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+        }
+
+        /* Vertical track */
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 80px;
+            top: 10px;
+            bottom: 10px;
+            width: 1px;
+            background: rgba(0,0,0,0.12);
+        }
+
+        @media (max-width: 768px) {
+            .timeline::before { left: 20px; }
+        }
+
+        .timeline-item {
+            display: grid;
+            grid-template-columns: 80px 1fr;
+            gap: 32px;
+            padding: 28px 0;
+            border-bottom: 1px solid rgba(0,0,0,0.06);
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.55s ease, transform 0.55s cubic-bezier(0.34, 1.2, 0.64, 1);
+        }
+
+        @media (max-width: 768px) {
+            .timeline-item { grid-template-columns: 20px 1fr; gap: 24px; }
+        }
+
+        .timeline-item.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .timeline-item:last-child {
+            border-bottom: none;
+        }
+
+        .timeline-year {
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 0.06em;
+            color: var(--color-text-light);
+            padding-top: 4px;
+            text-align: right;
+            position: relative;
+        }
+
+        /* Dot on the track */
+        .timeline-year::after {
+            content: '';
+            position: absolute;
+            right: -20px;
+            top: 7px;
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: var(--color-text);
+            transform: translateX(50%);
+        }
+
+        @media (max-width: 768px) {
+            .timeline-year { text-align: left; font-size: 10px; }
+            .timeline-year::after { right: auto; left: 100%; }
+        }
+
+        .timeline-content {}
+
+        .timeline-role {
+            font-size: clamp(16px, 1.5vw, 20px);
+            font-weight: 600;
+            color: var(--color-text);
+            margin: 0 0 4px 0;
+        }
+
+        .timeline-company {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--color-text-light);
+            margin: 0 0 10px 0;
+        }
+
+        .timeline-desc {
+            font-size: 14px;
+            line-height: 1.6;
+            color: var(--color-text);
+            opacity: 0.6;
+            margin: 0;
+        }
+
+        /* ── Currently section — Bento-style grid ── */
+        .currently-section {
+            margin-bottom: 100px;
+        }
+
+        .currently-title {
+            font-family: var(--font-heading);
+            font-size: clamp(28px, 3vw, 44px);
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            margin: 0 0 40px 0;
+        }
+
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            grid-template-rows: auto;
+            gap: 12px;
+        }
+
+        .bento-card {
+            background: rgba(0,0,0,0.04);
+            border-radius: 18px;
+            padding: 28px;
+            opacity: 0;
+            transform: scale(0.95);
+            transition: opacity 0.5s ease, transform 0.5s cubic-bezier(0.34, 1.2, 0.64, 1),
+                        background 0.25s ease;
+        }
+
+        .bento-card:hover {
+            background: rgba(0,0,0,0.07);
+        }
+
+        .bento-card.visible {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        /* Grid placement */
+        .bento-card:nth-child(1) { grid-column: span 5; }
+        .bento-card:nth-child(2) { grid-column: span 7; }
+        .bento-card:nth-child(3) { grid-column: span 4; }
+        .bento-card:nth-child(4) { grid-column: span 4; }
+        .bento-card:nth-child(5) { grid-column: span 4; }
+
+        @media (max-width: 900px) {
+            .bento-card:nth-child(1),
+            .bento-card:nth-child(2),
+            .bento-card:nth-child(3),
+            .bento-card:nth-child(4),
+            .bento-card:nth-child(5) {
+                grid-column: span 6;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .bento-card:nth-child(1),
+            .bento-card:nth-child(2),
+            .bento-card:nth-child(3),
+            .bento-card:nth-child(4),
+            .bento-card:nth-child(5) {
+                grid-column: span 12;
+            }
+        }
+
+        .bento-emoji {
+            font-size: 28px;
+            margin-bottom: 14px;
+            display: block;
+        }
+
+        .bento-label {
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--color-text-light);
+            margin-bottom: 8px;
+        }
+
+        .bento-value {
+            font-size: clamp(15px, 1.4vw, 18px);
+            font-weight: 600;
+            color: var(--color-text);
+            line-height: 1.4;
+        }
+
+        .bento-sub {
+            font-size: 13px;
+            color: var(--color-text-light);
+            margin-top: 4px;
+        }
+
+        /* ── Languages pill row ── */
+        .lang-row {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-top: 12px;
+        }
+
+        .lang-pill {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--color-text);
+            background: rgba(0,0,0,0.08);
+            padding: 5px 12px;
+            border-radius: 100px;
+        }
+
+        .lang-level {
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--color-text-light);
+        }
+
+        /* ── CTA ── */
+        .about-cta {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 40px;
+            padding: 60px 0 80px;
+            border-top: 1px solid rgba(0,0,0,0.1);
+            flex-wrap: wrap;
+        }
+
+        .cta-text {
+            font-family: var(--font-heading);
+            font-size: clamp(24px, 3vw, 40px);
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            color: var(--color-text);
+            margin: 0;
+        }
+
+        .cta-text span {
+            color: var(--color-text-light);
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 12px;
+            flex-shrink: 0;
+        }
+
+        .btn-primary {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 14px 28px;
+            background: var(--color-text);
+            color: var(--color-bg);
+            font-size: 15px;
+            font-weight: 600;
+            font-family: var(--font-body);
+            border: none;
+            border-radius: 100px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: transform 0.25s cubic-bezier(0.34, 1.4, 0.64, 1),
+                        background 0.2s ease,
+                        box-shadow 0.25s ease;
+        }
+
+        .btn-primary:hover {
+            transform: scale(1.04) translateY(-1px);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.18);
+        }
+
+        .btn-primary:active {
+            transform: scale(0.98);
+        }
+
+        .btn-secondary {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 14px 28px;
+            background: transparent;
+            color: var(--color-text);
+            font-size: 15px;
+            font-weight: 600;
+            font-family: var(--font-body);
+            border: 1px solid rgba(0,0,0,0.2);
+            border-radius: 100px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: transform 0.25s cubic-bezier(0.34, 1.4, 0.64, 1),
+                        border-color 0.2s ease,
+                        background 0.2s ease;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(0,0,0,0.05);
+            border-color: rgba(0,0,0,0.4);
+            transform: scale(1.04) translateY(-1px);
+        }
+
+        /* ── Sticky label on scroll ── */
+        .scroll-reveal {
+            opacity: 0;
+            transform: translateY(24px);
+            transition: opacity 0.6s ease, transform 0.6s cubic-bezier(0.34, 1.2, 0.64, 1);
+        }
+
+        .scroll-reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ── Mobile nav spacing ── */
+        @media (max-width: 768px) {
+            .about-hero {
+                padding-top: 90px;
+            }
+            .about-cta {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+
+        /* ── Image float ── */
+        .about-image-block {
+            position: relative;
+        }
+
+        .about-photo {
+            width: 100%;
+            aspect-ratio: 4/5;
+            border-radius: 20px;
+            overflow: hidden;
+            background: rgba(0,0,0,0.06);
+        }
+
+        .about-photo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: top center;
+            filter: grayscale(15%);
+            transition: filter 0.4s ease, transform 0.6s ease;
+        }
+
+        .about-photo:hover img {
+            filter: grayscale(0%);
+            transform: scale(1.03);
+        }
+
+        .photo-caption {
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--color-text-light);
+            margin-top: 12px;
+            letter-spacing: 0.03em;
+        }
+
+        /* Placeholder for missing photo */
+        .photo-placeholder {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 64px;
+            background: rgba(0,0,0,0.04);
+            border-radius: 20px;
+            aspect-ratio: 4/5;
+        }
+    </style>
+</head>
+<body>
+    <!-- Fixed Navigation -->
+    <nav class="navigation" id="mainNav">
+        <a href="index.html#work" class="nav-link">Work</a>
+        <a href="fun.html" class="nav-link">Fun</a>
+        <a href="about.html" class="nav-link active">About</a>
+        <a href="#resume" class="nav-link">Resume</a>
+    </nav>
+
+    <!-- Hamburger Button -->
+    <button class="hamburger-menu" id="hamburgerBtn">
+        <span></span><span></span><span></span>
+    </button>
+
+    <div class="hamburger-fade-zone"></div>
+
+    <div class="mobile-menu" id="mobileMenu">
+        <a href="index.html#work" class="nav-link">Work</a>
+        <a href="fun.html" class="nav-link">Fun</a>
+        <a href="about.html" class="nav-link active">About</a>
+        <a href="#resume" class="nav-link">Resume</a>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container">
+
+        <!-- ── Hero ── -->
+        <section class="about-hero">
+            <p class="about-eyebrow">About me</p>
+            <h1 class="about-headline">
+                Designing clarity<br>
+                <span class="highlight">from chaos.</span>
+            </h1>
+            <p class="about-intro-text" id="introText">
+                I'm Francesco — a UX/UI designer and Localization QA specialist based in Madrid. I care deeply about the spaces between pixels: the interactions people barely notice but always feel.
+            </p>
+        </section>
+
+        <!-- ── Divider ── -->
+        <div class="about-divider" id="heroDivider"></div>
+
+        <!-- ── Two-column: story + photo ── -->
+        <div class="about-grid scroll-reveal" id="storyGrid">
+            <div class="about-story">
+                <span class="section-label">The story</span>
+                <p>Born in <strong>Italy</strong>, shaped by curiosity. I grew up surrounded by design without knowing it — from the way a Roman arch frames a corridor to the rhythm of a well-typed page. Design wasn't a choice; it was the language I already spoke.</p>
+                <p>I moved to <strong>Madrid</strong> and built a career at the crossroads of two disciplines: UX/UI design and Localization QA. One asks me to think in systems and empathy; the other asks me to think in precision and edge cases. Together, they make me unusually good at catching what shouldn't ship.</p>
+                <p>Outside the screen, I'm chasing good music, rewatching the same games I've loved for fifteen years, and photographing corners of cities most people walk past.</p>
+            </div>
+
+            <div class="about-image-block">
+                <!-- Replace src with your preferred photo, or remove if you want the placeholder -->
+                <div class="about-photo">
+                    <img src="Assets/Images/Francesco_Gerbasio.webp" alt="Francesco Gerbasio"
+                         onerror="this.parentElement.classList.add('photo-placeholder'); this.parentElement.innerHTML='🎨'">
+                </div>
+                <p class="photo-caption">Madrid, 2025 — between meetings and music</p>
+            </div>
+        </div>
+
+        <!-- ── Stats ── -->
+        <div class="about-stats" id="statsRow">
+            <div class="stat-item">
+                <div class="stat-number">11+</div>
+                <div class="stat-label">Shipped titles across LQA & UX</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">3</div>
+                <div class="stat-label">Languages spoken fluently</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">5+</div>
+                <div class="stat-label">Years of design practice</div>
+            </div>
+        </div>
+
+        <!-- ── Skills ── -->
+        <div class="about-grid scroll-reveal" id="skillsGrid" style="margin-bottom:100px;">
+            <div class="skills-block" id="skillsBlock">
+                <div class="skill-group">
+                    <p class="skill-group-title">Design</p>
+                    <div class="skill-tags">
+                        <span class="skill-tag">UX Research</span>
+                        <span class="skill-tag">Wireframing</span>
+                        <span class="skill-tag">Prototyping</span>
+                        <span class="skill-tag">Design Systems</span>
+                        <span class="skill-tag">Figma</span>
+                        <span class="skill-tag">Interaction Design</span>
+                        <span class="skill-tag">Accessibility</span>
+                    </div>
+                </div>
+                <div class="skill-group">
+                    <p class="skill-group-title">Quality & Localization</p>
+                    <div class="skill-tags">
+                        <span class="skill-tag">LQA</span>
+                        <span class="skill-tag">Functional QA</span>
+                        <span class="skill-tag">Italian ↔ English</span>
+                        <span class="skill-tag">Spanish</span>
+                        <span class="skill-tag">Game Testing</span>
+                        <span class="skill-tag">Bug Reporting</span>
+                    </div>
+                </div>
+                <div class="skill-group">
+                    <p class="skill-group-title">Development</p>
+                    <div class="skill-tags">
+                        <span class="skill-tag">HTML / CSS</span>
+                        <span class="skill-tag">JavaScript</span>
+                        <span class="skill-tag">Responsive Design</span>
+                        <span class="skill-tag">Web Animation</span>
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <span class="section-label">What I bring</span>
+                <p style="font-size:clamp(15px,1.3vw,18px);line-height:1.75;opacity:0.7;color:var(--color-text);margin:0 0 24px 0;">
+                    I don't just make things look good — I make them make sense. My background in both design and QA gives me a rare lens: I build interfaces with an eye for what breaks, what confuses, and what quietly delights.
+                </p>
+                <p style="font-size:clamp(15px,1.3vw,18px);line-height:1.75;opacity:0.7;color:var(--color-text);margin:0;">
+                    Working across Italian, English, and Spanish means I also think in multiple registers — understanding how tone, context, and culture shift a user experience before it ever reaches a screen.
+                </p>
+            </div>
+        </div>
+
+        <!-- ── Values ── -->
+        <section class="values-section scroll-reveal" id="valuesSection">
+            <div class="values-header">
+                <h2 class="values-title">Things I believe in</h2>
+                <span class="values-count">04 principles</span>
+            </div>
+            <div class="values-list" id="valuesList">
+                <div class="value-item">
+                    <span class="value-index">01</span>
+                    <div class="value-content">
+                        <h3 class="value-name">Details are the design.</h3>
+                        <p class="value-desc">The best interfaces are the ones people don't notice. They just work — and work beautifully. I obsess over the things most people skip: spacing, micro-copy, transition timing, error states.</p>
+                    </div>
+                </div>
+                <div class="value-item">
+                    <span class="value-index">02</span>
+                    <div class="value-content">
+                        <h3 class="value-name">Questions before answers.</h3>
+                        <p class="value-desc">Great design starts with asking why three more times than feels comfortable. A clear problem statement is worth more than a hundred wireframes.</p>
+                    </div>
+                </div>
+                <div class="value-item">
+                    <span class="value-index">03</span>
+                    <div class="value-content">
+                        <h3 class="value-name">Ship early, learn faster.</h3>
+                        <p class="value-desc">Perfection is a moving target. I'd rather get something real in front of people and iterate than spend months refining something no one's validated yet.</p>
+                    </div>
+                </div>
+                <div class="value-item">
+                    <span class="value-index">04</span>
+                    <div class="value-content">
+                        <h3 class="value-name">Context is everything.</h3>
+                        <p class="value-desc">A good solution in one language, culture, or context can be a bad one in another. My multilingual background has taught me to always ask: for whom, and where?</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ── Timeline ── -->
+        <section class="timeline-section scroll-reveal" id="timelineSection">
+            <div class="timeline-header">
+                <h2 class="timeline-title">Journey so far</h2>
+            </div>
+            <div class="timeline" id="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-year">2025 →</div>
+                    <div class="timeline-content">
+                        <p class="timeline-role">Localization QA Specialist</p>
+                        <p class="timeline-company">Universally Speaking</p>
+                        <p class="timeline-desc">Working on Italian localization for major game titles including Red Dead Redemption, Dragon Ball: Sparking! Zero, and more. Ensuring linguistic accuracy, cultural resonance, and franchise consistency.</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-year">2023 →</div>
+                    <div class="timeline-content">
+                        <p class="timeline-role">UX/UI Designer</p>
+                        <p class="timeline-company">Freelance</p>
+                        <p class="timeline-desc">Designed end-to-end digital products for clients across entertainment, transport, and lifestyle — from concept through high-fidelity prototypes. Projects include Cines Callao, QuickCheckout, and Abruzzo Experience.</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-year">2020 →</div>
+                    <div class="timeline-content">
+                        <p class="timeline-role">Self-directed study</p>
+                        <p class="timeline-company">Design + Development</p>
+                        <p class="timeline-desc">Deep dives into interaction design, front-end development, and music production. The foundation period where curiosity met craft.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ── Currently bento ── -->
+        <section class="currently-section scroll-reveal" id="currentlySection">
+            <h2 class="currently-title">Right now</h2>
+            <div class="bento-grid" id="bentoGrid">
+                <div class="bento-card">
+                    <span class="bento-emoji">📍</span>
+                    <p class="bento-label">Location</p>
+                    <p class="bento-value">Madrid, Spain</p>
+                    <p class="bento-sub">Open to remote & relocation</p>
+                </div>
+                <div class="bento-card">
+                    <span class="bento-emoji">🎮</span>
+                    <p class="bento-label">Currently playing</p>
+                    <p class="bento-value">Stray · Pokémon Legends: Z-A</p>
+                    <p class="bento-sub">Always open to recommendations</p>
+                </div>
+                <div class="bento-card">
+                    <span class="bento-emoji">🎵</span>
+                    <p class="bento-label">On repeat</p>
+                    <p class="bento-value">Italian rap &amp; Latin urbano</p>
+                    <p class="bento-sub">Lazza · Bad Bunny · Rauw Alejandro</p>
+                </div>
+                <div class="bento-card">
+                    <span class="bento-emoji">✈️</span>
+                    <p class="bento-label">Last trip</p>
+                    <p class="bento-value">Wrocław, Poland</p>
+                    <p class="bento-sub">Always planning the next one</p>
+                </div>
+                <div class="bento-card">
+                    <span class="bento-emoji">🌐</span>
+                    <p class="bento-label">Languages</p>
+                    <div class="lang-row">
+                        <span class="lang-pill">🇮🇹 Italian <span class="lang-level">Native</span></span>
+                        <span class="lang-pill">🇬🇧 English <span class="lang-level">Fluent</span></span>
+                        <span class="lang-pill">🇪🇸 Spanish <span class="lang-level">Fluent</span></span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ── CTA ── -->
+        <div class="about-cta scroll-reveal" id="ctaSection">
+            <p class="cta-text">Want to work together?<br><span>Let's talk.</span></p>
+            <div class="cta-buttons">
+                <a href="https://www.linkedin.com/in/francesco-gerbasio" target="_blank" class="btn-primary">
+                    LinkedIn →
+                </a>
+                <a href="mailto:francescogerbasio@icloud.com" class="btn-secondary">
+                    Email me
+                </a>
+            </div>
+        </div>
+
+    </div><!-- /container -->
+
+    <!-- Version indicator -->
+    <div style="position:fixed;bottom:10px;right:10px;font-size:10px;color:rgba(0,0,0,0.3);font-family:monospace;z-index:9999;">
+        v1.0.0
+    </div>
+
+    <script src="location-config.js"></script>
+    <script>
+    // ===================================
+    // NAVIGATION
+    // ===================================
+    document.addEventListener('DOMContentLoaded', function () {
+        const nav = document.querySelector('.navigation');
+        const hamburgerBtn = document.getElementById('hamburgerBtn');
+        const mobileMenu   = document.getElementById('mobileMenu');
+        const mobileLinks  = document.querySelectorAll('.mobile-menu .nav-link');
+
+        if (hamburgerBtn) {
+            hamburgerBtn.addEventListener('click', function (e) {
+                e.stopPropagation();
+                this.classList.toggle('active');
+                mobileMenu.classList.toggle('active');
+            });
+        }
+        document.addEventListener('click', function (e) {
+            if (mobileMenu?.classList.contains('active')) {
+                if (!mobileMenu.contains(e.target) && !hamburgerBtn.contains(e.target)) {
+                    hamburgerBtn.classList.remove('active');
+                    mobileMenu.classList.remove('active');
+                }
+            }
+        });
+        mobileLinks.forEach(l => l.addEventListener('click', () => {
+            hamburgerBtn.classList.remove('active');
+            mobileMenu.classList.remove('active');
+        }));
+
+        window.addEventListener('scroll', () => {
+            nav.classList.toggle('scrolled', window.scrollY > 20);
+        });
+        nav.classList.toggle('scrolled', window.scrollY > 20);
+
+        // ===================================
+        // HERO DIVIDER
+        // ===================================
+        setTimeout(() => {
+            document.getElementById('heroDivider').classList.add('animate');
+        }, 600);
+
+        // Fix intro text opacity (it starts at 0 via animation, then needs .visible)
+        setTimeout(() => {
+            const t = document.getElementById('introText');
+            if (t) t.classList.add('visible');
+        }, 800);
+
+        // ===================================
+        // INTERSECTION OBSERVER — general
+        // ===================================
+        const revealObs = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    revealObs.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+
+        document.querySelectorAll('.scroll-reveal').forEach(el => revealObs.observe(el));
+
+        // ===================================
+        // STATS — stagger
+        // ===================================
+        const statsObs = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const items = entry.target.querySelectorAll('.stat-item');
+                    items.forEach((item, i) => {
+                        setTimeout(() => item.classList.add('visible'), i * 120);
+                    });
+                    statsObs.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.2 });
+        statsObs.observe(document.getElementById('statsRow'));
+
+        // ===================================
+        // SKILL TAGS — stagger
+        // ===================================
+        const skillObs = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const tags = entry.target.querySelectorAll('.skill-tag');
+                    tags.forEach((tag, i) => {
+                        setTimeout(() => tag.classList.add('visible'), i * 55);
+                    });
+                    skillObs.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.1 });
+        const skillsBlock = document.getElementById('skillsBlock');
+        if (skillsBlock) skillObs.observe(skillsBlock);
+
+        // ===================================
+        // VALUE ITEMS — stagger
+        // ===================================
+        const valueObs = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const items = entry.target.querySelectorAll('.value-item');
+                    items.forEach((item, i) => {
+                        setTimeout(() => item.classList.add('visible'), i * 100);
+                    });
+                    valueObs.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.1 });
+        const valuesList = document.getElementById('valuesList');
+        if (valuesList) valueObs.observe(valuesList);
+
+        // ===================================
+        // TIMELINE ITEMS — stagger
+        // ===================================
+        const tlObs = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const items = entry.target.querySelectorAll('.timeline-item');
+                    items.forEach((item, i) => {
+                        setTimeout(() => item.classList.add('visible'), i * 130);
+                    });
+                    tlObs.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.1 });
+        const timeline = document.getElementById('timeline');
+        if (timeline) tlObs.observe(timeline);
+
+        // ===================================
+        // BENTO CARDS — stagger
+        // ===================================
+        const bentoObs = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const cards = entry.target.querySelectorAll('.bento-card');
+                    cards.forEach((card, i) => {
+                        setTimeout(() => card.classList.add('visible'), i * 80);
+                    });
+                    bentoObs.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.1 });
+        const bentoGrid = document.getElementById('bentoGrid');
+        if (bentoGrid) bentoObs.observe(bentoGrid);
+
+        // ===================================
+        // STORY + SKILLS GRID
+        // ===================================
+        ['storyGrid', 'skillsGrid'].forEach(id => {
+            const el = document.getElementById(id);
+            if (el) revealObs.observe(el);
+        });
+    });
+    </script>
+</body>
+</html>
