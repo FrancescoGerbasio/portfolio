@@ -594,7 +594,6 @@ a {
    OTHER PROJECTS ACCORDION
    =================================== */
 
-/* ── Other Projects Accordion — Apple refined ── */
 .other-projects-accordion {
     max-width: 1200px;
     margin: 0 auto;
@@ -635,7 +634,6 @@ a {
     border-radius: 20px;
 }
 
-/* Chevron icon — CSS only, no JS text needed */
 .accordion-icon {
     margin-left: auto;
     width: 28px;
@@ -645,7 +643,7 @@ a {
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 0; /* hide any residual text content e.g. "+" */
+    font-size: 0;
     transition:
         background  0.2s ease,
         transform   0.4s cubic-bezier(0.34, 1.20, 0.64, 1);
@@ -689,11 +687,11 @@ a {
     padding: 8px 0 24px;
 }
 
+/* ── FIX: Project list item — proper flex alignment ── */
 .project-list-item {
-    display: grid;
-    grid-template-columns: 1fr auto auto auto;  /* name | · | studio | year */
+    display: flex;
     align-items: center;
-    gap: 0 10px;
+    gap: 12px;
     padding: 16px 0;
     background: transparent;
     border: none;
@@ -707,37 +705,7 @@ a {
         opacity    0.35s ease,
         transform  0.35s cubic-bezier(0.34, 1.20, 0.64, 1),
         padding    0.2s  ease;
-}
-
-/* On mobile, stack name on its own row, studio+year on second row */
-@media (max-width: 600px) {
-    .project-list-item {
-        grid-template-columns: 1fr auto;  /* name | year */
-        grid-template-rows: auto auto;
-        gap: 2px 8px;
-    }
-
-    .project-list-item .project-name {
-        grid-column: 1;
-        grid-row: 1;
-    }
-
-    /* Hide the dividers on mobile — cleaner without them */
-    .project-list-item .project-divider {
-        display: none;
-    }
-
-    .project-list-item .project-studio {
-        grid-column: 1;
-        grid-row: 2;
-        font-size: 12px;
-    }
-
-    .project-list-item .project-year {
-        grid-column: 2;
-        grid-row: 1 / 3;  /* spans both rows, always right-aligned */
-        align-self: center;
-    }
+    overflow: visible;
 }
 
 .project-list-item:last-child {
@@ -796,7 +764,7 @@ a {
     padding-left: 0;
 }
 
-/* ── FIX: NDA hidden text — proper positioning for particles ── */
+/* ── FIX: NDA hidden text — clip particles, don't break layout ── */
 .project-list-item.nda-protected-item .nda-hidden-text {
     color: transparent !important;
     user-select: none !important;
@@ -806,31 +774,33 @@ a {
     -ms-user-select: none;
     display: inline-block;
     position: relative;
-    min-width: 80px;   /* guarantees render space so particles are visible */
-    min-height: 1em;
+    overflow: hidden;        /* clips particle canvas to this element */
+    vertical-align: middle;
 }
 
-/* Particle container inside list items */
-.project-list-item.nda-protected-item .particle-container {
+/* ── FIX: Particle container stays inside its parent ── */
+.project-list-item .particle-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    overflow: hidden;
     z-index: 1;
-    border-radius: 4px;
-    overflow: visible; /* let particles drift slightly outside */
-}
-
-.project-list-item.nda-protected-item .project-name,
-.project-list-item.nda-protected-item .project-studio {
-    position: relative;
 }
 
 .project-list-item.nda-protected-item.unlocked .nda-hidden-text {
     color: inherit !important;
     pointer-events: auto;
     user-select: auto !important;
+    overflow: visible;
 }
 
 .project-name {
     font-weight: 600;
     color: var(--color-text);
+    flex-shrink: 0;
 }
 
 .project-divider {
@@ -841,16 +811,16 @@ a {
 
 .project-studio {
     color: var(--color-text-light);
+    flex-shrink: 0;
 }
 
-/* ── FIX: Year alignment — always pushed to the right edge ── */
+/* ── FIX: Year pushed to far right, never wraps ── */
 .project-year {
+    margin-left: auto;
     color: var(--color-text-light);
     opacity: 0.7;
-    margin-left: auto;   /* pushes year to the far right */
-    flex-shrink: 0;      /* never shrinks or wraps */
-    text-align: right;
-    min-width: 36px;     /* stable width on narrow screens */
+    white-space: nowrap;
+    flex-shrink: 0;
 }
 
 @media (max-width: 768px) {
@@ -860,6 +830,15 @@ a {
 
     .project-list-item {
         padding: 13px 0;
+        gap: 8px;
+    }
+
+    .project-name {
+        font-size: 14px;
+    }
+
+    .project-studio {
+        font-size: 13px;
     }
 }
 
@@ -1562,7 +1541,6 @@ html {
    FLAG NAVIGATION
    =================================== */
 
-/* ── Flag / Country filter — Apple segmented control style ── */
 .flag-navigation {
     display: flex;
     gap: 0;
@@ -1576,7 +1554,6 @@ html {
     scrollbar-width: none;
     -ms-overflow-style: none;
     -webkit-overflow-scrolling: touch;
-    /* Pill container */
     background: rgba(0,0,0,0.055);
     border-radius: 50px;
     padding: 4px;
@@ -1625,7 +1602,6 @@ html {
     font-weight: 600;
 }
 
-/* The sliding white pill — injected by JS */
 .flag-nav-pill {
     position: absolute;
     top: 4px;
@@ -1643,7 +1619,6 @@ html {
     z-index: 0;
 }
 
-/* Active press feedback */
 .flag-btn:active {
     transform: scale(0.96);
 }
@@ -1658,17 +1633,11 @@ html {
     transition: opacity 0.3s ease;
 }
 
-/* ═══════════════════════════════════════
-   EDITORIAL GRID — "All" view
-   Unified masonry — no country grouping
-   ═══════════════════════════════════════ */
-
 .editorial-grid {
     position: relative !important;
     height: auto;
 }
 
-/* Cards absolutely positioned by JS — same engine as masonry */
 .editorial-card-all {
     position: absolute;
     border-radius: 14px;
@@ -1739,7 +1708,6 @@ html {
     border-radius: 12px;
     overflow: hidden;
     cursor: pointer;
-    /* Base state — invisible until revealed */
     opacity: 0;
     transform: scale(0.92) translateY(12px);
     transition:
@@ -1747,13 +1715,11 @@ html {
         box-shadow 0.3s ease;
 }
 
-/* Once animation is done, never go invisible again */
 .travel-card[data-anim-done] {
     opacity: 1;
     transform: none;
 }
 
-/* Reveal animation — triggered by JS adding .revealed */
 @keyframes card-reveal {
     0% {
         opacity: 0;
@@ -1849,7 +1815,6 @@ html {
     flex-wrap: wrap;
 }
 
-/* ── Outer wrapper: perspective + shape transition ── */
 .song-card {
     position: relative;
     width: 300px;
@@ -1867,7 +1832,6 @@ html {
     height: 270px;
 }
 
-/* ── 3D flip container ── */
 .song-card-inner {
     position: relative;
     width: 100%;
@@ -1880,7 +1844,6 @@ html {
     transform: rotateY(180deg);
 }
 
-/* ── Shared face styles ── */
 .song-card-front,
 .song-card-back {
     position: absolute;
@@ -1891,7 +1854,6 @@ html {
     clip-path: inset(0 round 18px);
 }
 
-/* ══ FRONT FACE ══ */
 .song-card-front {
     background: #000;
     box-shadow:
@@ -1917,7 +1879,6 @@ html {
     display: block;
 }
 
-/* Shine sweep on hover */
 .song-card-artwork::after {
     content: '';
     position: absolute;
@@ -1939,6 +1900,7 @@ html {
     background-position: 200% 0;
     transition: background-position 0.45s ease;
 }
+
 .song-card-info {
     padding: 14px 16px 16px;
     background: rgba(10, 10, 10, 0.72);
@@ -1950,7 +1912,6 @@ html {
     gap: 12px;
 }
 
-/* Animated waveform */
 .song-card-waveform {
     display: flex;
     align-items: flex-end;
@@ -2040,7 +2001,6 @@ html {
     margin-left: 2px;
 }
 
-/* ══ BACK FACE ══ */
 .song-card-back {
     transform: rotateY(180deg);
     background: #000;
@@ -2111,14 +2071,12 @@ html {
     50%       { opacity: 0.4; transform: scale(0.7); }
 }
 
-/* Mobile: disable flip */
 @media (max-width: 768px) {
     .my-music-container { justify-content: center; }
     .song-card { width: 280px; height: 280px; }
     .song-card.flipped { width: 280px; height: 280px; }
     .song-card.flipped .song-card-inner { transform: none; }
 }
-
 
 /* ===================================
    ARTISTS GRID
@@ -2130,29 +2088,6 @@ html {
     gap: 16px;
 }
 
-/* ── Artist Card — CSS Grid stacking (Safari-safe) ── */
-.artist-card {
-    border-radius: 20px;
-    cursor: pointer;
-    aspect-ratio: 3/4;
-    background: #111;
-    position: relative;
-
-    display: grid;
-    grid-template-rows: 1fr;
-    grid-template-columns: 1fr;
-
-    /* Base shadow — always present */
-    box-shadow:
-        0 2px 4px  rgba(0,0,0,0.08),
-        0 8px 20px rgba(0,0,0,0.10),
-        0 20px 40px rgba(0,0,0,0.08);
-
-    transition: transform 0.45s cubic-bezier(0.34, 1.30, 0.64, 1);
-    animation: artistReveal 0.55s cubic-bezier(0.34, 1.20, 0.64, 1) both;
-}
-
-/* ── Artist Card ── */
 .artist-card {
     border-radius: 20px;
     cursor: pointer;
@@ -2169,9 +2104,7 @@ html {
         0 2px 4px  rgba(0,0,0,0.12),
         0 8px 20px rgba(0,0,0,0.14);
 
-    /* Only transition transform — box-shadow snaps instantly */
     transition: transform 0.45s cubic-bezier(0.34, 1.30, 0.64, 1);
-
     animation: artistReveal 0.55s cubic-bezier(0.34, 1.20, 0.64, 1) both;
 }
 
@@ -2182,7 +2115,6 @@ html {
         0 24px 48px rgba(0,0,0,0.18);
 }
 
-/* All three layers share the same grid cell */
 .artist-image,
 .artist-overlay,
 .artist-info {
@@ -2190,7 +2122,6 @@ html {
     grid-column: 1;
 }
 
-/* ── Layer 1: Photo ── */
 .artist-image {
     width: 100%;
     height: 100%;
@@ -2213,7 +2144,6 @@ html {
     transform: scale(1.08);
 }
 
-/* ── Layer 2: Gradient overlay ── */
 .artist-overlay {
     border-radius: 20px;
     z-index: 2;
@@ -2228,7 +2158,6 @@ html {
     pointer-events: none;
 }
 
-/* ── Layer 3: Info — aligned to bottom via Grid ── */
 .artist-info {
     align-self: end;
     z-index: 3;
@@ -2251,7 +2180,6 @@ html {
         0 2px 8px rgba(0,0,0,0.7);
 }
 
-/* ── Spotify pill ── */
 .artist-spotify-pill {
     display: inline-flex;
     align-items: center;
@@ -2294,7 +2222,6 @@ html {
     to   { opacity: 1; transform: translateY(0)    scale(1);    }
 }
 
-/* Responsive */
 @media (max-width: 1024px) {
     .artists-grid { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 12px; }
 }
@@ -2304,13 +2231,11 @@ html {
 
     .artist-card:hover { transform: none; }
 
-    /* Single float keyframe — phase offset makes each card feel independent */
     @keyframes artistFloat {
         0%, 100% { transform: translateY(0);   }
         50%       { transform: translateY(-7px); }
     }
 
-    /* Every card gets its own duration + delay — no two are in sync */
     .artist-card:nth-child(1)  { animation: artistReveal .55s both, artistFloat 3.1s ease-in-out 0.0s   infinite; }
     .artist-card:nth-child(2)  { animation: artistReveal .55s both, artistFloat 3.7s ease-in-out 0.6s   infinite; }
     .artist-card:nth-child(3)  { animation: artistReveal .55s both, artistFloat 2.9s ease-in-out 1.3s   infinite; }
@@ -2380,7 +2305,6 @@ html {
     50%       { opacity: 0.6; box-shadow: 0 0 12px rgba(48,209,88,0.9); }
 }
 
-/* ── Featured carousel ── */
 .games-featured {
     position: relative;
     width: 100%;
@@ -2529,7 +2453,6 @@ html {
     .gf-arrow { display: none; }
 }
 
-/* ── Game grid ── */
 .games-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
@@ -2619,7 +2542,6 @@ html {
     margin: 0;
 }
 
-/* ── Saga card ── */
 .saga-card {
     cursor: pointer;
 }
@@ -2628,7 +2550,6 @@ html {
     position: relative;
 }
 
-/* "N games" badge on cover */
 .saga-badge {
     position: absolute;
     top: 10px;
@@ -2646,7 +2567,6 @@ html {
     pointer-events: none;
 }
 
-/* Expand indicator on game name */
 .saga-card .game-name::after {
     content: ' ↓';
     font-size: 11px;
@@ -2661,7 +2581,6 @@ html {
     content: ' ↑';
 }
 
-/* Cover subtle ring on open */
 .saga-card.open .game-cover {
     box-shadow:
         0 0 0 2px var(--color-text),
@@ -2669,7 +2588,6 @@ html {
         0 20px 40px rgba(0,0,0,0.16);
 }
 
-/* Drawer */
 .saga-drawer {
     max-height: 0;
     overflow: hidden;
