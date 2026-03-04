@@ -1,0 +1,79 @@
+
+/* ═══════════════════════════════════════
+   CASE STUDY CARD STYLES
+   Added for cs-card interactions on the
+   UX/UI project grid
+═══════════════════════════════════════ */
+
+.cs-card {
+    cursor: pointer;
+}
+
+.cs-card:focus-visible {
+    outline: 2px solid var(--color-text);
+    outline-offset: 4px;
+    border-radius: 14px;
+}
+
+.cs-card-thumb {
+    position: relative;
+    overflow: hidden;
+}
+
+.cs-card-thumb img {
+    transition: transform .55s cubic-bezier(.25,.46,.45,.94), filter .4s ease;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.cs-card:hover .cs-card-thumb img {
+    transform: scale(1.06);
+    filter: brightness(.85);
+}
+
+.cs-card-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(0,0,0,.75) 0%, transparent 50%);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 20px;
+    opacity: 0;
+    transform: translateY(6px);
+    transition: opacity .3s ease, transform .3s cubic-bezier(.34,1.2,.64,1);
+    pointer-events: none;
+}
+
+.cs-card:hover .cs-card-overlay {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.cs-card-tag {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,.55);
+    margin-bottom: 6px;
+    display: block;
+}
+
+.cs-card-open {
+    font-size: 14px;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: -.01em;
+}
+
+.project-badge.cs-badge {
+    font-size: 11px !important;
+    padding: 3px 10px !important;
+    background: transparent !important;
+}
+
+.project-badge.cs-badge::after {
+    display: none !important;
+}

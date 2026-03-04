@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Francesco - Portfolio</title>
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="case-study-engine.css">
 </head>
 <body>
     <!-- Navigation -->
@@ -70,13 +71,10 @@
 
             <!-- Sidebar -->
             <div class="sidebar">
-                <!-- Profile and Map Row -->
                 <div class="profile-map-row">
                     <div class="profile-image">
                         <img src="Assets/Images/Francesco_Gerbasio.webp" alt="Francesco Gerbasio">
                     </div>
-                    
-                    <!-- Location Widget - Compact Version -->
                     <div class="location-widget-compact">
                         <div class="location-mini">
                             <span class="location-pin">📍</span>
@@ -90,10 +88,8 @@
                         </div>
                     </div>
                 </div>
-                
                 <h3 class="sidebar-title">Nice to meet ya!</h3>
                 <p class="sidebar-bio">UX/UI designer by day, quality-obsessed by habit. <br>Turning early ideas into polished interfaces and catching the details that shouldn't ship.</p>
-                
                 <div class="social-links">
                     <a href="https://www.linkedin.com/in/francesco-gerbasio" target="_blank" rel="noopener noreferrer" class="social-icon">
                         <img src="Assets/Images/LinkedIn.svg" alt="LinkedIn">
@@ -133,7 +129,7 @@
                     </div>
                 </div>
 
-                <!-- Dead Take Project -->
+                <!-- Dead Take -->
                 <div class="project-card">
                     <a href="https://www.surgentstudios.com/projects/dead-take" target="_blank" class="project-image-link">
                         <div class="project-image">
@@ -149,10 +145,11 @@
                         <p class="project-meta">Surgent Studios - 2025</p>
                     </div>
                 </div>
+
             </div>
         </section>
 
-        <!-- Other Projects Section (Accordion) -->
+        <!-- Other Projects Accordion -->
         <section class="work-section">
             <div class="other-projects-accordion">
                 <button class="accordion-trigger" id="accordionTrigger">
@@ -160,10 +157,8 @@
                     <span class="accordion-count">(9)</span>
                     <span class="accordion-icon" id="accordionIcon">+</span>
                 </button>
-                
                 <div class="accordion-content" id="accordionContent">
                     <div class="projects-list">
-                        <!-- 2026 - NDA Protected -->
                         <div class="project-list-item nda-protected-item" data-project-id="seven-deadly-sins-origin" data-release-date="2026-03-23">
                             <span class="project-name nda-hidden-text">The Seven Deadly Sins: Origin</span>
                             <span class="project-divider">·</span>
@@ -171,8 +166,6 @@
                             <span class="project-divider">·</span>
                             <span class="project-year">2026</span>
                         </div>
-                        
-                        <!-- 202x - NDA Protected -->
                         <div class="project-list-item nda-protected-item" data-project-id="little-nightmares-vr">
                             <span class="project-name nda-hidden-text">Little Nightmares VR: Altered Echoes</span>
                             <span class="project-divider">·</span>
@@ -180,8 +173,6 @@
                             <span class="project-divider">·</span>
                             <span class="project-year">202x</span>
                         </div>
-                        
-                        <!-- 2025 Projects -->
                         <a href="https://en.bandainamcoent.eu/dragon-ball/dragon-ball-sparking-zero" target="_blank" class="project-list-item clickable">
                             <span class="project-name">Dragon Ball: Sparking! Zero</span>
                             <span class="project-divider">·</span>
@@ -235,59 +226,90 @@
                 </div>
             </div>
         </section>
-
         <!-- UX/UI Design Section -->
         <section class="work-section">
             <h2 class="section-title">UX/UI Design</h2>
-            
             <div class="projects-grid">
-                <div class="project-card">
-                    <div class="project-image">
+
+                <!-- Cines Callao -->
+                <div class="project-card cs-card" id="card-callao" role="button" tabindex="0" aria-label="Open Cines Callao case study">
+                    <div class="project-image cs-card-thumb" style="background:linear-gradient(135deg,#1a0a0c 0%,#2d0a0e 100%);">
                         <img src="Assets/Images/CinesCallao.webp" alt="Cines Callao">
+                        <div class="cs-card-overlay">
+                            <span class="cs-card-tag">UX/UI · iOS · 2025</span>
+                            <span class="cs-card-open">View Case Study ↗</span>
+                        </div>
                     </div>
                     <div class="project-info">
-                        <h3 class="project-title">Cines Callao</h3>
-                        <p class="project-description">A mobile app concept that streamlines the process of discovering new movies, watching trailers, and booking tickets at the famous Cines Callao theater in Madrid.</p>
-                        <p class="project-meta">Personal Project - 2025</p>
+                        <div class="project-header">
+                            <h3 class="project-title">Cines Callao</h3>
+                            <span class="project-badge cs-badge" style="border-color:#c1121f;color:#c1121f;">CASE STUDY</span>
+                        </div>
+                        <p class="project-description">Simplified ticket booking and schedule visibility for Madrid's most iconic cinema. Navigation time to booking cut by 30%.</p>
+                        <p class="project-meta">Personal Project · 2025</p>
                     </div>
                 </div>
 
-                <div class="project-card">
-                    <div class="project-image">
+                <!-- QuickCheckout -->
+                <div class="project-card cs-card" id="card-quickcheckout" role="button" tabindex="0" aria-label="Open QuickCheckout case study">
+                    <div class="project-image cs-card-thumb" style="background:linear-gradient(135deg,#040c1a 0%,#0a1a2e 100%);">
                         <img src="Assets/Images/QuickCheckout.webp" alt="QuickCheckout">
+                        <div class="cs-card-overlay">
+                            <span class="cs-card-tag">UX/UI · E-Commerce · 2024</span>
+                            <span class="cs-card-open">View Case Study ↗</span>
+                        </div>
                     </div>
                     <div class="project-info">
-                        <h3 class="project-title">QuickCheckout</h3>
-                        <p class="project-description">Worked on the Italian localization of the horror game Dead Take, with a focus on linguistic accuracy, atmosphere, and player immersion.</p>
-                        <p class="project-meta">Personal Project - 2024</p>
+                        <div class="project-header">
+                            <h3 class="project-title">QuickCheckout</h3>
+                            <span class="project-badge cs-badge" style="border-color:#2563eb;color:#2563eb;">CASE STUDY</span>
+                        </div>
+                        <p class="project-description">Redesigned e-commerce checkout experience. Compressed 4 steps into 1 view. Form errors reduced by 42% through inline validation.</p>
+                        <p class="project-meta">Personal Project · 2024</p>
                     </div>
                 </div>
 
-                <div class="project-card">
-                    <div class="project-image">
+                <!-- Abruzzo Experience -->
+                <div class="project-card cs-card" id="card-abruzzo" role="button" tabindex="0" aria-label="Open Abruzzo Experience case study">
+                    <div class="project-image cs-card-thumb" style="background:linear-gradient(135deg,#0a1a0f 0%,#0d2416 100%);">
                         <img src="Assets/Images/AbruzzoExperience.webp" alt="Abruzzo Experience">
+                        <div class="cs-card-overlay">
+                            <span class="cs-card-tag">UX/UI · Travel App · 2024</span>
+                            <span class="cs-card-open">View Case Study ↗</span>
+                        </div>
                     </div>
                     <div class="project-info">
-                        <h3 class="project-title">Abruzzo Experience</h3>
-                        <p class="project-description">A mobile app concept that streamlines the process of discovering new movies, watching trailers, and booking tickets at the famous Cines Callao theater in Madrid.</p>
-                        <p class="project-meta">Personal Project - 2024</p>
+                        <div class="project-header">
+                            <h3 class="project-title">Abruzzo Experience</h3>
+                            <span class="project-badge cs-badge" style="border-color:#2d6a4f;color:#2d6a4f;">CASE STUDY</span>
+                        </div>
+                        <p class="project-description">One app connecting residents and visitors to activities across Italy's most underrated region. Dual persona onboarding, offline-first experience detail.</p>
+                        <p class="project-meta">Personal Project · 2024</p>
                     </div>
                 </div>
 
-                <div class="project-card">
-                    <div class="project-image">
+                <!-- Dicarlobus -->
+                <div class="project-card cs-card" id="card-dicarlobus" role="button" tabindex="0" aria-label="Open Dicarlobus case study">
+                    <div class="project-image cs-card-thumb" style="background:linear-gradient(135deg,#1a0e00 0%,#261500 100%);">
                         <img src="Assets/Images/DicarlobusRedesign.webp" alt="Dicarlobus Redesign">
+                        <div class="cs-card-overlay">
+                            <span class="cs-card-tag">UX/UI · Transport · 2024</span>
+                            <span class="cs-card-open">View Case Study ↗</span>
+                        </div>
                     </div>
                     <div class="project-info">
-                        <h3 class="project-title">Dicarlobus Redesign</h3>
-                        <p class="project-description">A mobile app concept that streamlines the process of discovering new movies, watching trailers, and booking tickets at the famous Cines Callao theater in Madrid.</p>
-                        <p class="project-meta">Personal Project - 2024</p>
+                        <div class="project-header">
+                            <h3 class="project-title">Dicarlobus Redesign</h3>
+                            <span class="project-badge cs-badge" style="border-color:#f77f00;color:#f77f00;">CASE STUDY</span>
+                        </div>
+                        <p class="project-description">Built a distinct brand identity from a generic shared template. Redesigned schedule visibility and ticket flow to WCAG AA accessibility standards.</p>
+                        <p class="project-meta">Personal Project · 2024</p>
                     </div>
                 </div>
+
             </div>
         </section>
     </div>
-
     <!-- NDA Password Modal -->
     <div class="nda-modal" id="ndaModal">
         <div class="nda-modal-content">
@@ -315,13 +337,486 @@
             </div>
         </div>
     </div>
-
     <!-- Version indicator -->
     <div style="position: fixed; bottom: 10px; right: 10px; font-size: 10px; color: rgba(0,0,0,0.3); font-family: monospace; z-index: 9999;">
-        v2.7.0
+        v2.8.0
     </div>
+    <!-- ── Case Study Card Styles ── -->
+    <style>
+    .cs-card { cursor: pointer; }
+    .cs-card:focus-visible { outline: 2px solid var(--color-text); outline-offset: 4px; border-radius: 14px; }
+    .cs-card-thumb { position: relative; overflow: hidden; }
+    .cs-card-thumb img { transition: transform .55s cubic-bezier(.25,.46,.45,.94), filter .4s ease; }
+    .cs-card:hover .cs-card-thumb img { transform: scale(1.06); filter: brightness(.85); }
+    .cs-card-overlay {
+        position: absolute; inset: 0;
+        background: linear-gradient(to top, rgba(0,0,0,.75) 0%, transparent 50%);
+        display: flex; flex-direction: column; justify-content: flex-end; padding: 20px;
+        opacity: 0; transform: translateY(6px);
+        transition: opacity .3s ease, transform .3s cubic-bezier(.34,1.2,.64,1);
+        pointer-events: none;
+    }
+    .cs-card:hover .cs-card-overlay { opacity: 1; transform: translateY(0); }
+    .cs-card-tag { font-size: 10px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: rgba(255,255,255,.55); margin-bottom: 6px; }
+    .cs-card-open { font-size: 14px; font-weight: 700; color: #fff; letter-spacing: -.01em; }
+    .project-badge.cs-badge { font-size: 11px !important; padding: 3px 10px !important; background: transparent !important; }
+    .project-badge.cs-badge::after { display: none !important; }
+    </style>
+    <!-- ═══════════════════════════════════════════════════════
+         CASE STUDY OVERLAYS
+    ═══════════════════════════════════════════════════════ -->
 
+    <!-- 1 · CINES CALLAO -->
+    <div class="cs-overlay" id="cs-callao" style="--cs-accent:#c1121f;--cs-accent-rgb:193,18,31;">
+        <div class="cs-backdrop"></div>
+        <button class="cs-close-btn" aria-label="Close">✕</button>
+        <div class="cs-panel">
+            <section class="cs-hero">
+                <div class="cs-orb cs-orb-1"></div>
+                <div class="cs-orb cs-orb-2"></div>
+                <div class="cs-phones">
+                    <div class="cs-phone"><img src="Assets/Images/CaseStudies/Callao/hero-1.webp" alt="Browse" onerror="this.parentElement.style.background='#1a0a0c'"></div>
+                    <div class="cs-phone"><img src="Assets/Images/CaseStudies/Callao/hero-2.webp" alt="Detail" onerror="this.parentElement.style.background='#1a0a0c'"></div>
+                    <div class="cs-phone"><img src="Assets/Images/CaseStudies/Callao/hero-3.webp" alt="Ticket" onerror="this.parentElement.style.background='#1a0a0c'"></div>
+                </div>
+                <div class="cs-hero-text">
+                    <p class="cs-eyebrow">Case Study · UX/UI · iOS App · 2025</p>
+                    <h1 class="cs-title">Cines Callao</h1>
+                    <div class="cs-hero-meta">
+                        <div class="cs-meta-item"><span class="cs-meta-label">Role</span><span class="cs-meta-value">Lead UX/UI Designer</span></div>
+                        <div class="cs-meta-item"><span class="cs-meta-label">Platform</span><span class="cs-meta-value">iOS Mobile</span></div>
+                        <div class="cs-meta-item"><span class="cs-meta-label">Duration</span><span class="cs-meta-value">8 weeks</span></div>
+                        <div class="cs-meta-item"><span class="cs-meta-label">Tools</span><span class="cs-meta-value">Figma · Maze</span></div>
+                    </div>
+                </div>
+                <div class="cs-scroll-cue"><span class="cs-scroll-cue-label">Scroll</span><div class="cs-scroll-line"></div></div>
+            </section>
+            <div class="cs-stats">
+                <div class="cs-stat"><div class="cs-stat-num">−30%</div><div class="cs-stat-desc">Reduction in time from app launch to completed booking</div></div>
+                <div class="cs-stat"><div class="cs-stat-num">12</div><div class="cs-stat-desc">User interviews conducted in Madrid</div></div>
+                <div class="cs-stat"><div class="cs-stat-num">3</div><div class="cs-stat-desc">Rounds of moderated usability testing</div></div>
+            </div>
+            <section class="cs-section">
+                <div class="cs-2col">
+                    <div>
+                        <span class="cs-section-tag">01 — Problem</span>
+                        <h2 class="cs-section-heading">A beloved cinema, a frustrating experience.</h2>
+                    </div>
+                    <div>
+                        <p class="cs-body">Cines Callao is one of Madrid's most iconic cultural landmarks. Yet its digital experience hadn't kept pace. Users were abandoning the booking flow mid-funnel, discovering showtimes through Google instead of the app, and avoiding digital tickets out of distrust.</p>
+                        <p class="cs-body">The brief was clear: simplify ticket booking, improve schedule visibility, and build a mobile-first experience that actually felt like it belonged to a premium cinema — not a generic template.</p>
+                    </div>
+                </div>
+            </section>
+            <section class="cs-section">
+                <span class="cs-section-tag">02 — Research & Insights</span>
+                <h2 class="cs-section-heading">12 conversations. 4 patterns that shaped everything.</h2>
+                <p class="cs-body">Semi-structured interviews with regular cinema-goers (18–45) in Madrid. I wasn't just mapping usability failures — I was listening for the emotional arc of deciding to go to the cinema and the friction that killed that excitement before checkout.</p>
+                <div class="cs-insights">
+                    <div class="cs-insight"><div class="cs-insight-icon">🧭</div><div class="cs-insight-title">Navigation paralysis</div><div class="cs-insight-body">Finding showtimes took more than 3 taps. Most users opened Google instead — the app had lost the first moment of intent.</div></div>
+                    <div class="cs-insight"><div class="cs-insight-icon">🎬</div><div class="cs-insight-title">No discovery mode</div><div class="cs-insight-body">"I don't always know what I want to watch." The app assumed decision-made users. Most weren't.</div></div>
+                    <div class="cs-insight"><div class="cs-insight-icon">🎟️</div><div class="cs-insight-title">Checkout as chore</div><div class="cs-insight-body">Seat selection and payment felt transactional, not anticipatory. The excitement of going to the cinema was absent.</div></div>
+                    <div class="cs-insight"><div class="cs-insight-icon">📲</div><div class="cs-insight-title">Digital ticket distrust</div><div class="cs-insight-body">Users printed paper backups "just in case." Zero confidence in the digital ticket meant zero adoption.</div></div>
+                </div>
+            </section>
+            <section class="cs-section">
+                <div class="cs-2col">
+                    <div>
+                        <span class="cs-section-tag">03 — Process</span>
+                        <h2 class="cs-section-heading">From sticky notes to flows that breathe.</h2>
+                        <div class="cs-steps">
+                            <div class="cs-step"><div class="cs-step-num">1</div><div><p class="cs-step-phase">Define</p><p class="cs-step-name">Jobs to be done</p><p class="cs-step-body">Synthesised research into 3 primary JTBDs: browse movies, find a showtime fast, book with confidence. Cut every feature that didn't map to a real job.</p></div></div>
+                            <div class="cs-step"><div class="cs-step-num">2</div><div><p class="cs-step-phase">Explore</p><p class="cs-step-name">8 information architectures</p><p class="cs-step-body">Low-fidelity IA sketches tested with 5 users. Discarded movie-first nav in favour of dual entry — browse by film OR by showtime.</p></div></div>
+                            <div class="cs-step"><div class="cs-step-num">3</div><div><p class="cs-step-phase">Build</p><p class="cs-step-name">Component system first</p><p class="cs-step-body">Built an atomic design system in Figma before any screens. Tokens for spacing, type, and colour ensured any change cascaded across 40+ artboards.</p></div></div>
+                            <div class="cs-step"><div class="cs-step-num">4</div><div><p class="cs-step-phase">Test</p><p class="cs-step-name">3 rounds of usability testing</p><p class="cs-step-body">Each round had one focused hypothesis. Iterated on seat map interaction twice before passing the zero-confusion bar.</p></div></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="cs-showcase">
+                            <div class="cs-showcase-phone"><img src="Assets/Images/CaseStudies/Callao/process-1.webp" alt="" onerror="this.parentElement.style.background='#1a0a0c'"></div>
+                            <div class="cs-showcase-phone"><img src="Assets/Images/CaseStudies/Callao/process-2.webp" alt="" onerror="this.parentElement.style.background='#1a0a0c'"></div>
+                            <div class="cs-showcase-phone"><img src="Assets/Images/CaseStudies/Callao/process-3.webp" alt="" onerror="this.parentElement.style.background='#1a0a0c'"></div>
+                        </div>
+                        <p class="cs-showcase-caption">Browse → Showtimes → Digital ticket</p>
+                    </div>
+                </div>
+            </section>
+            <div class="cs-results">
+                <div class="cs-results-headline">Navigation time to booking cut by <em>30%</em>. Validated across three testing rounds.</div>
+                <div class="cs-results-grid">
+                    <div class="cs-result-item"><div class="cs-result-num">−30%</div><div class="cs-result-desc">Time from launch to booking completion</div></div>
+                    <div class="cs-result-item"><div class="cs-result-num">4.8★</div><div class="cs-result-desc">Avg. satisfaction score in final testing round</div></div>
+                    <div class="cs-result-item"><div class="cs-result-num">0</div><div class="cs-result-desc">Users who misread the digital ticket in round 3</div></div>
+                    <div class="cs-result-item"><div class="cs-result-num">40+</div><div class="cs-result-desc">Components in the Figma design system</div></div>
+                </div>
+            </div>
+            <div class="cs-proto">
+                <h2 class="cs-proto-heading">See it in motion.</h2>
+                <p class="cs-proto-sub">The interactive Figma prototype walks the full booking journey — browse, seat selection, payment, and digital ticket.</p>
+                <a class="cs-proto-link" href="#" target="_blank">View Figma Prototype <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12L12 2M12 2H6M12 2v6"/></svg></a>
+            </div>
+            <div class="cs-bottom-nav">
+                <div><p class="cs-next-label">Next project</p><p class="cs-next-title" data-open="cs-quickcheckout">QuickCheckout →</p></div>
+                <div class="cs-next-arrow" data-open="cs-quickcheckout">→</div>
+            </div>
+        </div>
+    </div>
+    <div class="cs-progress-bar" style="background:#c1121f;"></div>
+
+    <!-- 2 · QUICKCHECKOUT -->
+    <div class="cs-overlay" id="cs-quickcheckout" style="--cs-accent:#2563eb;--cs-accent-rgb:37,99,235;">
+        <div class="cs-backdrop"></div>
+        <button class="cs-close-btn" aria-label="Close">✕</button>
+        <div class="cs-panel">
+            <section class="cs-hero">
+                <div class="cs-orb cs-orb-1"></div>
+                <div class="cs-orb cs-orb-2"></div>
+                <div class="cs-phones">
+                    <div class="cs-phone"><img src="Assets/Images/CaseStudies/QuickCheckout/hero-1.webp" alt="" onerror="this.parentElement.style.background='#040c1a'"></div>
+                    <div class="cs-phone"><img src="Assets/Images/CaseStudies/QuickCheckout/hero-2.webp" alt="" onerror="this.parentElement.style.background='#040c1a'"></div>
+                    <div class="cs-phone"><img src="Assets/Images/CaseStudies/QuickCheckout/hero-3.webp" alt="" onerror="this.parentElement.style.background='#040c1a'"></div>
+                </div>
+                <div class="cs-hero-text">
+                    <p class="cs-eyebrow">Case Study · UX/UI · E-Commerce · 2024</p>
+                    <h1 class="cs-title">QuickCheckout</h1>
+                    <div class="cs-hero-meta">
+                        <div class="cs-meta-item"><span class="cs-meta-label">Role</span><span class="cs-meta-value">UX/UI Designer</span></div>
+                        <div class="cs-meta-item"><span class="cs-meta-label">Platform</span><span class="cs-meta-value">Mobile · Web</span></div>
+                        <div class="cs-meta-item"><span class="cs-meta-label">Duration</span><span class="cs-meta-value">6 weeks</span></div>
+                        <div class="cs-meta-item"><span class="cs-meta-label">Tools</span><span class="cs-meta-value">Figma · Maze</span></div>
+                    </div>
+                </div>
+                <div class="cs-scroll-cue"><span class="cs-scroll-cue-label">Scroll</span><div class="cs-scroll-line"></div></div>
+            </section>
+            <div class="cs-stats">
+                <div class="cs-stat"><div class="cs-stat-num">67%</div><div class="cs-stat-desc">Average e-commerce cart abandonment rate — the problem this solves</div></div>
+                <div class="cs-stat"><div class="cs-stat-num">4→1</div><div class="cs-stat-desc">Checkout steps consolidated into a single focused view</div></div>
+                <div class="cs-stat"><div class="cs-stat-num">−42%</div><div class="cs-stat-desc">Reduction in form errors in usability testing</div></div>
+            </div>
+            <section class="cs-section">
+                <div class="cs-2col">
+                    <div>
+                        <span class="cs-section-tag">01 — Problem</span>
+                        <h2 class="cs-section-heading">The checkout page kills more sales than bad products.</h2>
+                    </div>
+                    <div>
+                        <p class="cs-body">67% of online shopping carts are abandoned at checkout. Not because users changed their mind — because the process felt like friction, not a transaction. Too many steps, too many fields, too many reasons to pause and reconsider.</p>
+                        <p class="cs-body">QuickCheckout was designed to compress that friction into a single, confident moment: you've already decided to buy. The UI shouldn't make you doubt that.</p>
+                    </div>
+                </div>
+            </section>
+            <section class="cs-section">
+                <span class="cs-section-tag">02 — Research & Insights</span>
+                <h2 class="cs-section-heading">Abandonment isn't indecision. It's friction.</h2>
+                <p class="cs-body">Competitor analysis across 8 major checkout flows, combined with 10 user interviews. The moments where users dropped off were almost always the same regardless of platform.</p>
+                <div class="cs-insights">
+                    <div class="cs-insight"><div class="cs-insight-icon">📋</div><div class="cs-insight-title">Form fatigue</div><div class="cs-insight-body">Seeing 12+ fields before payment caused users to abandon immediately. Length perception mattered more than actual effort required.</div></div>
+                    <div class="cs-insight"><div class="cs-insight-icon">🔐</div><div class="cs-insight-title">Forced account creation</div><div class="cs-insight-body">"I just want to buy one thing." Guest checkout removal was the single biggest drop-off trigger identified in testing.</div></div>
+                    <div class="cs-insight"><div class="cs-insight-icon">💳</div><div class="cs-insight-title">Payment anxiety</div><div class="cs-insight-body">Users needed visible trust signals at the exact moment they typed card details — not on the homepage, not in the footer.</div></div>
+                    <div class="cs-insight"><div class="cs-insight-icon">↩️</div><div class="cs-insight-title">No recovery path</div><div class="cs-insight-body">Validation errors wiped filled fields, restarting the cognitive load. Users gave up instead of correcting.</div></div>
+                </div>
+            </section>
+            <section class="cs-section">
+                <div class="cs-2col">
+                    <div>
+                        <span class="cs-section-tag">03 — Process</span>
+                        <h2 class="cs-section-heading">Every field earned its place.</h2>
+                        <div class="cs-steps">
+                            <div class="cs-step"><div class="cs-step-num">1</div><div><p class="cs-step-phase">Audit</p><p class="cs-step-name">Field-by-field justification</p><p class="cs-step-body">Mapped every form field to a business requirement. Challenged each one: is this strictly necessary? Removed 30% of fields from the baseline.</p></div></div>
+                            <div class="cs-step"><div class="cs-step-num">2</div><div><p class="cs-step-phase">Structure</p><p class="cs-step-name">Progressive disclosure</p><p class="cs-step-body">Collapsed 4 steps into one scroll. Sections reveal contextually, keeping cognitive load minimal at each moment.</p></div></div>
+                            <div class="cs-step"><div class="cs-step-num">3</div><div><p class="cs-step-phase">Detail</p><p class="cs-step-name">Inline validation, not post-submit</p><p class="cs-step-body">Errors surfaced field-by-field as users typed — never on submit. Correct fields stayed green. Progress was always preserved.</p></div></div>
+                            <div class="cs-step"><div class="cs-step-num">4</div><div><p class="cs-step-phase">Trust</p><p class="cs-step-name">Contextual security signals</p><p class="cs-step-body">Lock icon and SSL indicator appear only when the payment section activates — not cluttering earlier steps.</p></div></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="cs-showcase">
+                            <div class="cs-showcase-phone"><img src="Assets/Images/CaseStudies/QuickCheckout/process-1.webp" alt="" onerror="this.parentElement.style.background='#040c1a'"></div>
+                            <div class="cs-showcase-phone"><img src="Assets/Images/CaseStudies/QuickCheckout/process-2.webp" alt="" onerror="this.parentElement.style.background='#040c1a'"></div>
+                            <div class="cs-showcase-phone"><img src="Assets/Images/CaseStudies/QuickCheckout/process-3.webp" alt="" onerror="this.parentElement.style.background='#040c1a'"></div>
+                        </div>
+                        <p class="cs-showcase-caption">Cart → Single-page checkout → Confirmation</p>
+                    </div>
+                </div>
+            </section>
+            <div class="cs-results">
+                <div class="cs-results-headline">From 4 steps to <em>1 view</em>. Form errors down by 42%.</div>
+                <div class="cs-results-grid">
+                    <div class="cs-result-item"><div class="cs-result-num">4→1</div><div class="cs-result-desc">Checkout steps collapsed into one view</div></div>
+                    <div class="cs-result-item"><div class="cs-result-num">−42%</div><div class="cs-result-desc">Form errors in usability testing</div></div>
+                    <div class="cs-result-item"><div class="cs-result-num">−30%</div><div class="cs-result-desc">Fields removed vs. baseline audit</div></div>
+                    <div class="cs-result-item"><div class="cs-result-num">4.7★</div><div class="cs-result-desc">Usability satisfaction score</div></div>
+                </div>
+            </div>
+            <div class="cs-proto">
+                <h2 class="cs-proto-heading">See the flow.</h2>
+                <p class="cs-proto-sub">Interactive prototype covers the full purchase journey from cart to confirmation, including error states.</p>
+                <a class="cs-proto-link" href="#" target="_blank">View Figma Prototype <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12L12 2M12 2H6M12 2v6"/></svg></a>
+            </div>
+            <div class="cs-bottom-nav">
+                <div><p class="cs-next-label">Next project</p><p class="cs-next-title" data-open="cs-abruzzo">Abruzzo Experience →</p></div>
+                <div class="cs-next-arrow" data-open="cs-abruzzo">→</div>
+            </div>
+        </div>
+    </div>
+    <div class="cs-progress-bar" style="background:#2563eb;"></div>
+
+    <!-- 3 · ABRUZZO EXPERIENCE -->
+    <div class="cs-overlay" id="cs-abruzzo" style="--cs-accent:#2d6a4f;--cs-accent-rgb:45,106,79;">
+        <div class="cs-backdrop"></div>
+        <button class="cs-close-btn" aria-label="Close">✕</button>
+        <div class="cs-panel">
+            <section class="cs-hero">
+                <div class="cs-orb cs-orb-1"></div>
+                <div class="cs-orb cs-orb-2"></div>
+                <div class="cs-phones">
+                    <div class="cs-phone"><img src="Assets/Images/CaseStudies/Abruzzo/hero-1.webp" alt="" onerror="this.parentElement.style.background='#0a1a0f'"></div>
+                    <div class="cs-phone"><img src="Assets/Images/CaseStudies/Abruzzo/hero-2.webp" alt="" onerror="this.parentElement.style.background='#0a1a0f'"></div>
+                    <div class="cs-phone"><img src="Assets/Images/CaseStudies/Abruzzo/hero-3.webp" alt="" onerror="this.parentElement.style.background='#0a1a0f'"></div>
+                </div>
+                <div class="cs-hero-text">
+                    <p class="cs-eyebrow">Case Study · UX/UI · Travel App · 2024</p>
+                    <h1 class="cs-title">Abruzzo Experience</h1>
+                    <div class="cs-hero-meta">
+                        <div class="cs-meta-item"><span class="cs-meta-label">Role</span><span class="cs-meta-value">UX/UI Designer</span></div>
+                        <div class="cs-meta-item"><span class="cs-meta-label">Platform</span><span class="cs-meta-value">iOS · Android</span></div>
+                        <div class="cs-meta-item"><span class="cs-meta-label">Duration</span><span class="cs-meta-value">6 weeks</span></div>
+                        <div class="cs-meta-item"><span class="cs-meta-label">Tools</span><span class="cs-meta-value">Figma · Notion</span></div>
+                    </div>
+                </div>
+                <div class="cs-scroll-cue"><span class="cs-scroll-cue-label">Scroll</span><div class="cs-scroll-line"></div></div>
+            </section>
+            <div class="cs-stats">
+                <div class="cs-stat"><div class="cs-stat-num">2 in 1</div><div class="cs-stat-desc">Single app serving residents and visitors with distinct onboarding paths</div></div>
+                <div class="cs-stat"><div class="cs-stat-num">30+</div><div class="cs-stat-desc">Experience categories mapped through user research</div></div>
+                <div class="cs-stat"><div class="cs-stat-num">4.9★</div><div class="cs-stat-desc">Usability satisfaction score in final testing round</div></div>
+            </div>
+            <section class="cs-section">
+                <div class="cs-2col">
+                    <div>
+                        <span class="cs-section-tag">01 — Problem</span>
+                        <h2 class="cs-section-heading">Abruzzo is Italy's best-kept secret. That's both its charm and its problem.</h2>
+                    </div>
+                    <div>
+                        <p class="cs-body">Abruzzo has mountains, coast, medieval villages, food culture, and national parks — all within a few hours of Rome. But its digital tourism infrastructure hadn't caught up. Activities were fragmented across dozens of local sites, WhatsApp groups, and word-of-mouth.</p>
+                        <p class="cs-body">The brief: one app that connects both residents and visitors to the full range of experiences the region offers — without overwhelming either audience with content meant for the other.</p>
+                    </div>
+                </div>
+            </section>
+            <section class="cs-section">
+                <span class="cs-section-tag">02 — Research & Insights</span>
+                <h2 class="cs-section-heading">Two audiences. Completely different mental models.</h2>
+                <p class="cs-body">The most important early finding: residents and visitors approach discovery entirely differently. Visitors want to be guided. Residents want to be surprised. Designing for one risked alienating the other.</p>
+                <div class="cs-insights">
+                    <div class="cs-insight"><div class="cs-insight-icon">🗺️</div><div class="cs-insight-title">Visitors need curation</div><div class="cs-insight-body">"Tell me what's worth seeing." First-time visitors were overwhelmed by choice without editorial guidance. They needed a trusted voice, not a database.</div></div>
+                    <div class="cs-insight"><div class="cs-insight-icon">🏡</div><div class="cs-insight-title">Residents want discovery</div><div class="cs-insight-body">"I've lived here 30 years and I didn't know that existed." Locals needed serendipitous discovery, not a tourist itinerary.</div></div>
+                    <div class="cs-insight"><div class="cs-insight-icon">📅</div><div class="cs-insight-title">Seasonality is invisible</div><div class="cs-insight-body">Events and trails change dramatically by season. The app had to surface what's actually available right now — not a static catalogue.</div></div>
+                    <div class="cs-insight"><div class="cs-insight-icon">📡</div><div class="cs-insight-title">Offline reality</div><div class="cs-insight-body">Mountain areas have limited signal. Any saved experience needed to work offline — including maps and booking confirmations.</div></div>
+                </div>
+            </section>
+            <section class="cs-section">
+                <div class="cs-2col">
+                    <div>
+                        <span class="cs-section-tag">03 — Process</span>
+                        <h2 class="cs-section-heading">One app. Two entry points. Shared core.</h2>
+                        <div class="cs-steps">
+                            <div class="cs-step"><div class="cs-step-num">1</div><div><p class="cs-step-phase">Strategy</p><p class="cs-step-name">Dual persona onboarding</p><p class="cs-step-body">Designed a single onboarding question — "Are you visiting or local?" — that branches the initial experience while sharing the same content architecture underneath.</p></div></div>
+                            <div class="cs-step"><div class="cs-step-num">2</div><div><p class="cs-step-phase">Architecture</p><p class="cs-step-name">Category taxonomy</p><p class="cs-step-body">Mapped 30+ experience types to 6 top-level categories through card sorting with 12 participants. Zero overlap, natural groupings.</p></div></div>
+                            <div class="cs-step"><div class="cs-step-num">3</div><div><p class="cs-step-phase">Design</p><p class="cs-step-name">Seasonal content system</p><p class="cs-step-body">Content cards surface availability dynamically — "open now", "seasonal", "bookable" — so the interface always reflects reality.</p></div></div>
+                            <div class="cs-step"><div class="cs-step-num">4</div><div><p class="cs-step-phase">Resilience</p><p class="cs-step-name">Offline-first experience detail</p><p class="cs-step-body">Any saved experience renders fully offline — maps, directions, booking reference. Designed offline as a feature, not a fallback.</p></div></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="cs-showcase">
+                            <div class="cs-showcase-phone"><img src="Assets/Images/CaseStudies/Abruzzo/process-1.webp" alt="" onerror="this.parentElement.style.background='#0a1a0f'"></div>
+                            <div class="cs-showcase-phone"><img src="Assets/Images/CaseStudies/Abruzzo/process-2.webp" alt="" onerror="this.parentElement.style.background='#0a1a0f'"></div>
+                            <div class="cs-showcase-phone"><img src="Assets/Images/CaseStudies/Abruzzo/process-3.webp" alt="" onerror="this.parentElement.style.background='#0a1a0f'"></div>
+                        </div>
+                        <p class="cs-showcase-caption">Discover → Experience detail → Offline map</p>
+                    </div>
+                </div>
+            </section>
+            <div class="cs-results">
+                <div class="cs-results-headline">One app. <em>Two audiences.</em> Zero compromises on either experience.</div>
+                <div class="cs-results-grid">
+                    <div class="cs-result-item"><div class="cs-result-num">2 in 1</div><div class="cs-result-desc">Distinct paths for visitors and residents</div></div>
+                    <div class="cs-result-item"><div class="cs-result-num">6</div><div class="cs-result-desc">Top-level categories validated through card sorting</div></div>
+                    <div class="cs-result-item"><div class="cs-result-num">100%</div><div class="cs-result-desc">Core screens functional offline</div></div>
+                    <div class="cs-result-item"><div class="cs-result-num">4.9★</div><div class="cs-result-desc">Usability satisfaction score</div></div>
+                </div>
+            </div>
+            <div class="cs-proto">
+                <h2 class="cs-proto-heading">Explore the region.</h2>
+                <p class="cs-proto-sub">The prototype covers both visitor and resident onboarding paths, discovery flow, and offline experience detail.</p>
+                <a class="cs-proto-link" href="#" target="_blank">View Figma Prototype <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12L12 2M12 2H6M12 2v6"/></svg></a>
+            </div>
+            <div class="cs-bottom-nav">
+                <div><p class="cs-next-label">Next project</p><p class="cs-next-title" data-open="cs-dicarlobus">Dicarlobus Redesign →</p></div>
+                <div class="cs-next-arrow" data-open="cs-dicarlobus">→</div>
+            </div>
+        </div>
+    </div>
+    <div class="cs-progress-bar" style="background:#2d6a4f;"></div>
+
+    <!-- 4 · DICARLOBUS -->
+    <div class="cs-overlay" id="cs-dicarlobus" style="--cs-accent:#f77f00;--cs-accent-rgb:247,127,0;">
+        <div class="cs-backdrop"></div>
+        <button class="cs-close-btn" aria-label="Close">✕</button>
+        <div class="cs-panel">
+            <section class="cs-hero">
+                <div class="cs-orb cs-orb-1"></div>
+                <div class="cs-orb cs-orb-2"></div>
+                <div class="cs-phones">
+                    <div class="cs-phone"><img src="Assets/Images/CaseStudies/Dicarlobus/hero-1.webp" alt="" onerror="this.parentElement.style.background='#1a0e00'"></div>
+                    <div class="cs-phone"><img src="Assets/Images/CaseStudies/Dicarlobus/hero-2.webp" alt="" onerror="this.parentElement.style.background='#1a0e00'"></div>
+                    <div class="cs-phone"><img src="Assets/Images/CaseStudies/Dicarlobus/hero-3.webp" alt="" onerror="this.parentElement.style.background='#1a0e00'"></div>
+                </div>
+                <div class="cs-hero-text">
+                    <p class="cs-eyebrow">Case Study · UX/UI · Transport · 2024</p>
+                    <h1 class="cs-title">Dicarlobus</h1>
+                    <div class="cs-hero-meta">
+                        <div class="cs-meta-item"><span class="cs-meta-label">Role</span><span class="cs-meta-value">UX/UI Designer</span></div>
+                        <div class="cs-meta-item"><span class="cs-meta-label">Platform</span><span class="cs-meta-value">Mobile · Web</span></div>
+                        <div class="cs-meta-item"><span class="cs-meta-label">Duration</span><span class="cs-meta-value">5 weeks</span></div>
+                        <div class="cs-meta-item"><span class="cs-meta-label">Tools</span><span class="cs-meta-value">Figma · FigJam</span></div>
+                    </div>
+                </div>
+                <div class="cs-scroll-cue"><span class="cs-scroll-cue-label">Scroll</span><div class="cs-scroll-line"></div></div>
+            </section>
+            <div class="cs-stats">
+                <div class="cs-stat"><div class="cs-stat-num">0→1</div><div class="cs-stat-desc">Brand identity built from scratch — extracted from a generic shared template</div></div>
+                <div class="cs-stat"><div class="cs-stat-num">−3 taps</div><div class="cs-stat-desc">Removed from the path to finding a schedule</div></div>
+                <div class="cs-stat"><div class="cs-stat-num">WCAG AA</div><div class="cs-stat-desc">Full accessibility compliance across all redesigned screens</div></div>
+            </div>
+            <section class="cs-section">
+                <div class="cs-2col">
+                    <div>
+                        <span class="cs-section-tag">01 — Problem</span>
+                        <h2 class="cs-section-heading">Same template. Different company. No one could tell.</h2>
+                    </div>
+                    <div>
+                        <p class="cs-body">Dicarlobus is a regional bus operator in Abruzzo serving both local commuters and tourists. Their existing app was built on a generic public transport template shared with other operators — same layout, same components, barely differentiated branding.</p>
+                        <p class="cs-body">The significant challenge: extracting a distinct brand identity from an application that shared a generic template with other public transportation services. Every design decision had to earn its place — not just look different, but mean something to the people who relied on this service daily.</p>
+                    </div>
+                </div>
+            </section>
+            <section class="cs-section">
+                <span class="cs-section-tag">02 — Research & Insights</span>
+                <h2 class="cs-section-heading">Commuters and tourists. One app. Completely different urgency levels.</h2>
+                <p class="cs-body">8 user interviews across two distinct groups: daily commuters who needed speed, and tourists who needed guidance and confidence. The existing app served neither — it was built for an abstract "transit user" who didn't exist.</p>
+                <div class="cs-insights">
+                    <div class="cs-insight"><div class="cs-insight-icon">⏱️</div><div class="cs-insight-title">Commuters need speed</div><div class="cs-insight-body">"I check it on the platform with 2 minutes to spare." Daily users needed their route in one tap — not buried under content meant for first-timers.</div></div>
+                    <div class="cs-insight"><div class="cs-insight-icon">🧳</div><div class="cs-insight-title">Tourists need reassurance</div><div class="cs-insight-body">Visitors couldn't tell if the schedule was live or outdated. Trust signals — timestamps, real-time indicators — were completely absent.</div></div>
+                    <div class="cs-insight"><div class="cs-insight-icon">🎨</div><div class="cs-insight-title">Generic means invisible</div><div class="cs-insight-body">Multiple users thought they'd used the same app for different bus companies. Zero brand recall eroded trust before the service was even evaluated.</div></div>
+                    <div class="cs-insight"><div class="cs-insight-icon">♿</div><div class="cs-insight-title">Accessibility failures</div><div class="cs-insight-body">The existing interface failed WCAG AA on contrast, touch target size, and screen reader labelling — alienating a significant user base.</div></div>
+                </div>
+            </section>
+            <section class="cs-section">
+                <div class="cs-2col">
+                    <div>
+                        <span class="cs-section-tag">03 — Process</span>
+                        <h2 class="cs-section-heading">Identity first. Interface second.</h2>
+                        <div class="cs-steps">
+                            <div class="cs-step"><div class="cs-step-num">1</div><div><p class="cs-step-phase">Brand</p><p class="cs-step-name">Extracting identity from nothing</p><p class="cs-step-body">Built a colour system, type hierarchy, and iconography language from scratch — rooted in the amber and terracotta palette of Abruzzo's landscape. Starting from the one asset Dicarlobus owned: the name.</p></div></div>
+                            <div class="cs-step"><div class="cs-step-num">2</div><div><p class="cs-step-phase">Structure</p><p class="cs-step-name">Context-aware homepage</p><p class="cs-step-body">Commuters see saved routes immediately. Tourists see curated routes and onboarding. Same architecture, different surface — adapts to returning vs. first-time users.</p></div></div>
+                            <div class="cs-step"><div class="cs-step-num">3</div><div><p class="cs-step-phase">Clarity</p><p class="cs-step-name">Schedules as the product</p><p class="cs-step-body">Redesigned the schedule view as the primary product surface. Realtime status, departure countdown, and platform info scannable in under 2 seconds.</p></div></div>
+                            <div class="cs-step"><div class="cs-step-num">4</div><div><p class="cs-step-phase">Accessibility</p><p class="cs-step-name">WCAG AA from the token level</p><p class="cs-step-body">Rebuilt colour system with contrast ratios baked into design tokens. Every touch target audited against 44×44px minimum. Screen reader labels reviewed on every element.</p></div></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="cs-showcase">
+                            <div class="cs-showcase-phone"><img src="Assets/Images/CaseStudies/Dicarlobus/process-1.webp" alt="" onerror="this.parentElement.style.background='#1a0e00'"></div>
+                            <div class="cs-showcase-phone"><img src="Assets/Images/CaseStudies/Dicarlobus/process-2.webp" alt="" onerror="this.parentElement.style.background='#1a0e00'"></div>
+                            <div class="cs-showcase-phone"><img src="Assets/Images/CaseStudies/Dicarlobus/process-3.webp" alt="" onerror="this.parentElement.style.background='#1a0e00'"></div>
+                        </div>
+                        <p class="cs-showcase-caption">Context-aware home → Real-time schedule → Digital ticket</p>
+                    </div>
+                </div>
+            </section>
+            <div class="cs-results">
+                <div class="cs-results-headline">A generic template became a <em>recognisable brand</em>. Built from the ground up.</div>
+                <div class="cs-results-grid">
+                    <div class="cs-result-item"><div class="cs-result-num">0→1</div><div class="cs-result-desc">Distinct brand identity from a shared template</div></div>
+                    <div class="cs-result-item"><div class="cs-result-num">−3 taps</div><div class="cs-result-desc">Path to schedule information</div></div>
+                    <div class="cs-result-item"><div class="cs-result-num">AA</div><div class="cs-result-desc">WCAG accessibility compliance achieved</div></div>
+                    <div class="cs-result-item"><div class="cs-result-num">4.8★</div><div class="cs-result-desc">Usability satisfaction score</div></div>
+                </div>
+            </div>
+            <div class="cs-proto">
+                <h2 class="cs-proto-heading">Ride the route.</h2>
+                <p class="cs-proto-sub">Interactive prototype covers both commuter and visitor flows — from route search to digital ticket, including the real-time schedule view.</p>
+                <a class="cs-proto-link" href="#" target="_blank">View Figma Prototype <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12L12 2M12 2H6M12 2v6"/></svg></a>
+            </div>
+            <div class="cs-bottom-nav">
+                <div><p class="cs-next-label">Back to</p><p class="cs-next-title" id="cs-back-to-top" style="cursor:pointer;">All Projects ↑</p></div>
+                <div class="cs-next-arrow" id="cs-back-arrow">↑</div>
+            </div>
+        </div>
+    </div>
+    <div class="cs-progress-bar" style="background:#f77f00;"></div>
     <script src="location-config.js"></script>
     <script src="script.js"></script>
+    <script src="case-study-engine.js"></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        CaseStudy.register('card-callao',        'cs-callao');
+        CaseStudy.register('card-quickcheckout', 'cs-quickcheckout');
+        CaseStudy.register('card-abruzzo',       'cs-abruzzo');
+        CaseStudy.register('card-dicarlobus',    'cs-dicarlobus');
+
+        document.querySelectorAll('.cs-card').forEach(card => {
+            card.addEventListener('keydown', e => {
+                if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); card.click(); }
+            });
+        });
+
+        const cardMap = {
+            'cs-callao':        'card-callao',
+            'cs-quickcheckout': 'card-quickcheckout',
+            'cs-abruzzo':       'card-abruzzo',
+            'cs-dicarlobus':    'card-dicarlobus'
+        };
+
+        document.querySelectorAll('[data-open]').forEach(el => {
+            el.addEventListener('click', function () {
+                const targetId = this.dataset.open;
+                document.querySelectorAll('.cs-overlay.cs-open').forEach(o => {
+                    o.classList.remove('cs-open');
+                    document.body.style.overflow = '';
+                });
+                setTimeout(() => {
+                    const card   = document.getElementById(cardMap[targetId]);
+                    const target = document.getElementById(targetId);
+                    if (!card || !target) return;
+                    const panel = target.querySelector('.cs-panel');
+                    const rect  = card.getBoundingClientRect();
+                    panel.style.transition = 'none';
+                    panel.style.top    = rect.top  + 'px';
+                    panel.style.left   = rect.left + 'px';
+                    panel.style.width  = rect.width  + 'px';
+                    panel.style.height = rect.height + 'px';
+                    panel.style.borderRadius = '20px';
+                    panel.scrollTop = 0;
+                    target.classList.add('cs-open');
+                    document.body.style.overflow = 'hidden';
+                    panel.offsetHeight;
+                    panel.style.transition = '';
+                    panel.style.top    = '0'; panel.style.left   = '0';
+                    panel.style.width  = '100%'; panel.style.height = '100%';
+                    panel.style.borderRadius = '0';
+                }, 120);
+            });
+        });
+
+        ['cs-back-to-top', 'cs-back-arrow'].forEach(id => {
+            const el = document.getElementById(id);
+            if (el) el.addEventListener('click', () => {
+                document.querySelectorAll('.cs-overlay.cs-open').forEach(o => {
+                    o.classList.remove('cs-open');
+                    document.body.style.overflow = '';
+                });
+            });
+        });
+    });
+    </script>
 </body>
 </html>
