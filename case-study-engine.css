@@ -64,6 +64,13 @@
     border-radius var(--cs-dur-slow) var(--cs-ease-out);
   scrollbar-width: thin;
   scrollbar-color: rgba(0,0,0,.14) transparent;
+  /* Hidden until JS positions and opens it */
+  visibility: hidden;
+  top: 0; left: 0; width: 0; height: 0;
+}
+
+.cs-overlay.cs-open .cs-panel {
+  visibility: visible;
 }
 
 .cs-panel::-webkit-scrollbar { width: 3px; }

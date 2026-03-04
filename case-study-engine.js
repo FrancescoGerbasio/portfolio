@@ -7,7 +7,6 @@
 (function () {
   'use strict';
 
-  // All registered case studies: { cardEl, overlayEl, panelEl, progressEl }
   const studies = [];
 
   function register(cardId, overlayId) {
@@ -49,53 +48,60 @@
     function open() {
       const rect = card.getBoundingClientRect();
 
-      // Snap panel to card rect (no transition)
-      panel.style.transition = 'none';
-      panel.style.top    = rect.top  + 'px';
-      panel.style.left   = rect.left + 'px';
-      panel.style.width  = rect.width  + 'px';
-      panel.style.height = rect.height + 'px';
-      panel.style.borderRadius = '20px';
-      panel.scrollTop = 0;
+      // Position panel at card location BEFORE making it visible
+      panel.style.transition    = 'none';
+      panel.style.visibility    = 'visible';
+      panel.style.top           = rect.top    + 'px';
+      panel.style.left          = rect.left   + 'px';
+      panel.style.width         = rect.width  + 'px';
+      panel.style.height        = rect.height + 'px';
+      panel.style.borderRadius  = '20px';
+      panel.scrollTop           = 0;
 
       overlay.classList.add('cs-open');
       document.body.style.overflow = 'hidden';
 
-      // Force reflow then animate to full viewport
+      // Force reflow, then animate to fullscreen
       panel.offsetHeight;
-      panel.style.transition = '';
-      panel.style.top    = '0';
-      panel.style.left   = '0';
-      panel.style.width  = '100%';
-      panel.style.height = '100%';
-      panel.style.borderRadius = '0';
+      panel.style.transition    = '';
+      panel.style.top           = '0';
+      panel.style.left          = '0';
+      panel.style.width         = '100%';
+      panel.style.height        = '100%';
+      panel.style.borderRadius  = '0';
 
       setTimeout(setupReveal, 680);
     }
 
     // ── Close ──
     function close() {
-      // Reset sections for re-open
       panel.querySelectorAll('.cs-section').forEach(s => s.classList.remove('cs-visible'));
 
       const rect = card.getBoundingClientRect();
-      panel.style.top    = rect.top  + 'px';
-      panel.style.left   = rect.left + 'px';
-      panel.style.width  = rect.width  + 'px';
-      panel.style.height = rect.height + 'px';
-      panel.style.borderRadius = '20px';
+      panel.style.top           = rect.top    + 'px';
+      panel.style.left          = rect.left   + 'px';
+      panel.style.width         = rect.width  + 'px';
+      panel.style.height        = rect.height + 'px';
+      panel.style.borderRadius  = '20px';
 
       overlay.classList.remove('cs-open');
       document.body.style.overflow = '';
 
-      if (progress) {
-        setTimeout(() => { progress.style.width = '0%'; panel.scrollTop = 0; }, 780);
-      }
+      // After animation completes — fully hide the panel
+      setTimeout(() => {
+        panel.style.visibility = 'hidden';
+        panel.style.width      = '0';
+        panel.style.height     = '0';
+        panel.style.top        = '0';
+        panel.style.left       = '0';
+        panel.scrollTop        = 0;
+        if (progress) progress.style.width = '0%';
+      }, 800);
     }
 
     card.addEventListener('click', open);
-    if (closeBtn)  closeBtn.addEventListener('click', close);
-    if (backdrop)  backdrop.addEventListener('click', close);
+    if (closeBtn) closeBtn.addEventListener('click', close);
+    if (backdrop) backdrop.addEventListener('click', close);
 
     study.close = close;
   }
@@ -108,6 +114,5 @@
     });
   });
 
-  // ── Expose globally ──
   window.CaseStudy = { register };
 })();
