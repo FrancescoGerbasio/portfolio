@@ -35,6 +35,7 @@
 
     overlay.classList.add('cs-open');
     document.body.style.overflow = 'hidden';
+    document.body.classList.add('cs-is-open');
 
     // Force reflow then animate to fullscreen
     panel.offsetHeight;
@@ -67,6 +68,7 @@
 
     overlay.classList.remove('cs-open');
     document.body.style.overflow = '';
+    document.body.classList.remove('cs-is-open');
 
     setTimeout(() => {
       panel.style.visibility = 'hidden';
@@ -130,6 +132,7 @@
         const targetId = el.dataset.open;
         // Close current WITHOUT animation (instant), then open target
         overlay.classList.remove('cs-open');
+        document.body.classList.remove('cs-is-open');
         panel.style.visibility = 'hidden';
         panel.style.width = '0'; panel.style.height = '0';
         panel.scrollTop = 0;

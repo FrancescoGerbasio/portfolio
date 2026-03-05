@@ -363,7 +363,7 @@
   line-height: 1;
   color: var(--cs-accent);
   margin-bottom: 8px;
-  font-family: var(--font-heading, sans-serif);
+  font-family: 'Inter', sans-serif;
 }
 
 .cs-stat-desc {
@@ -658,7 +658,7 @@
 }
 
 .cs-result-num {
-  font-family: var(--font-heading, sans-serif);
+  font-family: 'Inter', sans-serif;
   font-size: clamp(26px,3.5vw,38px);
   font-weight: 800;
   letter-spacing: -.04em;
@@ -822,21 +822,15 @@
 }
 
 /* ══════════════════════════════════════
-   FIX: Close button — avoid hamburger on mobile
-   Hamburger sits top-right on mobile, so
-   we push close btn down on small screens
+   Hide hamburger + mobile chrome while
+   a case study overlay is open
 ══════════════════════════════════════ */
 
-@media (max-width: 768px) {
-  .cs-close-btn {
-    top: auto;
-    bottom: 28px;
-    right: 20px;
-    width: 52px;
-    height: 52px;
-    font-size: 19px;
-    background: rgba(10,10,10,.75);
-  }
+body.cs-is-open .hamburger-menu,
+body.cs-is-open .hamburger-fade-zone,
+body.cs-is-open .location-widget-mobile,
+body.cs-is-open .mobile-menu {
+  display: none !important;
 }
 
 /* ══════════════════════════════════════
