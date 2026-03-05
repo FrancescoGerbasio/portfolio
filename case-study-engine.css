@@ -93,12 +93,21 @@
 
 .cs-overlay.cs-open ~ .cs-progress-bar { opacity: 1; }
 
-/* ── Close button ── */
+/* ── Close button ──
+   Lives inside .cs-panel as first child, sticky top-right.
+   Because it's inside the panel it gets clipped by the panel's
+   overflow:hidden as the close animation runs — no ghost ✕
+   floating over the hamburger menu.
+── */
 .cs-close-btn {
-  position: fixed;
-  top: 20px; right: 20px;
-  z-index: 520;
+  position: sticky;
+  top: 20px;
+  left: 100%;           /* push to right edge */
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: 44px; height: 44px;
+  margin: 20px 20px 0 auto;
   border-radius: 50%;
   background: rgba(10,10,10,.55);
   backdrop-filter: blur(16px);
@@ -107,10 +116,10 @@
   color: rgba(255,255,255,.9);
   font-size: 17px;
   line-height: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   cursor: pointer;
+  z-index: 10;
+  flex-shrink: 0;
+  /* Invisible until overlay opens */
   opacity: 0;
   transform: scale(.6) rotate(-90deg);
   transition:
