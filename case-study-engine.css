@@ -94,20 +94,17 @@
 .cs-overlay.cs-open ~ .cs-progress-bar { opacity: 1; }
 
 /* ── Close button ──
-   Lives inside .cs-panel as first child, sticky top-right.
-   Because it's inside the panel it gets clipped by the panel's
-   overflow:hidden as the close animation runs — no ghost ✕
-   floating over the hamburger menu.
+   position: absolute inside .cs-overlay (which is fixed, inset:0).
+   This means the button is naturally clipped by the overlay boundary —
+   when the overlay loses cs-open it fades out in place, fully contained,
+   never overlapping the hamburger or page chrome.
 ── */
 .cs-close-btn {
-  position: sticky;
+  position: absolute;
   top: 20px;
-  left: 100%;           /* push to right edge */
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  right: 20px;
+  z-index: 10;
   width: 44px; height: 44px;
-  margin: 20px 20px 0 auto;
   border-radius: 50%;
   background: rgba(10,10,10,.55);
   backdrop-filter: blur(16px);
@@ -116,10 +113,10 @@
   color: rgba(255,255,255,.9);
   font-size: 17px;
   line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
-  z-index: 10;
-  flex-shrink: 0;
-  /* Invisible until overlay opens */
   opacity: 0;
   transform: scale(.6) rotate(-90deg);
   transition:
@@ -133,6 +130,16 @@
   opacity: 1;
   transform: scale(1) rotate(0deg);
   pointer-events: auto;
+}
+
+/* When closing: fade out immediately, don't wait */
+.cs-overlay:not(.cs-open) .cs-close-btn {
+  opacity: 0;
+  transform: scale(.6) rotate(90deg);
+  transition:
+    opacity   var(--cs-dur-fast) ease,
+    transform var(--cs-dur-fast) ease;
+  pointer-events: none;
 }
 
 .cs-close-btn:hover {
