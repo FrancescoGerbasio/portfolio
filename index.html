@@ -471,17 +471,17 @@
             <section class="cs-hero">
                 <div class="cs-orb cs-orb-1"></div>
                 <div class="cs-orb cs-orb-2"></div>
-                <div class="cs-phones">
-                    <div class="cs-phone"><img src="Assets/Images/CaseStudies/QuickCheckout/hero-1.webp" alt="" onerror="this.parentElement.style.background='#040c1a'"></div>
-                    <div class="cs-phone"><img src="Assets/Images/CaseStudies/QuickCheckout/hero-2.webp" alt="" onerror="this.parentElement.style.background='#040c1a'"></div>
-                    <div class="cs-phone"><img src="Assets/Images/CaseStudies/QuickCheckout/hero-3.webp" alt="" onerror="this.parentElement.style.background='#040c1a'"></div>
+                <div class="cs-tablets">
+                    <div class="cs-tablet"><img src="Assets/Images/CaseStudies/QuickCheckout/hero-1.webp" alt="" onerror="this.parentElement.style.background='#040c1a'"></div>
+                    <div class="cs-tablet"><img src="Assets/Images/CaseStudies/QuickCheckout/hero-2.webp" alt="" onerror="this.parentElement.style.background='#040c1a'"></div>
+                    <div class="cs-tablet"><img src="Assets/Images/CaseStudies/QuickCheckout/hero-3.webp" alt="" onerror="this.parentElement.style.background='#040c1a'"></div>
                 </div>
                 <div class="cs-hero-text">
                     <p class="cs-eyebrow">Case Study · UX/UI · E-Commerce · 2024</p>
                     <h1 class="cs-title">QuickCheckout</h1>
                     <div class="cs-hero-meta">
                         <div class="cs-meta-item"><span class="cs-meta-label">Role</span><span class="cs-meta-value">UX/UI Designer</span></div>
-                        <div class="cs-meta-item"><span class="cs-meta-label">Platform</span><span class="cs-meta-value">Mobile · Web</span></div>
+                        <div class="cs-meta-item"><span class="cs-meta-label">Platform</span><span class="cs-meta-value">Web · Tablet</span></div>
                         <div class="cs-meta-item"><span class="cs-meta-label">Duration</span><span class="cs-meta-value">6 weeks</span></div>
                         <div class="cs-meta-item"><span class="cs-meta-label">Tools</span><span class="cs-meta-value">Figma · Maze</span></div>
                     </div>
@@ -529,10 +529,10 @@
                         </div>
                     </div>
                     <div>
-                        <div class="cs-showcase">
-                            <div class="cs-showcase-phone"><img src="Assets/Images/CaseStudies/QuickCheckout/process-1.webp" alt="" onerror="this.parentElement.style.background='#040c1a'"></div>
-                            <div class="cs-showcase-phone"><img src="Assets/Images/CaseStudies/QuickCheckout/process-2.webp" alt="" onerror="this.parentElement.style.background='#040c1a'"></div>
-                            <div class="cs-showcase-phone"><img src="Assets/Images/CaseStudies/QuickCheckout/process-3.webp" alt="" onerror="this.parentElement.style.background='#040c1a'"></div>
+                        <div class="cs-showcase" style="flex-wrap:wrap;">
+                            <div class="cs-showcase-tablet"><img src="Assets/Images/CaseStudies/QuickCheckout/process-1.webp" alt="" onerror="this.parentElement.style.background='#040c1a'"></div>
+                            <div class="cs-showcase-tablet"><img src="Assets/Images/CaseStudies/QuickCheckout/process-2.webp" alt="" onerror="this.parentElement.style.background='#040c1a'"></div>
+                            <div class="cs-showcase-tablet"><img src="Assets/Images/CaseStudies/QuickCheckout/process-3.webp" alt="" onerror="this.parentElement.style.background='#040c1a'"></div>
                         </div>
                         <p class="cs-showcase-caption">Cart → Single-page checkout → Confirmation</p>
                     </div>
@@ -763,57 +763,10 @@
         CaseStudy.register('card-abruzzo',       'cs-abruzzo');
         CaseStudy.register('card-dicarlobus',    'cs-dicarlobus');
 
+        // Keyboard support for cs-cards
         document.querySelectorAll('.cs-card').forEach(card => {
             card.addEventListener('keydown', e => {
                 if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); card.click(); }
-            });
-        });
-
-        const cardMap = {
-            'cs-callao':        'card-callao',
-            'cs-quickcheckout': 'card-quickcheckout',
-            'cs-abruzzo':       'card-abruzzo',
-            'cs-dicarlobus':    'card-dicarlobus'
-        };
-
-        document.querySelectorAll('[data-open]').forEach(el => {
-            el.addEventListener('click', function () {
-                const targetId = this.dataset.open;
-                document.querySelectorAll('.cs-overlay.cs-open').forEach(o => {
-                    o.classList.remove('cs-open');
-                    document.body.style.overflow = '';
-                });
-                setTimeout(() => {
-                    const card   = document.getElementById(cardMap[targetId]);
-                    const target = document.getElementById(targetId);
-                    if (!card || !target) return;
-                    const panel = target.querySelector('.cs-panel');
-                    const rect  = card.getBoundingClientRect();
-                    panel.style.transition = 'none';
-                    panel.style.top    = rect.top  + 'px';
-                    panel.style.left   = rect.left + 'px';
-                    panel.style.width  = rect.width  + 'px';
-                    panel.style.height = rect.height + 'px';
-                    panel.style.borderRadius = '20px';
-                    panel.scrollTop = 0;
-                    target.classList.add('cs-open');
-                    document.body.style.overflow = 'hidden';
-                    panel.offsetHeight;
-                    panel.style.transition = '';
-                    panel.style.top    = '0'; panel.style.left   = '0';
-                    panel.style.width  = '100%'; panel.style.height = '100%';
-                    panel.style.borderRadius = '0';
-                }, 120);
-            });
-        });
-
-        ['cs-back-to-top', 'cs-back-arrow'].forEach(id => {
-            const el = document.getElementById(id);
-            if (el) el.addEventListener('click', () => {
-                document.querySelectorAll('.cs-overlay.cs-open').forEach(o => {
-                    o.classList.remove('cs-open');
-                    document.body.style.overflow = '';
-                });
             });
         });
     });

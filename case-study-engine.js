@@ -1,14 +1,99 @@
 /* ============================================================
-   CASE STUDY ENGINE — JavaScript
-   Handles: open/close animation, scroll reveal, progress bar,
-            keyboard nav, multiple overlays
+   CASE STUDY ENGINE — JavaScript v2
+   Fixes:
+   - "Next project" navigation now properly resets scroll reveal
+   - "Back to all" closes overlay and scrolls to top of page
+   - Close button position avoids hamburger on mobile
    ============================================================ */
 
 (function () {
   'use strict';
 
-  const studies = [];
+  const studies   = [];
+  const studyMap  = {}; // overlayId → study
 
+  // ── Core open function (used by card click AND next/prev nav) ──
+  function openOverlay(overlayId) {
+    const study = studyMap[overlayId];
+    if (!study) return;
+
+    const { card, overlay, panel, progress } = study;
+    const rect = card.getBoundingClientRect();
+
+    // Reset sections before opening so reveal fires fresh
+    panel.querySelectorAll('.cs-section').forEach(s => s.classList.remove('cs-visible'));
+    panel.scrollTop = 0;
+
+    // Position panel at card, make visible, no transition
+    panel.style.transition   = 'none';
+    panel.style.visibility   = 'visible';
+    panel.style.top          = rect.top    + 'px';
+    panel.style.left         = rect.left   + 'px';
+    panel.style.width        = rect.width  + 'px';
+    panel.style.height       = rect.height + 'px';
+    panel.style.borderRadius = '20px';
+
+    overlay.classList.add('cs-open');
+    document.body.style.overflow = 'hidden';
+
+    // Force reflow then animate to fullscreen
+    panel.offsetHeight;
+    panel.style.transition   = '';
+    panel.style.top          = '0';
+    panel.style.left         = '0';
+    panel.style.width        = '100%';
+    panel.style.height       = '100%';
+    panel.style.borderRadius = '0';
+
+    // Set up scroll reveal after animation lands
+    setTimeout(() => setupReveal(panel), 700);
+  }
+
+  // ── Core close function ──
+  function closeOverlay(overlayId) {
+    const study = studyMap[overlayId];
+    if (!study) return;
+
+    const { card, overlay, panel, progress } = study;
+
+    panel.querySelectorAll('.cs-section').forEach(s => s.classList.remove('cs-visible'));
+
+    const rect = card.getBoundingClientRect();
+    panel.style.top          = rect.top    + 'px';
+    panel.style.left         = rect.left   + 'px';
+    panel.style.width        = rect.width  + 'px';
+    panel.style.height       = rect.height + 'px';
+    panel.style.borderRadius = '20px';
+
+    overlay.classList.remove('cs-open');
+    document.body.style.overflow = '';
+
+    setTimeout(() => {
+      panel.style.visibility = 'hidden';
+      panel.style.width      = '0';
+      panel.style.height     = '0';
+      panel.style.top        = '0';
+      panel.style.left       = '0';
+      panel.scrollTop        = 0;
+      if (progress) progress.style.width = '0%';
+    }, 820);
+  }
+
+  // ── Scroll reveal observer ──
+  function setupReveal(panel) {
+    const sections = panel.querySelectorAll('.cs-section');
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('cs-visible');
+          obs.unobserve(e.target);
+        }
+      });
+    }, { root: panel, threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+    sections.forEach(s => obs.observe(s));
+  }
+
+  // ── Register a case study ──
   function register(cardId, overlayId) {
     const card    = document.getElementById(cardId);
     const overlay = document.getElementById(overlayId);
@@ -17,100 +102,61 @@
     const panel    = overlay.querySelector('.cs-panel');
     const closeBtn = overlay.querySelector('.cs-close-btn');
     const backdrop = overlay.querySelector('.cs-backdrop');
-    const progress = overlay.nextElementSibling; // .cs-progress-bar
+    const progress = overlay.nextElementSibling;
 
-    const study = { card, overlay, panel, closeBtn, backdrop, progress };
+    const study = { card, overlay, panel, closeBtn, backdrop, progress, overlayId };
     studies.push(study);
+    studyMap[overlayId] = study;
 
-    // ── Scroll reveal inside panel ──
-    function setupReveal() {
-      const sections = panel.querySelectorAll('.cs-section');
-      const obs = new IntersectionObserver((entries) => {
-        entries.forEach(e => {
-          if (e.isIntersecting) {
-            e.target.classList.add('cs-visible');
-            obs.unobserve(e.target);
-          }
-        });
-      }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
-      sections.forEach(s => obs.observe(s));
-    }
-
-    // ── Reading progress ──
+    // Reading progress bar
     panel.addEventListener('scroll', () => {
       if (!progress) return;
       const sh = panel.scrollHeight - panel.clientHeight;
-      const pct = sh > 0 ? (panel.scrollTop / sh) * 100 : 0;
-      progress.style.width = pct + '%';
+      progress.style.width = sh > 0 ? (panel.scrollTop / sh) * 100 + '%' : '0%';
     });
 
-    // ── Open ──
-    function open() {
-      const rect = card.getBoundingClientRect();
+    // Card click → open
+    card.addEventListener('click', () => openOverlay(overlayId));
 
-      // Position panel at card location BEFORE making it visible
-      panel.style.transition    = 'none';
-      panel.style.visibility    = 'visible';
-      panel.style.top           = rect.top    + 'px';
-      panel.style.left          = rect.left   + 'px';
-      panel.style.width         = rect.width  + 'px';
-      panel.style.height        = rect.height + 'px';
-      panel.style.borderRadius  = '20px';
-      panel.scrollTop           = 0;
+    // Close button
+    if (closeBtn) closeBtn.addEventListener('click', () => closeOverlay(overlayId));
 
-      overlay.classList.add('cs-open');
-      document.body.style.overflow = 'hidden';
+    // Backdrop click
+    if (backdrop) backdrop.addEventListener('click', () => closeOverlay(overlayId));
 
-      // Force reflow, then animate to fullscreen
-      panel.offsetHeight;
-      panel.style.transition    = '';
-      panel.style.top           = '0';
-      panel.style.left          = '0';
-      panel.style.width         = '100%';
-      panel.style.height        = '100%';
-      panel.style.borderRadius  = '0';
-
-      setTimeout(setupReveal, 680);
-    }
-
-    // ── Close ──
-    function close() {
-      panel.querySelectorAll('.cs-section').forEach(s => s.classList.remove('cs-visible'));
-
-      const rect = card.getBoundingClientRect();
-      panel.style.top           = rect.top    + 'px';
-      panel.style.left          = rect.left   + 'px';
-      panel.style.width         = rect.width  + 'px';
-      panel.style.height        = rect.height + 'px';
-      panel.style.borderRadius  = '20px';
-
-      overlay.classList.remove('cs-open');
-      document.body.style.overflow = '';
-
-      // After animation completes — fully hide the panel
-      setTimeout(() => {
+    // "Next project" links inside this panel
+    panel.querySelectorAll('[data-open]').forEach(el => {
+      el.addEventListener('click', () => {
+        const targetId = el.dataset.open;
+        // Close current WITHOUT animation (instant), then open target
+        overlay.classList.remove('cs-open');
         panel.style.visibility = 'hidden';
-        panel.style.width      = '0';
-        panel.style.height     = '0';
-        panel.style.top        = '0';
-        panel.style.left       = '0';
-        panel.scrollTop        = 0;
-        if (progress) progress.style.width = '0%';
-      }, 800);
-    }
+        panel.style.width = '0'; panel.style.height = '0';
+        panel.scrollTop = 0;
+        document.body.style.overflow = '';
+        // Small delay so the DOM settles, then open target
+        requestAnimationFrame(() => requestAnimationFrame(() => openOverlay(targetId)));
+      });
+    });
 
-    card.addEventListener('click', open);
-    if (closeBtn) closeBtn.addEventListener('click', close);
-    if (backdrop) backdrop.addEventListener('click', close);
-
-    study.close = close;
+    // "Back to all projects" — close and scroll page to top
+    const backTop   = panel.querySelector('#cs-back-to-top');
+    const backArrow = panel.querySelector('#cs-back-arrow');
+    [backTop, backArrow].forEach(el => {
+      if (!el) return;
+      el.addEventListener('click', () => {
+        closeOverlay(overlayId);
+        // After close animation, scroll main page back to top
+        setTimeout(() => window.scrollTo({ top: 0, behavior: 'smooth' }), 200);
+      });
+    });
   }
 
-  // ── Global ESC handler ──
+  // ── Global ESC ──
   document.addEventListener('keydown', (e) => {
     if (e.key !== 'Escape') return;
     studies.forEach(s => {
-      if (s.overlay.classList.contains('cs-open') && s.close) s.close();
+      if (s.overlay.classList.contains('cs-open')) closeOverlay(s.overlayId);
     });
   });
 
