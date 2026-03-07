@@ -118,9 +118,16 @@ document.addEventListener('DOMContentLoaded', function() {
     
     let currentPhraseIndex = 0;
     
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
     function rotatePhrase() {
         const textElement = document.getElementById('rotatingText');
-        if (textElement) {
+        if (!textElement) return;
+        if (prefersReducedMotion) {
+            // Instant swap — no fade, no movement
+            currentPhraseIndex = (currentPhraseIndex + 1) % rotatingPhrases.length;
+            textElement.textContent = rotatingPhrases[currentPhraseIndex];
+        } else {
             textElement.style.opacity = '0';
             textElement.style.transform = 'translateY(-10px)';
             setTimeout(() => {

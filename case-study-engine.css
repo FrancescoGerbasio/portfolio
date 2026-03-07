@@ -983,3 +983,48 @@ body.cs-is-open .mobile-menu {
     opacity: 1;
   }
 }
+/* ===================================
+   PREFERS-REDUCED-MOTION — case studies
+   =================================== */
+
+@media (prefers-reduced-motion: reduce) {
+
+    /* ── Orb breathe: freeze in place ───────────────────────────── */
+    .cs-orb {
+        animation: none !important;
+    }
+
+    /* ── Scroll cue pulse: hide (decorative only) ───────────────── */
+    .cs-scroll-cue {
+        animation: none !important;
+        opacity: 0 !important;
+    }
+
+    /* ── Panel entry animations: instant ────────────────────────── */
+    .cs-hero-text,
+    .cs-phones,
+    .cs-tablets,
+    .cs-scroll-cue {
+        animation: none !important;
+        opacity: 1 !important;
+        transform: none !important;
+    }
+
+    /* ── Overlay open/close: instant ────────────────────────────── */
+    .cs-overlay,
+    .cs-panel,
+    .cs-backdrop {
+        transition: none !important;
+    }
+
+    /* ── Progress bar: instant fill ─────────────────────────────── */
+    .cs-progress-bar {
+        transition: none !important;
+    }
+
+    /* ── Hover on showcase phones: no scale ─────────────────────── */
+    .cs-showcase-phone:hover,
+    .cs-showcase-tablet:hover {
+        transform: none !important;
+    }
+}

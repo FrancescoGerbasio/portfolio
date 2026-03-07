@@ -3106,3 +3106,119 @@ html {
 :focus:not(:focus-visible) {
     outline: none;
 }
+
+/* ===================================
+   PREFERS-REDUCED-MOTION (WCAG 2.3)
+   Only users who explicitly opt in at
+   OS level are affected. Everyone else
+   sees the full animated experience.
+   =================================== */
+
+@media (prefers-reduced-motion: reduce) {
+
+    /* ── Global: kill all durations ─────────────────────────────── */
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+
+    /* ── Scroll-reveal: appear instantly, no translateY travel ───── */
+    .project-card {
+        opacity: 1 !important;
+        transform: none !important;
+        transition: none !important;
+    }
+
+    /* ── Hero phrase rotation: no fade, just swap ────────────────── */
+    .hero-subtitle {
+        transition: none !important;
+    }
+
+    /* ── NDA particles: stop all particle animation ─────────────── */
+    .particle {
+        animation: none !important;
+    }
+
+    /* ── Wave bars (music player): freeze at mid height ─────────── */
+    .song-card-waveform span {
+        animation: none !important;
+        height: 50% !important;
+    }
+
+    /* ── Artist cards: reveal only, no float ────────────────────── */
+    .artist-card {
+        animation: artistReveal 0.01ms both !important;
+    }
+
+    /* ── Pulse dot (location widget): static ────────────────────── */
+    .pulse-dot,
+    .pulse-ring {
+        animation: none !important;
+    }
+
+    /* ── Spinner (loading states): static ring ───────────────────── */
+    .spinner {
+        animation: none !important;
+        border-top-color: var(--color-text);
+    }
+
+    /* ── Navigation dot slide: instant ──────────────────────────── */
+    .nav-dot::after {
+        animation: none !important;
+        opacity: 1;
+    }
+
+    /* ── Card reveal (travel/gaming): instant appear ─────────────── */
+    .masonry-item,
+    .game-card,
+    .travel-card {
+        animation: none !important;
+        opacity: 1 !important;
+        transform: none !important;
+    }
+
+    /* ── Mobile menu + overlay: instant open/close ───────────────── */
+    .mobile-menu,
+    .nda-modal,
+    .cs-overlay,
+    .cv-picker,
+    .cv-picker-backdrop {
+        transition: none !important;
+    }
+
+    /* ── Skill tags in about: instant appear ─────────────────────── */
+    .skill-tag {
+        transition: none !important;
+        transform: none !important;
+        opacity: 1 !important;
+    }
+
+    /* ── About page scroll reveals: instant ─────────────────────── */
+    .scroll-reveal,
+    .stat-item,
+    .value-item,
+    .timeline-item,
+    .bento-card {
+        opacity: 1 !important;
+        transform: none !important;
+        transition: none !important;
+    }
+
+    /* ── Skip-nav: no transition needed ─────────────────────────── */
+    .skip-nav {
+        transition: none !important;
+    }
+
+    /* ── Hover transforms: keep colour changes, remove movement ──── */
+    .project-card:hover,
+    .cs-card:hover .cs-card-thumb img,
+    .skill-tag:hover,
+    .btn-primary:hover,
+    .btn-secondary:hover {
+        transform: none !important;
+    }
+}
