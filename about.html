@@ -1,19 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-        <meta charset="UTF-8">
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>About — Francesco Gerbasio</title>
-    <meta name="description" content="Portfolio of Francesco Gerbasio, UX/UI Designer based in Madrid.">
-
-    <!-- Open Graph -->
+    <meta name="description" content="Francesco Gerbasio — UX/UI designer and Localization QA specialist from Abruzzo, now based in Madrid. The story, skills, and values behind the work.">
     <meta property="og:title" content="About — Francesco Gerbasio">
-    <meta property="og:description" content="UX/UI Designer based in Madrid. Case studies in mobile, kiosk, and travel app design.">
+    <meta property="og:description" content="UX/UI designer and Localization QA specialist. The story behind the work.">
     <meta property="og:image" content="Assets/Images/og-image.webp">
     <meta property="og:type" content="website">
     <meta name="twitter:card" content="summary_large_image">
-
-    <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="Assets/Images/favicon.svg">
     <link rel="stylesheet" href="styles.css">
     <style>
@@ -492,7 +488,7 @@
         <a href="index.html#work" class="nav-link">Work</a>
         <a href="fun.html" class="nav-link">Fun</a>
         <a href="about.html" class="nav-link active">About</a>
-        <a href="#" class="nav-link" data-cv-trigger>Resume</a>
+        <a href="index.html#resume" class="nav-link">Resume</a>
     </nav>
 
     <button class="hamburger-menu" id="hamburgerBtn">
@@ -733,7 +729,9 @@
 
     </div>
 
+
     <script src="location-config.js"></script>
+    <script src="cv-picker.js"></script>
     <script>
     document.addEventListener('DOMContentLoaded', function () {
 
@@ -859,17 +857,14 @@
     ═══════════════════════════════════════════════════ -->
     
     <!-- Backdrop (mobile sheet / desktop close target) -->
-    <!-- ═══════════════════════════════════════════════════
-         CV LANGUAGE PICKER
-    ═══════════════════════════════════════════════════ -->
-
-    <!-- Backdrop (mobile sheet / desktop close target) -->
     <div class="cv-picker-backdrop" id="cvPickerBackdrop"></div>
     
     <!-- Popover (desktop) / Bottom sheet (mobile) -->
     <div class="cv-picker" id="cvPicker" role="dialog" aria-label="Choose CV language" aria-modal="true">
     
+        <!-- Desktop: drag handle visible on mobile only -->
         <div class="cv-picker-handle"></div>
+    
         <p class="cv-picker-label">Open CV in</p>
     
         <div class="cv-picker-options">
@@ -877,30 +872,28 @@
             <a class="cv-picker-option" id="cvOptEn"
                href="Assets/CV/Francesco_Gerbasio_CV_EN.pdf"
                target="_blank" rel="noopener">
-                <span class="cv-picker-flag cv-picker-flag--en">EN</span>
+                <span class="cv-picker-flag">🇬🇧</span>
                 <span class="cv-picker-info">
                     <span class="cv-picker-lang">English</span>
                     <span class="cv-picker-sub">EN version</span>
                 </span>
-                <img src="Assets/Images/Arrow.svg" alt="" class="cv-picker-arrow" aria-hidden="true">
+                <span class="cv-picker-arrow">↗</span>
             </a>
     
             <a class="cv-picker-option" id="cvOptEs"
                href="Assets/CV/Francesco_Gerbasio_CV_ES.pdf"
                target="_blank" rel="noopener">
-                <span class="cv-picker-flag cv-picker-flag--es">ES</span>
+                <span class="cv-picker-flag">🇪🇸</span>
                 <span class="cv-picker-info">
                     <span class="cv-picker-lang">Español</span>
                     <span class="cv-picker-sub">Versión ES</span>
                 </span>
-                <img src="Assets/Images/Arrow.svg" alt="" class="cv-picker-arrow" aria-hidden="true">
+                <span class="cv-picker-arrow">↗</span>
             </a>
     
         </div>
     
     </div>
 
-    <script src="cv-picker.js"></script>
-    
 </body>
 </html>
