@@ -750,6 +750,30 @@
     <div class="cs-progress-bar" style="background:#f77f00;"></div>
 
 
+    <script src="location-config.js"></script>
+    <script src="script.js"></script>
+    <script src="case-study-engine.js"></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        CaseStudy.register('card-callao',        'cs-callao');
+        CaseStudy.register('card-quickcheckout', 'cs-quickcheckout');
+        CaseStudy.register('card-abruzzo',       'cs-abruzzo');
+        CaseStudy.register('card-dicarlobus',    'cs-dicarlobus');
+
+        // Keyboard support for cs-cards
+        document.querySelectorAll('.cs-card').forEach(card => {
+            card.addEventListener('keydown', e => {
+                if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); card.click(); }
+            });
+        });
+    });
+    </script>
+
+    <!-- ═══════════════════════════════════════════════════
+         CV LANGUAGE PICKER
+    ═══════════════════════════════════════════════════ -->
+
+    <!-- Backdrop (mobile sheet / desktop close target) -->
     <div class="cv-picker-backdrop" id="cvPickerBackdrop"></div>
     
     <!-- Popover (desktop) / Bottom sheet (mobile) -->
