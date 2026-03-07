@@ -67,11 +67,11 @@
                 
                 <div class="hero-info">
                     <div class="info-block">
-                        <h3>Currently</h3>
+                        <p class="info-label">Currently</p>
                         <p>Localization QA - Universally Speaking</p>
                     </div>
                     <div class="info-block">
-                        <h3>Previously at</h3>
+                        <p class="info-label">Previously at</p>
                         <p>UX/UI Designer - Freelancer</p>
                     </div>
                 </div>
@@ -96,7 +96,7 @@
                         </div>
                     </div>
                 </div>
-                <h3 class="sidebar-title">Nice to meet ya!</h3>
+                <p class="sidebar-title">Nice to meet ya!</p>
                 <p class="sidebar-bio">UX/UI designer by day, quality-obsessed by habit. <br>Turning early ideas into polished interfaces and catching the details that shouldn't ship.</p>
                 <div class="social-links">
                     <a href="https://www.linkedin.com/in/francesco-gerbasio" target="_blank" rel="noopener noreferrer" class="social-icon" aria-label="LinkedIn profile (opens in new tab)">
@@ -116,11 +116,11 @@
             <div class="projects-grid">
                 <!-- Red Dead Redemption Project - NDA Protected -->
                 <div class="project-card nda-protected" data-project-id="red-dead">
-                    <a href="https://www.rockstargames.com/reddeadredemption" target="_blank" rel="noopener noreferrer" class="project-image-link nda-link" aria-label="Red Dead Redemption — NDA protected project (opens in new tab)">
+                    <a href="https://www.rockstargames.com/reddeadredemption" target="_blank" rel="noopener noreferrer" class="project-image-link nda-link" aria-label="Red Dead Redemption — NDA protected project (opens in new tab)" tabindex="-1" aria-hidden="true">
                         <div class="project-image">
                             <img src="Assets/Images/RedDeadRedemption.webp" alt="Red Dead Redemption">
                             <!-- NDA Lock Overlay -->
-                            <div class="nda-overlay">
+                            <div class="nda-overlay" role="button" tabindex="0" aria-label="Unlock NDA protected project">
                                 <div class="nda-lock-icon">🔒</div>
                                 <div class="nda-text">NDA Protected Project</div>
                                 <div class="nda-subtext">Click to unlock</div>
@@ -319,7 +319,7 @@
         </section>
     </div>
     <!-- NDA Password Modal -->
-    <div class="nda-modal" id="ndaModal">
+    <div class="nda-modal" id="ndaModal" aria-hidden="true">
         <div class="nda-modal-content">
             <h2 class="nda-modal-title">🔒 Protected Project</h2>
             <p class="nda-modal-description">This project is under NDA. Please enter the password provided to view the full details.</p>

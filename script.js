@@ -231,6 +231,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const ndaSubmitBtn = document.getElementById('ndaSubmitBtn');
     const ndaCancelBtn = document.getElementById('ndaCancelBtn');
     const ndaErrorMessage = document.getElementById('ndaErrorMessage');
+    let ndaTriggerElement = null;
     let currentNdaProject = null;
     
     if (ndaPasswordToggle) {
@@ -251,12 +252,23 @@ document.addEventListener('DOMContentLoaded', function() {
             e.preventDefault();
             e.stopPropagation();
             currentNdaProject = this.closest('.project-card');
+            ndaTriggerElement = this;
             openNdaModal();
+        });
+        overlay.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                currentNdaProject = this.closest('.project-card');
+                ndaTriggerElement = this;
+                openNdaModal();
+            }
         });
     });
     
     function openNdaModal() {
         ndaModal.classList.add('active');
+        ndaModal.removeAttribute('aria-hidden');
+        document.querySelector('.container').setAttribute('aria-hidden', 'true');
         ndaPasswordInput.value = '';
         ndaPasswordInput.setAttribute('type', 'password');
         ndaPasswordToggle.innerHTML = `<svg class="eye-open" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>`;
@@ -267,11 +279,34 @@ document.addEventListener('DOMContentLoaded', function() {
     
     function closeNdaModal() {
         ndaModal.classList.remove('active');
+        ndaModal.setAttribute('aria-hidden', 'true');
+        document.querySelector('.container').removeAttribute('aria-hidden');
+        if (ndaTriggerElement) {
+            ndaTriggerElement.focus();
+            ndaTriggerElement = null;
+        }
         currentNdaProject = null;
     }
     
     ndaCancelBtn.addEventListener('click', closeNdaModal);
     ndaModal.addEventListener('click', function(e) { if (e.target === ndaModal) closeNdaModal(); });
+
+    // Focus trap inside NDA modal
+    ndaModal.addEventListener('keydown', function(e) {
+        if (!ndaModal.classList.contains('active')) return;
+        if (e.key === 'Escape') { closeNdaModal(); return; }
+        if (e.key !== 'Tab') return;
+        const focusable = Array.from(ndaModal.querySelectorAll(
+            'button, input, [tabindex]:not([tabindex="-1"])'
+        )).filter(el => !el.disabled);
+        const first = focusable[0];
+        const last  = focusable[focusable.length - 1];
+        if (e.shiftKey) {
+            if (document.activeElement === first) { e.preventDefault(); last.focus(); }
+        } else {
+            if (document.activeElement === last)  { e.preventDefault(); first.focus(); }
+        }
+    });
     
     async function submitPassword() {
         const password = ndaPasswordInput.value;
@@ -291,9 +326,18 @@ document.addEventListener('DOMContentLoaded', function() {
         if (!projectCard) return;
         projectCard.classList.add('unlocked');
         const link = projectCard.querySelector('.project-image-link.nda-link');
-        if (link) link.classList.add('unlocked');
+        if (link) {
+            link.classList.add('unlocked');
+            link.removeAttribute('tabindex');
+            link.removeAttribute('aria-hidden');
+        }
         const overlay = projectCard.querySelector('.nda-overlay');
-        if (overlay) overlay.classList.add('hidden');
+        if (overlay) {
+            overlay.classList.add('hidden');
+            overlay.setAttribute('tabindex', '-1');
+            overlay.removeAttribute('role');
+            overlay.removeAttribute('aria-label');
+        }
         setTimeout(() => {
             projectCard.querySelectorAll('.particle-container').forEach(c => c.remove());
         }, 1000);

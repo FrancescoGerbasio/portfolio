@@ -20,6 +20,9 @@
     const { card, overlay, panel, progress } = study;
     const rect = card.getBoundingClientRect();
 
+    // Store trigger so we can return focus on close
+    study.triggerEl = document.activeElement;
+
     // Reset sections before opening so reveal fires fresh
     panel.querySelectorAll('.cs-section').forEach(s => s.classList.remove('cs-visible'));
     panel.scrollTop = 0;
@@ -34,8 +37,12 @@
     panel.style.borderRadius = '20px';
 
     overlay.classList.add('cs-open');
+    overlay.removeAttribute('aria-hidden');
     document.body.style.overflow = 'hidden';
     document.body.classList.add('cs-is-open');
+
+    // Hide main page content from AT
+    document.querySelector('.container')?.setAttribute('aria-hidden', 'true');
 
     // Force reflow then animate to fullscreen
     panel.offsetHeight;
@@ -46,8 +53,12 @@
     panel.style.height       = '100%';
     panel.style.borderRadius = '0';
 
-    // Set up scroll reveal after animation lands
-    setTimeout(() => setupReveal(panel), 700);
+    // Set up scroll reveal + move focus to close button after animation lands
+    setTimeout(() => {
+      setupReveal(panel);
+      const closeBtn = overlay.querySelector('.cs-close-btn');
+      if (closeBtn) closeBtn.focus();
+    }, 700);
   }
 
   // ── Core close function ──
@@ -67,8 +78,16 @@
     panel.style.borderRadius = '20px';
 
     overlay.classList.remove('cs-open');
+    overlay.setAttribute('aria-hidden', 'true');
     document.body.style.overflow = '';
     document.body.classList.remove('cs-is-open');
+
+    // Restore main page to AT and return focus to card that opened this
+    document.querySelector('.container')?.removeAttribute('aria-hidden');
+    if (study.triggerEl) {
+      study.triggerEl.focus();
+      study.triggerEl = null;
+    }
 
     setTimeout(() => {
       panel.style.visibility = 'hidden';
@@ -117,8 +136,28 @@
       progress.style.width = sh > 0 ? (panel.scrollTop / sh) * 100 + '%' : '0%';
     });
 
-    // Card click → open
+    // Card click + keyboard → open
     card.addEventListener('click', () => openOverlay(overlayId));
+    card.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openOverlay(overlayId); }
+    });
+
+    // Focus trap inside panel
+    panel.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') { closeOverlay(overlayId); return; }
+      if (e.key !== 'Tab') return;
+      const focusable = Array.from(panel.querySelectorAll(
+        'a[href], button, input, [tabindex]:not([tabindex="-1"])'
+      )).filter(el => !el.disabled && el.offsetParent !== null);
+      if (!focusable.length) return;
+      const first = focusable[0];
+      const last  = focusable[focusable.length - 1];
+      if (e.shiftKey) {
+        if (document.activeElement === first) { e.preventDefault(); last.focus(); }
+      } else {
+        if (document.activeElement === last)  { e.preventDefault(); first.focus(); }
+      }
+    });
 
     // Close button
     if (closeBtn) closeBtn.addEventListener('click', () => closeOverlay(overlayId));
@@ -162,6 +201,9 @@
       if (s.overlay.classList.contains('cs-open')) closeOverlay(s.overlayId);
     });
   });
+
+  // Mark all overlays hidden from AT on init; openOverlay removes it
+  document.querySelectorAll('.cs-overlay').forEach(o => o.setAttribute('aria-hidden', 'true'));
 
   window.CaseStudy = { register };
 })();
