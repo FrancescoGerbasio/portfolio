@@ -14,8 +14,10 @@ document.addEventListener('DOMContentLoaded', function() {
     if (hamburgerBtn) {
         hamburgerBtn.addEventListener('click', function(e) {
             e.stopPropagation();
+            const isOpen = mobileMenu.classList.toggle('active');
             this.classList.toggle('active');
-            mobileMenu.classList.toggle('active');
+            this.setAttribute('aria-expanded', isOpen);
+            this.setAttribute('aria-label', isOpen ? 'Close navigation menu' : 'Open navigation menu');
         });
     }
     
@@ -24,6 +26,8 @@ document.addEventListener('DOMContentLoaded', function() {
             if (!mobileMenu.contains(e.target) && !hamburgerBtn.contains(e.target)) {
                 hamburgerBtn.classList.remove('active');
                 mobileMenu.classList.remove('active');
+                hamburgerBtn.setAttribute('aria-expanded', 'false');
+                hamburgerBtn.setAttribute('aria-label', 'Open navigation menu');
             }
         }
     });
@@ -32,6 +36,8 @@ document.addEventListener('DOMContentLoaded', function() {
         link.addEventListener('click', function() {
             hamburgerBtn.classList.remove('active');
             mobileMenu.classList.remove('active');
+            hamburgerBtn.setAttribute('aria-expanded', 'false');
+            hamburgerBtn.setAttribute('aria-label', 'Open navigation menu');
         });
     });
     
@@ -373,14 +379,9 @@ document.addEventListener('DOMContentLoaded', function() {
     
     if (accordionTrigger) {
         accordionTrigger.addEventListener('click', function() {
-            const isOpen = accordionContent.classList.contains('open');
-            if (isOpen) {
-                accordionContent.classList.remove('open');
-                accordionTrigger.classList.remove('active');
-            } else {
-                accordionContent.classList.add('open');
-                accordionTrigger.classList.add('active');
-            }
+            const isOpen = accordionContent.classList.toggle('open');
+            accordionTrigger.classList.toggle('active', isOpen);
+            accordionTrigger.setAttribute('aria-expanded', isOpen);
         });
     }
     

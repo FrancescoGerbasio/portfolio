@@ -1200,7 +1200,6 @@ a {
     .hero {
         flex-direction: column;
         margin-top: 3%;
-        margin-bottom: 60px;
     }
     
     .hero::after {
@@ -1210,34 +1209,7 @@ a {
     .hero-content {
         max-width: 100%;
         padding-right: 0;
-        margin-bottom: 0;
-    }
-
-    .hero-title {
-        font-size: clamp(36px, 5vw, 52px);
-    }
-
-    .phrase-container {
-        height: auto;
-        min-height: 120px;
-        margin-top: 12px;
-        margin-bottom: 32px;
-    }
-
-    .hero-subtitle {
-        font-size: clamp(36px, 5vw, 52px);
-        position: relative;
-    }
-
-    .hero-info {
-        flex-direction: row;
-        gap: clamp(32px, 5vw, 80px);
-        margin-bottom: 48px;
-    }
-
-    .info-block h3,
-    .info-block p {
-        font-size: clamp(16px, 1.8vw, 22px);
+        margin-bottom: 40px;
     }
     
     .sidebar::before {
@@ -3022,4 +2994,116 @@ html {
     .cv-picker.active .cv-picker-option:hover {
         transform: none;
     }
+}
+
+/* ===================================
+   ACCESSIBILITY — WCAG 2.1 / 2.2
+   =================================== */
+
+/* Screen-reader only utility */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+/* Skip navigation link (2.4.1) */
+.skip-nav {
+    position: absolute;
+    top: -100%;
+    left: 16px;
+    z-index: 10000;
+    padding: 12px 20px;
+    background: var(--color-text);
+    color: var(--color-bg);
+    font-size: 14px;
+    font-weight: 600;
+    font-family: var(--font-body);
+    border-radius: 0 0 8px 8px;
+    text-decoration: none;
+    transition: top 0.2s ease;
+}
+.skip-nav:focus {
+    top: 0;
+}
+
+/* Global focus-visible ring (2.4.7 / 2.4.11) */
+:focus-visible {
+    outline: 2px solid var(--color-text);
+    outline-offset: 3px;
+    border-radius: 4px;
+}
+
+/* Navigation links focus */
+.nav-link:focus-visible {
+    outline: 2px solid var(--color-text);
+    outline-offset: 4px;
+    border-radius: 4px;
+}
+
+/* Hamburger button focus */
+.hamburger-menu:focus-visible {
+    outline: 2px solid var(--color-text);
+    outline-offset: 4px;
+    border-radius: 8px;
+}
+
+/* Accordion focus */
+.accordion-trigger:focus-visible {
+    outline: 2px solid var(--color-text);
+    outline-offset: 4px;
+    border-radius: 8px;
+}
+
+/* Project list item links focus */
+.project-list-item:focus-visible {
+    outline: 2px solid var(--color-text);
+    outline-offset: 4px;
+    border-radius: 8px;
+}
+
+/* Social icon links focus */
+.social-icon:focus-visible {
+    outline: 2px solid var(--color-text);
+    outline-offset: 4px;
+    border-radius: 4px;
+}
+
+/* CS overlay close button focus */
+.cs-close-btn:focus-visible {
+    outline: 2px solid #fff;
+    outline-offset: 4px;
+    border-radius: 50%;
+}
+
+/* CS proto link focus */
+.cs-proto-link:focus-visible {
+    outline: 2px solid currentColor;
+    outline-offset: 4px;
+    border-radius: 4px;
+}
+
+/* NDA modal buttons focus */
+.nda-btn:focus-visible {
+    outline: 2px solid var(--color-text);
+    outline-offset: 3px;
+    border-radius: 100px;
+}
+
+/* CV picker options focus */
+.cv-picker-option:focus-visible {
+    outline: 2px solid var(--color-text);
+    outline-offset: 3px;
+    border-radius: 12px;
+}
+
+/* Remove default outline only where we have custom focus-visible */
+:focus:not(:focus-visible) {
+    outline: none;
 }

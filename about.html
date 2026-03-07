@@ -4,13 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>About — Francesco Gerbasio</title>
-    <meta name="description" content="Francesco Gerbasio — UX/UI designer and Localization QA specialist from Abruzzo, now based in Madrid. The story, skills, and values behind the work.">
-    <meta property="og:title" content="About — Francesco Gerbasio">
-    <meta property="og:description" content="UX/UI designer and Localization QA specialist. The story behind the work.">
-    <meta property="og:image" content="Assets/Images/og-image.webp">
-    <meta property="og:type" content="website">
-    <meta name="twitter:card" content="summary_large_image">
-    <link rel="icon" type="image/svg+xml" href="Assets/Images/favicon.svg">
     <link rel="stylesheet" href="styles.css">
     <style>
         @keyframes fadeUp {
@@ -483,6 +476,7 @@
     </style>
 </head>
 <body>
+    <a href="#main-content" class="skip-nav">Skip to main content</a>
 
     <nav class="navigation" id="mainNav">
         <a href="index.html#work" class="nav-link">Work</a>
@@ -491,20 +485,20 @@
         <a href="index.html#resume" class="nav-link">Resume</a>
     </nav>
 
-    <button class="hamburger-menu" id="hamburgerBtn">
+    <button class="hamburger-menu" id="hamburgerBtn" aria-label="Open navigation menu" aria-expanded="false" aria-controls="mobileMenu">
         <span></span><span></span><span></span>
     </button>
 
     <div class="hamburger-fade-zone"></div>
 
-    <div class="mobile-menu" id="mobileMenu">
+    <div class="mobile-menu" id="mobileMenu" role="navigation" aria-label="Mobile navigation">
         <a href="index.html#work" class="nav-link">Work</a>
         <a href="fun.html" class="nav-link">Fun</a>
         <a href="about.html" class="nav-link active">About</a>
         <a href="#" class="nav-link" data-cv-trigger>Resume</a>
     </div>
 
-    <div class="container">
+    <div class="container" id="main-content" tabindex="-1">
 
         <section class="about-hero">
             <p class="about-eyebrow">About me</p>
@@ -722,8 +716,8 @@
         <div class="about-cta scroll-reveal" id="ctaSection">
             <p class="cta-text">Want to work together?<br><span>Let's talk.</span></p>
             <div class="cta-buttons">
-                <a href="https://www.linkedin.com/in/francesco-gerbasio" target="_blank" class="btn-primary">LinkedIn →</a>
-                <a href="mailto:francesco.gerbasio00@gmail.com" class="btn-secondary">Email me</a>
+                <a href="https://www.linkedin.com/in/francesco-gerbasio" target="_blank" rel="noopener noreferrer" class="btn-primary">LinkedIn →</a>
+                <a href="mailto:francesco.gerbasio00@gmail.com" class="btn-secondary" aria-label="Send email to Francesco">Email me</a>
             </div>
         </div>
 

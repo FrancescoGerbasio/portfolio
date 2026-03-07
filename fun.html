@@ -3,17 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fun — Francesco Gerbasio</title>
-    <meta name="description" content="Francesco Gerbasio — the side of the portfolio that's just for fun. Travel, music production, and games.">
-    <meta property="og:title" content="Fun — Francesco Gerbasio">
-    <meta property="og:description" content="Travel stories, music, and games. The human behind the designer.">
-    <meta property="og:image" content="Assets/Images/og-image.webp">
-    <meta property="og:type" content="website">
-    <meta name="twitter:card" content="summary_large_image">
-    <link rel="icon" type="image/svg+xml" href="Assets/Images/favicon.svg">
+    <title>Fun - Francesco Gerbasio</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+    <a href="#main-content" class="skip-nav">Skip to main content</a>
     <!-- Fixed Navigation -->
     <nav class="navigation">
         <a href="index.html#work" class="nav-link">Work</a>
@@ -23,7 +17,7 @@
     </nav>
 
     <!-- Hamburger Button -->
-    <button class="hamburger-menu" id="hamburgerBtn">
+    <button class="hamburger-menu" id="hamburgerBtn" aria-label="Open navigation menu" aria-expanded="false" aria-controls="mobileMenu">
         <span></span>
         <span></span>
         <span></span>
@@ -33,7 +27,7 @@
     <div class="hamburger-fade-zone"></div>
 
     <!-- Mobile Menu Overlay -->
-    <div class="mobile-menu" id="mobileMenu">
+    <div class="mobile-menu" id="mobileMenu" role="navigation" aria-label="Mobile navigation">
         <a href="index.html#work" class="nav-link">Work</a>
         <a href="fun.html" class="nav-link active">Fun</a>
         <a href="about.html" class="nav-link">About</a>
@@ -41,7 +35,7 @@
     </div>
 
     <!-- Main Content -->
-    <div class="container">
+    <div class="container" id="main-content" tabindex="-1">
         <!-- Category Navigation at Top Right -->
         <div class="category-nav-top">
             <button class="category-btn active" data-category="travel">Travel</button>
