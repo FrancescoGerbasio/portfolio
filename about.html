@@ -725,6 +725,7 @@
     <div style="position:fixed;bottom:10px;right:10px;font-size:10px;color:rgba(0,0,0,0.3);font-family:monospace;z-index:9999;">v1.0.0</div>
 
     <script src="location-config.js"></script>
+    <script src="cv-picker.js"></script>
     <script>
     document.addEventListener('DOMContentLoaded', function () {
 
@@ -844,6 +845,49 @@
 
     });
     </script>
+
+ <!-- ═══════════════════════════════════════════════════
+         CV LANGUAGE PICKER
+    ═══════════════════════════════════════════════════ -->
+    
+    <!-- Backdrop (mobile sheet / desktop close target) -->
+    <div class="cv-picker-backdrop" id="cvPickerBackdrop"></div>
+    
+    <!-- Popover (desktop) / Bottom sheet (mobile) -->
+    <div class="cv-picker" id="cvPicker" role="dialog" aria-label="Choose CV language" aria-modal="true">
+    
+        <!-- Desktop: drag handle visible on mobile only -->
+        <div class="cv-picker-handle"></div>
+    
+        <p class="cv-picker-label">Open CV in</p>
+    
+        <div class="cv-picker-options">
+    
+            <a class="cv-picker-option" id="cvOptEn"
+               href="Assets/CV/Francesco_Gerbasio_CV_EN.pdf"
+               target="_blank" rel="noopener">
+                <span class="cv-picker-flag">🇬🇧</span>
+                <span class="cv-picker-info">
+                    <span class="cv-picker-lang">English</span>
+                    <span class="cv-picker-sub">EN version</span>
+                </span>
+                <span class="cv-picker-arrow">↗</span>
+            </a>
+    
+            <a class="cv-picker-option" id="cvOptEs"
+               href="Assets/CV/Francesco_Gerbasio_CV_ES.pdf"
+               target="_blank" rel="noopener">
+                <span class="cv-picker-flag">🇪🇸</span>
+                <span class="cv-picker-info">
+                    <span class="cv-picker-lang">Español</span>
+                    <span class="cv-picker-sub">Versión ES</span>
+                </span>
+                <span class="cv-picker-arrow">↗</span>
+            </a>
+    
+        </div>
+    
+    </div>
 
 </body>
 </html>

@@ -2684,3 +2684,314 @@ html {
         justify-content: center;
     }
 }
+
+/* ===================================
+   CV LANGUAGE PICKER
+   Popover on desktop, bottom sheet on mobile
+   =================================== */
+
+/* ── Backdrop ── */
+.cv-picker-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 490;
+    background: transparent;
+    pointer-events: none;
+    transition: background 0.3s ease;
+}
+
+.cv-picker-backdrop.active {
+    pointer-events: auto;
+}
+
+/* Only darken on mobile (bottom sheet needs it) */
+@media (max-width: 768px) {
+    .cv-picker-backdrop.active {
+        background: rgba(0, 0, 0, 0.35);
+        backdrop-filter: blur(4px);
+        -webkit-backdrop-filter: blur(4px);
+    }
+}
+
+/* ── Shared picker shell ── */
+.cv-picker {
+    position: fixed;
+    z-index: 491;
+    background: rgba(253, 245, 246, 0.88);
+    backdrop-filter: blur(28px) saturate(180%);
+    -webkit-backdrop-filter: blur(28px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.55);
+    box-shadow:
+        0 4px 16px rgba(0, 0, 0, 0.08),
+        0 16px 48px rgba(0, 0, 0, 0.12),
+        inset 0 1px 0 rgba(255, 255, 255, 0.7);
+
+    /* Hidden state */
+    opacity: 0;
+    pointer-events: none;
+    visibility: hidden;
+}
+
+.cv-picker.active {
+    opacity: 1;
+    pointer-events: auto;
+    visibility: visible;
+}
+
+/* ── DESKTOP — popover anchored below nav link ── */
+@media (min-width: 769px) {
+    .cv-picker {
+        top: var(--cv-picker-top, 80px);
+        left: var(--cv-picker-left, 50%);
+        transform: translateX(-50%) translateY(-8px) scale(0.96);
+        transform-origin: top center;
+        width: 220px;
+        border-radius: 16px;
+        padding: 8px;
+        transition:
+            opacity   0.22s cubic-bezier(0.4, 0, 0.2, 1),
+            transform 0.28s cubic-bezier(0.34, 1.3, 0.64, 1),
+            visibility 0s linear 0.22s;
+    }
+
+    .cv-picker.active {
+        transform: translateX(-50%) translateY(0) scale(1);
+        transition:
+            opacity   0.22s cubic-bezier(0.4, 0, 0.2, 1),
+            transform 0.28s cubic-bezier(0.34, 1.3, 0.64, 1),
+            visibility 0s linear 0s;
+    }
+
+    /* Small caret pointing up toward nav */
+    .cv-picker::before {
+        content: '';
+        position: absolute;
+        top: -6px;
+        left: 50%;
+        transform: translateX(-50%) rotate(45deg);
+        width: 10px;
+        height: 10px;
+        background: rgba(253, 245, 246, 0.88);
+        border-left: 1px solid rgba(255, 255, 255, 0.55);
+        border-top: 1px solid rgba(255, 255, 255, 0.55);
+        backdrop-filter: blur(28px);
+        -webkit-backdrop-filter: blur(28px);
+        pointer-events: none;
+    }
+
+    .cv-picker-handle { display: none; }
+}
+
+/* ── MOBILE — bottom sheet ── */
+@media (max-width: 768px) {
+    .cv-picker {
+        bottom: 0;
+        left: 0;
+        right: 0;
+        top: auto;
+        width: 100%;
+        border-radius: 24px 24px 0 0;
+        padding: 12px 16px 32px;
+        transform: translateY(100%);
+        transition:
+            transform 0.38s cubic-bezier(0.34, 1.15, 0.64, 1),
+            opacity   0.2s ease,
+            visibility 0s linear 0.38s;
+        border-bottom: none;
+    }
+
+    .cv-picker.active {
+        transform: translateY(0);
+        transition:
+            transform 0.38s cubic-bezier(0.34, 1.15, 0.64, 1),
+            opacity   0.2s ease,
+            visibility 0s linear 0s;
+    }
+
+    .cv-picker::before { display: none; }
+}
+
+/* ── Drag handle (mobile only) ── */
+.cv-picker-handle {
+    width: 36px;
+    height: 4px;
+    background: rgba(0, 0, 0, 0.18);
+    border-radius: 2px;
+    margin: 0 auto 16px;
+}
+
+/* ── Label ── */
+.cv-picker-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-text-light);
+    padding: 4px 8px 8px;
+}
+
+@media (max-width: 768px) {
+    .cv-picker-label {
+        text-align: center;
+        padding: 0 0 16px;
+        font-size: 12px;
+    }
+}
+
+/* ── Option rows ── */
+.cv-picker-options {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+@media (max-width: 768px) {
+    .cv-picker-options {
+        gap: 8px;
+    }
+}
+
+.cv-picker-option {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 12px;
+    border-radius: 10px;
+    text-decoration: none;
+    color: var(--color-text);
+    transition:
+        background 0.15s ease,
+        transform  0.2s cubic-bezier(0.34, 1.4, 0.64, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.cv-picker-option:hover {
+    background: rgba(0, 0, 0, 0.06);
+    transform: translateX(2px);
+}
+
+.cv-picker-option:active {
+    transform: scale(0.97);
+    background: rgba(0, 0, 0, 0.1);
+}
+
+/* Ripple on click */
+.cv-picker-option::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.06);
+    opacity: 0;
+    border-radius: inherit;
+    transition: opacity 0.15s ease;
+}
+
+.cv-picker-option:active::after {
+    opacity: 1;
+}
+
+@media (max-width: 768px) {
+    .cv-picker-option {
+        padding: 16px;
+        border-radius: 14px;
+        background: rgba(0, 0, 0, 0.03);
+        border: 1px solid rgba(0, 0, 0, 0.06);
+    }
+
+    .cv-picker-option:hover {
+        transform: none;
+        background: rgba(0, 0, 0, 0.06);
+    }
+}
+
+/* ── Flag ── */
+.cv-picker-flag {
+    font-size: 24px;
+    line-height: 1;
+    flex-shrink: 0;
+    filter: drop-shadow(0 1px 2px rgba(0,0,0,0.12));
+    transition: transform 0.2s cubic-bezier(0.34, 1.5, 0.64, 1);
+}
+
+.cv-picker-option:hover .cv-picker-flag {
+    transform: scale(1.15) rotate(-4deg);
+}
+
+/* ── Text block ── */
+.cv-picker-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    flex: 1;
+}
+
+.cv-picker-lang {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--color-text);
+    line-height: 1.2;
+}
+
+.cv-picker-sub {
+    font-size: 11px;
+    font-weight: 400;
+    color: var(--color-text-light);
+}
+
+/* ── Arrow ── */
+.cv-picker-arrow {
+    font-size: 14px;
+    color: var(--color-text-light);
+    opacity: 0;
+    transform: translate(-4px, 4px);
+    transition:
+        opacity   0.15s ease,
+        transform 0.2s cubic-bezier(0.34, 1.4, 0.64, 1);
+    flex-shrink: 0;
+}
+
+.cv-picker-option:hover .cv-picker-arrow {
+    opacity: 1;
+    transform: translate(0, 0);
+}
+
+@media (max-width: 768px) {
+    .cv-picker-arrow {
+        opacity: 0.35;
+        transform: none;
+    }
+}
+
+/* ── Staggered option entrance ── */
+.cv-picker-option {
+    opacity: 0;
+    transform: translateY(6px);
+    transition:
+        opacity    0.2s ease,
+        transform  0.25s cubic-bezier(0.34, 1.3, 0.64, 1),
+        background 0.15s ease;
+}
+
+.cv-picker.active .cv-picker-option:nth-child(1) {
+    opacity: 1;
+    transform: translateY(0);
+    transition-delay: 0.07s;
+}
+
+.cv-picker.active .cv-picker-option:nth-child(2) {
+    opacity: 1;
+    transform: translateY(0);
+    transition-delay: 0.13s;
+}
+
+/* hover override — don't fight the entrance animation */
+.cv-picker.active .cv-picker-option:hover {
+    transform: translateX(2px);
+}
+
+@media (max-width: 768px) {
+    .cv-picker.active .cv-picker-option:hover {
+        transform: none;
+    }
+}
