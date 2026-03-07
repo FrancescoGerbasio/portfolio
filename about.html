@@ -88,8 +88,7 @@
         .about-story p {
             font-size: clamp(15px, 1.3vw, 18px);
             line-height: 1.75;
-            color: var(--color-text);
-            opacity: 0.75;
+            color: oklch(28% 0 0);
             margin: 0 0 20px 0;
         }
         .about-story p:last-child { margin: 0; }
@@ -100,7 +99,7 @@
             aspect-ratio: 4/5;
             border-radius: 20px;
             overflow: hidden;
-            background: rgba(0,0,0,0.06);
+            background: oklch(0% 0 0 / 0.06);
         }
         .about-photo img {
             width: 100%;
@@ -128,7 +127,7 @@
         }
         .stat-item {
             padding: 32px 24px;
-            border-right: 1px solid rgba(0,0,0,0.12);
+            border-right: 1px solid oklch(0% 0 0 / 0.12);
             opacity: 0;
             transform: translateY(16px);
             transition: opacity 0.5s ease, transform 0.5s cubic-bezier(0.34, 1.2, 0.64, 1);
@@ -170,7 +169,7 @@
             font-weight: 500;
             color: var(--color-text);
             background: transparent;
-            border: 1px solid rgba(0,0,0,0.2);
+            border: 1px solid oklch(0% 0 0 / 0.2);
             padding: 6px 14px;
             border-radius: 100px;
             transition: background 0.2s ease, border-color 0.2s ease,
@@ -194,7 +193,7 @@
             gap: 24px;
             margin-bottom: 40px;
             padding-bottom: 20px;
-            border-bottom: 1px solid rgba(0,0,0,0.1);
+            border-bottom: 1px solid oklch(0% 0 0 / 0.1);
         }
         .values-title {
             font-family: var(--font-heading);
@@ -214,7 +213,7 @@
             gap: 32px;
             align-items: start;
             padding: 32px 0;
-            border-bottom: 1px solid rgba(0,0,0,0.07);
+            border-bottom: 1px solid oklch(0% 0 0 / 0.07);
             opacity: 0;
             transform: translateX(-20px);
             transition: opacity 0.5s ease, transform 0.5s cubic-bezier(0.34, 1.2, 0.64, 1);
@@ -245,8 +244,7 @@
         .value-desc {
             font-size: clamp(14px, 1.2vw, 16px);
             line-height: 1.65;
-            color: var(--color-text);
-            opacity: 0.6;
+            color: oklch(40% 0 0);
             margin: 0;
         }
 
@@ -266,7 +264,7 @@
             top: 10px;
             bottom: 10px;
             width: 1px;
-            background: rgba(0,0,0,0.12);
+            background: oklch(0% 0 0 / 0.12);
         }
         @media (max-width: 768px) { .timeline::before { left: 20px; } }
         .timeline-item {
@@ -274,7 +272,7 @@
             grid-template-columns: 80px 1fr;
             gap: 32px;
             padding: 28px 0;
-            border-bottom: 1px solid rgba(0,0,0,0.06);
+            border-bottom: 1px solid oklch(0% 0 0 / 0.06);
             opacity: 0;
             transform: translateY(20px);
             transition: opacity 0.55s ease, transform 0.55s cubic-bezier(0.34, 1.2, 0.64, 1);
@@ -323,8 +321,7 @@
         .timeline-desc {
             font-size: 14px;
             line-height: 1.6;
-            color: var(--color-text);
-            opacity: 0.6;
+            color: oklch(40% 0 0);
             margin: 0;
         }
 
@@ -342,14 +339,14 @@
             gap: 12px;
         }
         .bento-card {
-            background: rgba(0,0,0,0.04);
+            background: oklch(0% 0 0 / 0.04);
             border-radius: 18px;
             padding: 28px;
             opacity: 0;
             transform: scale(0.95);
             transition: opacity 0.5s ease, transform 0.5s cubic-bezier(0.34, 1.2, 0.64, 1), background 0.25s ease;
         }
-        .bento-card:hover { background: rgba(0,0,0,0.07); }
+        .bento-card:hover { background: oklch(0% 0 0 / 0.07); }
         .bento-card.visible { opacity: 1; transform: scale(1); }
         .bento-card:nth-child(1) { grid-column: span 5; }
         .bento-card:nth-child(2) { grid-column: span 7; }
@@ -390,7 +387,7 @@
             font-size: 13px;
             font-weight: 500;
             color: var(--color-text);
-            background: rgba(0,0,0,0.08);
+            background: oklch(0% 0 0 / 0.08);
             padding: 5px 12px;
             border-radius: 100px;
         }
@@ -408,7 +405,7 @@
             justify-content: space-between;
             gap: 40px;
             padding: 60px 0 80px;
-            border-top: 1px solid rgba(0,0,0,0.1);
+            border-top: 1px solid oklch(0% 0 0 / 0.1);
             flex-wrap: wrap;
         }
         .cta-text {
@@ -451,14 +448,14 @@
             font-size: 15px;
             font-weight: 600;
             font-family: var(--font-body);
-            border: 1px solid rgba(0,0,0,0.2);
+            border: 1px solid oklch(0% 0 0 / 0.2);
             border-radius: 100px;
             cursor: pointer;
             text-decoration: none;
             transition: transform 0.25s cubic-bezier(0.34, 1.4, 0.64, 1), background 0.2s ease;
         }
         .btn-secondary:hover {
-            background: rgba(0,0,0,0.05);
+            background: oklch(0% 0 0 / 0.05);
             transform: scale(1.04) translateY(-1px);
         }
 
@@ -582,10 +579,10 @@
             </div>
             <div>
                 <span class="section-label">What I bring</span>
-                <p style="font-size:clamp(15px,1.3vw,18px);line-height:1.75;opacity:0.7;color:var(--color-text);margin:0 0 24px 0;">
+                <p style="font-size:clamp(15px,1.3vw,18px);line-height:1.75;color:oklch(35% 0 0);margin:0 0 24px 0;">
                     I don't just make things look good — I make them make sense. My background in both design and QA gives me a rare lens: I build interfaces with an eye for what breaks, what confuses, and what quietly delights.
                 </p>
-                <p style="font-size:clamp(15px,1.3vw,18px);line-height:1.75;opacity:0.7;color:var(--color-text);margin:0;">
+                <p style="font-size:clamp(15px,1.3vw,18px);line-height:1.75;color:oklch(35% 0 0);margin:0;">
                     Working across Italian, English, and Spanish means I also think in multiple registers — understanding how tone, context, and culture shift a user experience before it ever reaches a screen.
                 </p>
             </div>

@@ -28,16 +28,16 @@
     
     /* OKLCH Colors - Better perceptual uniformity */
     --color-bg: oklch(98% 0.01 15 / 1); /* #fdf5f6 */
-    --color-text: oklch(0% 0 0 / 1); /* #000000 */
-    --color-text-light: oklch(60% 0 0 / 1); /* #888888 */
-    --color-border: oklch(60% 0 0 / 1); /* #888888 */
+    --color-text: oklch(0% 0 0 / 1); /* oklch(0% 0 0)000 */
+    --color-text-light: oklch(47% 0 0); /* #6c6c6c — 4.89:1 on bg */
+    --color-border: oklch(47% 0 0); /* #6c6c6c */
     
     /* Fallback for older browsers */
     @supports not (color: oklch(0% 0 0)) {
         --color-bg: #fdf5f6;
-        --color-text: #000000;
-        --color-text-light: #888888;
-        --color-border: #888888;
+        --color-text: oklch(0% 0 0)000;
+        --color-text-light: #6c6c6c;
+        --color-border: #6c6c6c;
     }
 }
 
@@ -91,11 +91,11 @@ a {
 
 /* Frosted glass effect when scrolled */
 .navigation.scrolled {
-    background: rgba(253, 245, 246, 0.7);
+    background: oklch(98% 0.01 15 / 0.7);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
-    border: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 8px 32px oklch(0% 0 0 / 0.08);
+    border: 1px solid oklch(100% 0 0 / 0.3);
 }
 
 .nav-link {
@@ -288,8 +288,7 @@ a {
 .sidebar-bio {
     font-size: clamp(16px, 1.3vw, 22px);
     line-height: 1.4;
-    color: var(--color-text);
-    opacity: 0.5;
+    color: oklch(47% 0 0);
     margin-bottom: 32px;
     transition: font-size 0.3s ease;
 }
@@ -364,7 +363,7 @@ a {
     display: none;
     font-size: clamp(12px, 1.1vw, 14px);
     color: var(--color-text);
-    background: rgba(255, 200, 100, 0.3);
+    background: oklch(85% 0.12 75 / 0.3);
     padding: 4px 10px;
     border-radius: 12px;
     margin-left: 8px;
@@ -422,7 +421,7 @@ a {
     display: none;
     position: fixed;
     inset: 0;
-    background: rgba(0, 0, 0, 0.7);
+    background: oklch(0% 0 0 / 0.7);
     z-index: 1000;
     align-items: center;
     justify-content: center;
@@ -464,7 +463,7 @@ a {
     line-height: 1.5;
     border: 2px solid var(--color-border);
     border-radius: 8px;
-    background: white;
+    background: oklch(100% 0 0);
     margin-bottom: 16px;
     font-family: var(--font-body);
     transition: border-color 0.3s ease;
@@ -516,7 +515,7 @@ a {
 }
 
 .nda-password-input.error {
-    border-color: #ff4444;
+    border-color: oklch(60% 0.22 25);
     animation: shake 0.5s ease;
 }
 
@@ -543,7 +542,7 @@ a {
 }
 
 .nda-btn-primary:hover {
-    background: #333;
+    background: oklch(25% 0 0);
 }
 
 .nda-btn-secondary {
@@ -553,11 +552,11 @@ a {
 }
 
 .nda-btn-secondary:hover {
-    background: rgba(0, 0, 0, 0.05);
+    background: oklch(0% 0 0 / 0.05);
 }
 
 .nda-error-message {
-    color: #ff4444;
+    color: oklch(60% 0.22 25);
     font-size: 14px;
     margin-top: -8px;
     margin-bottom: 16px;
@@ -667,7 +666,7 @@ a {
 }
 
 .accordion-trigger.active .accordion-icon::after {
-    border-color: white;
+    border-color: oklch(100% 0 0);
     transform: rotate(225deg) translate(-1px, -2px);
 }
 
@@ -819,7 +818,7 @@ a {
     margin-left: auto;
     color: var(--color-text-light);
     opacity: 0.7;
-    white-space: nowrap;
+    oklch(100% 0 0)-space: nowrap;
     flex-shrink: 0;
 }
 
@@ -924,7 +923,7 @@ a {
     content: '';
     position: absolute;
     inset: 0;
-    background: rgba(253, 245, 246, 0.5);
+    background: oklch(98% 0.01 15 / 0.5);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
     z-index: 1;
@@ -1002,7 +1001,7 @@ a {
     transition: background 0.3s ease;
     z-index: 10;
     pointer-events: auto;
-    box-shadow: inset 0 0 0 2px rgba(0, 0, 0, 0.08);
+    box-shadow: inset 0 0 0 2px oklch(0% 0 0 / 0.08);
 }
 
 .nda-overlay:hover {
@@ -1174,7 +1173,7 @@ a {
 }
 
 .mobile-menu .nav-link:hover {
-    background-color: rgba(0, 0, 0, 0.05);
+    background-color: oklch(0% 0 0 / 0.05);
 }
 
 .mobile-menu .nav-link.active {
@@ -1246,10 +1245,10 @@ a {
         width: 100%;
         height: 150px;
         background: linear-gradient(to bottom, 
-            #fdf5f6 0%,
-            #fdf5f6 10%,
+            oklch(98% 0.01 15) 0%,
+            oklch(98% 0.01 15) 10%,
             rgba(253, 245, 246, 0.9) 25%,
-            rgba(253, 245, 246, 0.7) 40%,
+            oklch(98% 0.01 15 / 0.7) 40%,
             rgba(253, 245, 246, 0.4) 55%,
             rgba(253, 245, 246, 0.2) 70%,
             rgba(253, 245, 246, 0.08) 82%,
@@ -1587,7 +1586,7 @@ html {
     display: flex;
     align-items: center;
     gap: 6px;
-    white-space: nowrap;
+    oklch(100% 0 0)-space: nowrap;
     flex-shrink: 0;
     z-index: 1;
     -webkit-tap-highlight-color: transparent;
@@ -1607,7 +1606,7 @@ html {
     top: 4px;
     left: 4px;
     height: calc(100% - 8px);
-    background: white;
+    background: oklch(100% 0 0);
     border-radius: 46px;
     box-shadow:
         0 1px 3px  rgba(0,0,0,0.10),
@@ -1699,7 +1698,7 @@ html {
 .editorial-card-all-loc {
     font-size: 13px;
     font-weight: 600;
-    color: white;
+    color: oklch(100% 0 0);
     line-height: 1;
 }
 
@@ -1770,7 +1769,7 @@ html {
     gap: 10px;
     font-size: 16px;
     font-weight: 600;
-    color: white;
+    color: oklch(100% 0 0);
     opacity: 0;
     visibility: hidden;
     transform: translateY(10px);
@@ -1855,7 +1854,7 @@ html {
 }
 
 .song-card-front {
-    background: #000;
+    background: oklch(0% 0 0);
     box-shadow:
         0 1px 2px  rgba(0,0,0,0.10),
         0 8px 24px rgba(0,0,0,0.14),
@@ -1948,7 +1947,7 @@ html {
     font-weight: 600;
     color: rgba(255,255,255,0.95);
     letter-spacing: -0.01em;
-    white-space: nowrap;
+    oklch(100% 0 0)-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
     margin: 0 0 2px;
@@ -1959,7 +1958,7 @@ html {
     font-size: 11px;
     font-weight: 400;
     color: rgba(255,255,255,0.45);
-    white-space: nowrap;
+    oklch(100% 0 0)-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
     margin: 0;
@@ -1997,13 +1996,13 @@ html {
 .song-card-play-btn svg {
     width: 12px;
     height: 12px;
-    fill: white;
+    fill: oklch(100% 0 0);
     margin-left: 2px;
 }
 
 .song-card-back {
     transform: rotateY(180deg);
-    background: #000;
+    background: oklch(0% 0 0);
     box-shadow:
         0 1px 2px  rgba(0,0,0,0.10),
         0 8px 24px rgba(0,0,0,0.14),
@@ -2046,7 +2045,7 @@ html {
     align-items: center;
     gap: 5px;
     background: rgba(0,0,0,0.55);
-    color: white;
+    color: oklch(100% 0 0);
     font-size: 11px;
     font-weight: 600;
     padding: 4px 9px;
@@ -2060,7 +2059,7 @@ html {
 .preview-dot {
     width: 6px;
     height: 6px;
-    background: #ff3b30;
+    background: oklch(57% 0.22 23);
     border-radius: 50%;
     animation: pulse-dot 1.4s ease-in-out infinite;
     flex-shrink: 0;
@@ -2092,7 +2091,7 @@ html {
     border-radius: 20px;
     cursor: pointer;
     aspect-ratio: 3/4;
-    background: #111;
+    background: oklch(10% 0 0);
     position: relative;
     will-change: transform;
 
@@ -2128,7 +2127,7 @@ html {
     overflow: hidden;
     border-radius: 20px;
     z-index: 1;
-    -webkit-mask-image: -webkit-radial-gradient(white, black);
+    -webkit-mask-image: -webkit-radial-gradient(oklch(100% 0 0), black);
 }
 
 .artist-image img {
@@ -2171,13 +2170,13 @@ html {
 .artist-name {
     font-size: 14px;
     font-weight: 700;
-    color: #fff;
+    color: oklch(100% 0 0);
     letter-spacing: -0.01em;
     line-height: 1.2;
     margin: 0;
     text-shadow:
         0 1px 3px rgba(0,0,0,0.9),
-        0 2px 8px rgba(0,0,0,0.7);
+        0 2px 8px oklch(0% 0 0 / 0.7);
 }
 
 .artist-spotify-pill {
@@ -2212,7 +2211,7 @@ html {
     content: '';
     width: 6px;
     height: 6px;
-    background: #1DB954;
+    background: oklch(70% 0.17 145);
     border-radius: 50%;
     flex-shrink: 0;
 }
@@ -2290,12 +2289,12 @@ html {
     width: 7px;
     height: 7px;
     border-radius: 50%;
-    background: #888;
+    background: oklch(47% 0 0);
     flex-shrink: 0;
 }
 
 .games-subsection-dot.playing {
-    background: #30d158;
+    background: oklch(77% 0.18 145);
     box-shadow: 0 0 6px rgba(48, 209, 88, 0.7);
     animation: pulse-dot 2s ease-in-out infinite;
 }
@@ -2311,7 +2310,7 @@ html {
     aspect-ratio: 21/9;
     border-radius: 20px;
     overflow: hidden;
-    background: #0a0a0a;
+    background: oklch(7% 0 0);
 }
 
 @media (max-width: 768px) {
@@ -2373,14 +2372,14 @@ html {
     font-weight: 600;
     letter-spacing: 0.12em;
     text-transform: uppercase;
-    color: rgba(255,255,255,0.55);
+    color: oklch(100% 0 0 / 0.55);
 }
 
 .gf-title {
     font-family: var(--font-heading);
     font-size: clamp(24px, 4vw, 52px);
     font-weight: 700;
-    color: #fff;
+    color: oklch(100% 0 0);
     line-height: 1.05;
     letter-spacing: -0.02em;
     text-shadow: 0 2px 20px rgba(0,0,0,0.5);
@@ -2407,7 +2406,7 @@ html {
     width: 6px;
     height: 6px;
     border-radius: 50%;
-    background: rgba(255,255,255,0.3);
+    background: oklch(100% 0 0 / 0.3);
     border: none;
     cursor: pointer;
     padding: 0;
@@ -2415,7 +2414,7 @@ html {
 }
 
 .gf-dot.active {
-    background: #fff;
+    background: oklch(100% 0 0);
     transform: scale(1.3);
 }
 
@@ -2427,7 +2426,7 @@ html {
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     border: 1px solid rgba(255,255,255,0.15);
-    color: #fff;
+    color: oklch(100% 0 0);
     font-size: 22px;
     width: 40px;
     height: 40px;
@@ -2481,7 +2480,7 @@ html {
     aspect-ratio: 3/4;
     border-radius: 12px;
     overflow: hidden;
-    background: #1a1a1a;
+    background: oklch(13% 0 0);
     box-shadow:
         0 2px 4px  rgba(0,0,0,0.10),
         0 8px 20px rgba(0,0,0,0.12);
@@ -2707,7 +2706,7 @@ html {
 /* Only darken on mobile (bottom sheet needs it) */
 @media (max-width: 768px) {
     .cv-picker-backdrop.active {
-        background: rgba(0, 0, 0, 0.35);
+        background: oklch(0% 0 0 / 0.35);
         backdrop-filter: blur(4px);
         -webkit-backdrop-filter: blur(4px);
     }
@@ -2717,14 +2716,14 @@ html {
 .cv-picker {
     position: fixed;
     z-index: 491;
-    background: rgba(253, 245, 246, 0.88);
+    background: oklch(98% 0.01 15 / 0.88);
     backdrop-filter: blur(28px) saturate(180%);
     -webkit-backdrop-filter: blur(28px) saturate(180%);
-    border: 1px solid rgba(255, 255, 255, 0.55);
+    border: 1px solid oklch(100% 0 0 / 0.55);
     box-shadow:
-        0 4px 16px rgba(0, 0, 0, 0.08),
+        0 4px 16px oklch(0% 0 0 / 0.08),
         0 16px 48px rgba(0, 0, 0, 0.12),
-        inset 0 1px 0 rgba(255, 255, 255, 0.7);
+        inset 0 1px 0 oklch(100% 0 0 / 0.7);
 
     /* Hidden state */
     opacity: 0;
@@ -2771,9 +2770,9 @@ html {
         transform: translateX(-50%) rotate(45deg);
         width: 10px;
         height: 10px;
-        background: rgba(253, 245, 246, 0.88);
-        border-left: 1px solid rgba(255, 255, 255, 0.55);
-        border-top: 1px solid rgba(255, 255, 255, 0.55);
+        background: oklch(98% 0.01 15 / 0.88);
+        border-left: 1px solid oklch(100% 0 0 / 0.55);
+        border-top: 1px solid oklch(100% 0 0 / 0.55);
         backdrop-filter: blur(28px);
         -webkit-backdrop-filter: blur(28px);
         pointer-events: none;
@@ -2815,7 +2814,7 @@ html {
 .cv-picker-handle {
     width: 36px;
     height: 4px;
-    background: rgba(0, 0, 0, 0.18);
+    background: oklch(0% 0 0 / 0.18);
     border-radius: 2px;
     margin: 0 auto 16px;
 }
@@ -2867,7 +2866,7 @@ html {
 }
 
 .cv-picker-option:hover {
-    background: rgba(0, 0, 0, 0.06);
+    background: oklch(0% 0 0 / 0.06);
     transform: translateX(2px);
 }
 
@@ -2881,7 +2880,7 @@ html {
     content: '';
     position: absolute;
     inset: 0;
-    background: rgba(0, 0, 0, 0.06);
+    background: oklch(0% 0 0 / 0.06);
     opacity: 0;
     border-radius: inherit;
     transition: opacity 0.15s ease;
@@ -2895,13 +2894,13 @@ html {
     .cv-picker-option {
         padding: 16px;
         border-radius: 14px;
-        background: rgba(0, 0, 0, 0.03);
-        border: 1px solid rgba(0, 0, 0, 0.06);
+        background: oklch(0% 0 0 / 0.03);
+        border: 1px solid oklch(0% 0 0 / 0.06);
     }
 
     .cv-picker-option:hover {
         transform: none;
-        background: rgba(0, 0, 0, 0.06);
+        background: oklch(0% 0 0 / 0.06);
     }
 }
 
@@ -3009,7 +3008,7 @@ html {
     margin: -1px;
     overflow: hidden;
     clip: rect(0, 0, 0, 0);
-    white-space: nowrap;
+    oklch(100% 0 0)-space: nowrap;
     border: 0;
 }
 
@@ -3077,7 +3076,7 @@ html {
 
 /* CS overlay close button focus */
 .cs-close-btn:focus-visible {
-    outline: 2px solid #fff;
+    outline: 2px solid oklch(100% 0 0);
     outline-offset: 4px;
     border-radius: 50%;
 }
