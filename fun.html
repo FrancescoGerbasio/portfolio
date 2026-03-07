@@ -12,7 +12,7 @@
         <a href="index.html#work" class="nav-link">Work</a>
         <a href="fun.html" class="nav-link active">Fun</a>
         <a href="about.html" class="nav-link">About</a>
-        <a href="index.html#resume" class="nav-link">Resume</a>
+        <a href="#" class="nav-link" data-cv-trigger>Resume</a>
     </nav>
 
     <!-- Hamburger Button -->
@@ -30,7 +30,7 @@
         <a href="index.html#work" class="nav-link">Work</a>
         <a href="fun.html" class="nav-link active">Fun</a>
         <a href="about.html" class="nav-link">About</a>
-        <a href="index.html#resume" class="nav-link">Resume</a>
+        <a href="#" class="nav-link" data-cv-trigger>Resume</a>
     </div>
 
     <!-- Main Content -->
@@ -96,21 +96,23 @@
 
     <script src="data-games.js"></script>
     <script src="fun.js"></script>
-    <script src="cv-picker.js"></script>
     
     <!-- ═══════════════════════════════════════════════════
          CV LANGUAGE PICKER
     ═══════════════════════════════════════════════════ -->
     
     <!-- Backdrop (mobile sheet / desktop close target) -->
+    <!-- ═══════════════════════════════════════════════════
+         CV LANGUAGE PICKER
+    ═══════════════════════════════════════════════════ -->
+
+    <!-- Backdrop (mobile sheet / desktop close target) -->
     <div class="cv-picker-backdrop" id="cvPickerBackdrop"></div>
     
     <!-- Popover (desktop) / Bottom sheet (mobile) -->
     <div class="cv-picker" id="cvPicker" role="dialog" aria-label="Choose CV language" aria-modal="true">
     
-        <!-- Desktop: drag handle visible on mobile only -->
         <div class="cv-picker-handle"></div>
-    
         <p class="cv-picker-label">Open CV in</p>
     
         <div class="cv-picker-options">
@@ -118,28 +120,30 @@
             <a class="cv-picker-option" id="cvOptEn"
                href="Assets/CV/Francesco_Gerbasio_CV_EN.pdf"
                target="_blank" rel="noopener">
-                <span class="cv-picker-flag">🇬🇧</span>
+                <span class="cv-picker-flag cv-picker-flag--en">EN</span>
                 <span class="cv-picker-info">
                     <span class="cv-picker-lang">English</span>
                     <span class="cv-picker-sub">EN version</span>
                 </span>
-                <span class="cv-picker-arrow">↗</span>
+                <img src="Assets/Images/Arrow.svg" alt="" class="cv-picker-arrow" aria-hidden="true">
             </a>
     
             <a class="cv-picker-option" id="cvOptEs"
                href="Assets/CV/Francesco_Gerbasio_CV_ES.pdf"
                target="_blank" rel="noopener">
-                <span class="cv-picker-flag">🇪🇸</span>
+                <span class="cv-picker-flag cv-picker-flag--es">ES</span>
                 <span class="cv-picker-info">
                     <span class="cv-picker-lang">Español</span>
                     <span class="cv-picker-sub">Versión ES</span>
                 </span>
-                <span class="cv-picker-arrow">↗</span>
+                <img src="Assets/Images/Arrow.svg" alt="" class="cv-picker-arrow" aria-hidden="true">
             </a>
     
         </div>
     
     </div>
+
+    <script src="cv-picker.js"></script>
     
 </body>
 </html>
