@@ -185,7 +185,13 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         } catch (error) {
             const descEl = document.getElementById('weatherDesc');
-            if (descEl) descEl.textContent = 'Weather unavailable';
+            if (descEl) descEl.textContent = '';
+            const tempEl = document.getElementById('weatherTemp');
+            if (tempEl) tempEl.textContent = '';
+            const tempMobileEl = document.getElementById('weatherTempMobile');
+            if (tempMobileEl) tempMobileEl.textContent = '';
+            const iconMobileEl = document.getElementById('weatherIconMobile');
+            if (iconMobileEl) iconMobileEl.textContent = '📍';
         }
     }
     

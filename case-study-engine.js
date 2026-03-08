@@ -70,18 +70,38 @@
 
     panel.querySelectorAll('.cs-section').forEach(s => s.classList.remove('cs-visible'));
 
-    // Animate clip-path back to the card's current position
+    // Scroll panel to top first so clip origin matches what user sees
+    panel.scrollTop = 0;
+
     const vw = window.innerWidth;
     const vh = window.innerHeight;
     const r  = card.getBoundingClientRect();
-    const t  = Math.round(r.top);
-    const r_ = Math.round(vw - r.right);
-    const b  = Math.round(vh - r.bottom);
-    const l  = Math.round(r.left);
-    panel.style.clipPath = `inset(${t}px ${r_}px ${b}px ${l}px round 20px)`;
 
-    overlay.classList.remove('cs-open');
-    overlay.setAttribute('aria-hidden', 'true');
+    // If card is off-screen (user scrolled past it), collapse to center
+    const cardVisible = r.top < vh && r.bottom > 0 && r.left < vw && r.right > 0;
+    let clipTarget;
+    if (cardVisible) {
+      const t  = Math.round(r.top);
+      const r_ = Math.round(vw - r.right);
+      const b  = Math.round(vh - r.bottom);
+      const l  = Math.round(r.left);
+      clipTarget = `inset(${t}px ${r_}px ${b}px ${l}px round 20px)`;
+    } else {
+      // Collapse to center of screen
+      const cy = Math.round(vh / 2);
+      const cx = Math.round(vw / 2);
+      clipTarget = `inset(${cy}px ${cx}px ${cy}px ${cx}px round 20px)`;
+    }
+
+    // Start clip animation — keep cs-open so backdrop fades in sync
+    panel.style.clipPath = clipTarget;
+
+    // Fade backdrop out slightly behind the clip
+    setTimeout(() => {
+      overlay.classList.remove('cs-open');
+      overlay.setAttribute('aria-hidden', 'true');
+    }, 80);
+
     document.body.style.overflow = '';
     document.body.classList.remove('cs-is-open');
     document.querySelector('.container')?.removeAttribute('aria-hidden');
@@ -91,13 +111,13 @@
       study.triggerEl = null;
     }
 
-    // After animation: reset clip-path for next open
+    // After animation: reset for next open
     setTimeout(() => {
       panel.style.transition = 'none';
-      panel.style.clipPath   = 'inset(50% 50% 50% 50% round 20px)'; // collapsed
+      panel.style.clipPath   = 'inset(50% 50% 50% 50% round 20px)';
       panel.scrollTop        = 0;
       if (progress) progress.style.width = '0%';
-    }, 650);
+    }, 680);
   }
 
   // ── Scroll reveal observer ──
