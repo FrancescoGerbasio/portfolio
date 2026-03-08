@@ -1477,12 +1477,16 @@ html {
         position: fixed;
         top: 20px;
         left: 0;
-        right: 0;
+        right: 60px; /* leave space for hamburger on the right */
         margin: 0;
-        padding: 0 20px;
-        justify-content: center;
-        z-index: 98; /* just below fade zone (99) so fade gradient sits on top */
+        padding: 0 0 0 20px;
+        justify-content: flex-start;
+        z-index: 100; /* above fade zone (99) so tabs are never hidden */
         pointer-events: auto;
+    }
+
+    .fun-page .container {
+        padding-top: 80px; /* push content below the fixed tabs */
     }
 }
 
@@ -1522,11 +1526,6 @@ html {
 }
 
 @media (max-width: 768px) {
-    /* Fun page: push content below the fixed category tabs */
-    .fun-page .container {
-        padding-top: 80px;
-    }
-
     .category-subtitle {
         text-align: justify;
         text-justify: inter-word;
