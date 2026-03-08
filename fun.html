@@ -6,7 +6,7 @@
     <title>Fun - Francesco Gerbasio</title>
     <link rel="stylesheet" href="styles.css">
 </head>
-<body>
+<body class="fun-page">
     <!-- Fixed Navigation -->
     <nav class="navigation">
         <a href="index.html#work" class="nav-link">Work</a>
@@ -35,15 +35,15 @@
 
     <!-- Main Content -->
     <div class="container">
-        <!-- Sticky header: category nav + subtitle, content scrolls behind -->
-        <div class="fun-sticky-header">
-            <div class="category-nav-top">
-                <button class="category-btn active" data-category="travel">Travel</button>
-                <button class="category-btn" data-category="music">Music</button>
-                <button class="category-btn" data-category="gaming">Gaming</button>
-            </div>
-            <p class="category-subtitle" id="categorySubtitle">Places I've been and stories from the road. Every journey tells a story, and these are mine captured through moments and memories.</p>
+        <!-- Category Navigation at Top Right -->
+        <div class="category-nav-top">
+            <button class="category-btn active" data-category="travel">Travel</button>
+            <button class="category-btn" data-category="music">Music</button>
+            <button class="category-btn" data-category="gaming">Gaming</button>
         </div>
+
+        <!-- Dynamic Subtitle -->
+        <p class="category-subtitle" id="categorySubtitle">Places I've been and stories from the road. Every journey tells a story, and these are mine captured through moments and memories.</p>
 
         <!-- Travel Section -->
         <section class="category-section active" id="travel-section">

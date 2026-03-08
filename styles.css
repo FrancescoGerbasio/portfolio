@@ -1258,6 +1258,12 @@ a {
         z-index: 99;
         pointer-events: none;
     }
+
+    /* Fun page has more header content (category nav + subtitle),
+       so the fade zone needs to be taller to match where photos start */
+    .fun-page .hamburger-fade-zone {
+        height: 300px;
+    }
     
     .container {
         padding: 25px 20px;
@@ -1463,25 +1469,12 @@ html {
     color: var(--color-text);
 }
 
-.fun-sticky-header {
-    position: sticky;
-    top: 0;
-    z-index: 90;
-    background-color: var(--color-bg);
-    padding-bottom: 8px;
-    margin-top: 4%;
-}
-
-/* Remove the margin-top from the inner nav since the wrapper handles it */
-.fun-sticky-header .category-nav-top {
-    margin-top: 0;
-}
-
 .category-nav-top {
     display: flex;
     gap: 24px;
     justify-content: flex-end;
     margin-bottom: 40px;
+    margin-top: 4%;
     flex-wrap: wrap;
 }
 
