@@ -4,6 +4,7 @@
    add as <script src="cv-picker.js"> before </body>
    =================================== */
 
+document.addEventListener('DOMContentLoaded', function () {
 (function () {
     'use strict';
 
@@ -85,3 +86,4 @@
     });
 
 })();
+});
