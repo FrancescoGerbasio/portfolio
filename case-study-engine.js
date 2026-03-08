@@ -17,48 +17,48 @@
     const study = studyMap[overlayId];
     if (!study) return;
 
-    const { card, overlay, panel, progress } = study;
-    const rect = card.getBoundingClientRect();
+    const { card, overlay, panel } = study;
 
-    // Store trigger so we can return focus on close
+    // Store trigger for focus return on close
     study.triggerEl = document.activeElement;
 
-    // Reset sections before opening so reveal fires fresh
+    // Reset scroll + section reveals
     panel.querySelectorAll('.cs-section').forEach(s => s.classList.remove('cs-visible'));
     panel.scrollTop = 0;
 
-    // Position panel at card, make visible, no transition
-    panel.style.transition   = 'none';
-    panel.style.visibility   = 'visible';
-    panel.style.top          = rect.top    + 'px';
-    panel.style.left         = rect.left   + 'px';
-    panel.style.width        = rect.width  + 'px';
-    panel.style.height       = rect.height + 'px';
-    panel.style.borderRadius = '20px';
+    // Compute card position relative to viewport for clip-path origin
+    const vw = window.innerWidth;
+    const vh = window.innerHeight;
+    const r  = card.getBoundingClientRect();
+
+    // clip-path inset: top right bottom left
+    const t = Math.round(r.top);
+    const r_ = Math.round(vw - r.right);
+    const b = Math.round(vh - r.bottom);
+    const l = Math.round(r.left);
+    const radius = 20;
+
+    // Set start clip instantly (no transition)
+    panel.style.transition = 'none';
+    panel.style.clipPath   = `inset(${t}px ${r_}px ${b}px ${l}px round ${radius}px)`;
 
     overlay.classList.add('cs-open');
     overlay.removeAttribute('aria-hidden');
     document.body.style.overflow = 'hidden';
     document.body.classList.add('cs-is-open');
-
-    // Hide main page content from AT
     document.querySelector('.container')?.setAttribute('aria-hidden', 'true');
 
-    // Force reflow then animate to fullscreen
+    // Force reflow, then let CSS transition take over to fully open
     panel.offsetHeight;
-    panel.style.transition   = '';
-    panel.style.top          = '0';
-    panel.style.left         = '0';
-    panel.style.width        = '100%';
-    panel.style.height       = '100%';
-    panel.style.borderRadius = '0';
+    panel.style.transition = '';
+    panel.style.clipPath   = 'inset(0px 0px 0px 0px round 0px)';
 
-    // Set up scroll reveal + move focus to close button after animation lands
+    // Reveal sections + focus close btn after animation lands
     setTimeout(() => {
       setupReveal(panel);
       const closeBtn = overlay.querySelector('.cs-close-btn');
       if (closeBtn) closeBtn.focus();
-    }, 700);
+    }, 620);
   }
 
   // ── Core close function ──
@@ -70,34 +70,34 @@
 
     panel.querySelectorAll('.cs-section').forEach(s => s.classList.remove('cs-visible'));
 
-    const rect = card.getBoundingClientRect();
-    panel.style.top          = rect.top    + 'px';
-    panel.style.left         = rect.left   + 'px';
-    panel.style.width        = rect.width  + 'px';
-    panel.style.height       = rect.height + 'px';
-    panel.style.borderRadius = '20px';
+    // Animate clip-path back to the card's current position
+    const vw = window.innerWidth;
+    const vh = window.innerHeight;
+    const r  = card.getBoundingClientRect();
+    const t  = Math.round(r.top);
+    const r_ = Math.round(vw - r.right);
+    const b  = Math.round(vh - r.bottom);
+    const l  = Math.round(r.left);
+    panel.style.clipPath = `inset(${t}px ${r_}px ${b}px ${l}px round 20px)`;
 
     overlay.classList.remove('cs-open');
     overlay.setAttribute('aria-hidden', 'true');
     document.body.style.overflow = '';
     document.body.classList.remove('cs-is-open');
-
-    // Restore main page to AT and return focus to card that opened this
     document.querySelector('.container')?.removeAttribute('aria-hidden');
+
     if (study.triggerEl) {
       study.triggerEl.focus();
       study.triggerEl = null;
     }
 
+    // After animation: reset clip-path for next open
     setTimeout(() => {
-      panel.style.visibility = 'hidden';
-      panel.style.width      = '0';
-      panel.style.height     = '0';
-      panel.style.top        = '0';
-      panel.style.left       = '0';
+      panel.style.transition = 'none';
+      panel.style.clipPath   = 'inset(50% 50% 50% 50% round 20px)'; // collapsed
       panel.scrollTop        = 0;
       if (progress) progress.style.width = '0%';
-    }, 820);
+    }, 650);
   }
 
   // ── Scroll reveal observer ──
@@ -123,7 +123,8 @@
     const panel    = overlay.querySelector('.cs-panel');
     const closeBtn = overlay.querySelector('.cs-close-btn');
     const backdrop = overlay.querySelector('.cs-backdrop');
-    const progress = overlay.nextElementSibling;
+    const progress = overlay.nextElementSibling?.classList.contains('cs-progress-bar')
+                   ? overlay.nextElementSibling : null;
 
     const study = { card, overlay, panel, closeBtn, backdrop, progress, overlayId };
     studies.push(study);
@@ -169,14 +170,14 @@
     panel.querySelectorAll('[data-open]').forEach(el => {
       el.addEventListener('click', () => {
         const targetId = el.dataset.open;
-        // Close current WITHOUT animation (instant), then open target
+        // Instant collapse, no animation
         overlay.classList.remove('cs-open');
+        overlay.setAttribute('aria-hidden', 'true');
         document.body.classList.remove('cs-is-open');
-        panel.style.visibility = 'hidden';
-        panel.style.width = '0'; panel.style.height = '0';
-        panel.scrollTop = 0;
         document.body.style.overflow = '';
-        // Small delay so the DOM settles, then open target
+        panel.style.transition = 'none';
+        panel.style.clipPath   = 'inset(50% 50% 50% 50% round 20px)';
+        panel.scrollTop = 0;
         requestAnimationFrame(() => requestAnimationFrame(() => openOverlay(targetId)));
       });
     });
