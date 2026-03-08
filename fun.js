@@ -281,7 +281,6 @@ function layoutMasonry() {
     });
 
     grid.style.height = Math.max(...colHeights) + 'px';
-    grid.style.transition = 'opacity 0.25s ease';
     grid.style.opacity = '1';
 
     const viewH = window.innerHeight;
