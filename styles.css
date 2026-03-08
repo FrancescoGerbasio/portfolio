@@ -1262,6 +1262,10 @@ a {
     .container {
         padding: 25px 20px;
     }
+
+    .fun-page .container {
+        padding-top: 200px;
+    }
     
     .location-widget-compact {
         display: none;
@@ -1470,24 +1474,6 @@ html {
     margin-bottom: 40px;
     margin-top: 4%;
     flex-wrap: wrap;
-}
-
-@media (max-width: 768px) {
-    .category-nav-top {
-        position: fixed;
-        top: 20px;
-        left: 0;
-        right: 60px; /* leave space for hamburger on the right */
-        margin: 0;
-        padding: 0 0 0 20px;
-        justify-content: flex-start;
-        z-index: 100; /* above fade zone (99) so tabs are never hidden */
-        pointer-events: auto;
-    }
-
-    .fun-page .container {
-        padding-top: 80px; /* push content below the fixed tabs */
-    }
 }
 
 .category-btn {
