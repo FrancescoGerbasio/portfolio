@@ -1258,12 +1258,6 @@ a {
         z-index: 99;
         pointer-events: none;
     }
-
-    /* Fun page has more header content (category nav + subtitle),
-       so the fade zone needs to be taller to match where photos start */
-    .fun-page .hamburger-fade-zone {
-        height: 300px;
-    }
     
     .container {
         padding: 25px 20px;
@@ -1478,6 +1472,20 @@ html {
     flex-wrap: wrap;
 }
 
+@media (max-width: 768px) {
+    .category-nav-top {
+        position: fixed;
+        top: 20px;
+        left: 0;
+        right: 0;
+        margin: 0;
+        padding: 0 20px;
+        justify-content: center;
+        z-index: 98; /* just below fade zone (99) so fade gradient sits on top */
+        pointer-events: auto;
+    }
+}
+
 .category-btn {
     padding: 8px 0;
     background: transparent;
@@ -1514,6 +1522,11 @@ html {
 }
 
 @media (max-width: 768px) {
+    /* Fun page: push content below the fixed category tabs */
+    .fun-page .container {
+        padding-top: 80px;
+    }
+
     .category-subtitle {
         text-align: justify;
         text-justify: inter-word;
