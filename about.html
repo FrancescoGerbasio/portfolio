@@ -722,12 +722,12 @@
             <p class="cta-text">Want to work together?<br><span>Let's talk.</span></p>
             <div class="cta-buttons">
                 <a href="https://www.linkedin.com/in/francesco-gerbasio" target="_blank" rel="noopener noreferrer" class="btn-primary">LinkedIn →</a>
-                <a href="mailto:francesco.gerbasio00@gmail.com" class="btn-secondary" aria-label="Send email to Francesco">Email me</a>
+                <a href="/cdn-cgi/l/email-protection#a0c6d2c1cec3c5d3c3cf8ec7c5d2c2c1d3c9cf9090e0c7cdc1c9cc8ec3cfcd" class="btn-secondary" aria-label="Send email to Francesco">Email me</a>
             </div>
         </div>
 
     </div>
-<script src="location-config.js"></script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="location-config.js"></script>
     <script src="cv-picker.js"></script>
     <script>
     document.addEventListener('DOMContentLoaded', function () {
@@ -753,10 +753,21 @@
             }
         });
 
-        document.querySelectorAll('.mobile-menu .nav-link').forEach(l => {
-            l.addEventListener('click', () => {
-                hamburgerBtn.classList.remove('active');
-                mobileMenu.classList.remove('active');
+        document.querySelectorAll('.mobile-menu .nav-link').forEach(function(l) {
+            l.addEventListener('click', function() {
+                if (this.hasAttribute('data-cv-trigger')) {
+                    mobileMenu.style.transition = 'none';
+                    mobileMenu.style.opacity    = '0';
+                    mobileMenu.classList.remove('active');
+                    hamburgerBtn.classList.remove('active');
+                    requestAnimationFrame(() => {
+                        mobileMenu.style.transition = '';
+                        mobileMenu.style.opacity    = '';
+                    });
+                } else {
+                    hamburgerBtn.classList.remove('active');
+                    mobileMenu.classList.remove('active');
+                }
             });
         });
 
@@ -883,14 +894,4 @@
                 <span class="cv-picker-flag">🇪🇸</span>
                 <span class="cv-picker-info">
                     <span class="cv-picker-lang">Español</span>
-                    <span class="cv-picker-sub">Versión ES</span>
-                </span>
-                <span class="cv-picker-arrow">↗</span>
-            </a>
-    
-        </div>
-    
-    </div>
-
-</body>
-</html>
+                    <span class="cv-picker-sub">Versión

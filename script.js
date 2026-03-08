@@ -34,12 +34,27 @@ document.addEventListener('DOMContentLoaded', function() {
     
     mobileNavLinks.forEach(link => {
         link.addEventListener('click', function() {
-            // cv-trigger links open the picker — close the hamburger menu but
-            // let cv-picker.js handle the rest
-            hamburgerBtn.classList.remove('active');
-            mobileMenu.classList.remove('active');
-            hamburgerBtn.setAttribute('aria-expanded', 'false');
-            hamburgerBtn.setAttribute('aria-label', 'Open navigation menu');
+            if (this.hasAttribute('data-cv-trigger')) {
+                // Instant close — no transition — so picker bottom sheet isn't hidden behind menu
+                mobileMenu.style.transition = 'none';
+                mobileMenu.style.opacity    = '0';
+                mobileMenu.style.transform  = 'translateY(-6px)';
+                mobileMenu.classList.remove('active');
+                hamburgerBtn.classList.remove('active');
+                hamburgerBtn.setAttribute('aria-expanded', 'false');
+                hamburgerBtn.setAttribute('aria-label', 'Open navigation menu');
+                // Restore transition after instant close
+                requestAnimationFrame(() => {
+                    mobileMenu.style.transition = '';
+                    mobileMenu.style.opacity    = '';
+                    mobileMenu.style.transform  = '';
+                });
+            } else {
+                hamburgerBtn.classList.remove('active');
+                mobileMenu.classList.remove('active');
+                hamburgerBtn.setAttribute('aria-expanded', 'false');
+                hamburgerBtn.setAttribute('aria-label', 'Open navigation menu');
+            }
         });
     });
     

@@ -712,10 +712,21 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
     });
-    mobileNavLinks.forEach(link => {
-        link.addEventListener('click', () => {
-            hamburgerBtn.classList.remove('active');
-            mobileMenu.classList.remove('active');
+    mobileNavLinks.forEach(function(link) {
+        link.addEventListener('click', function() {
+            if (this.hasAttribute('data-cv-trigger')) {
+                mobileMenu.style.transition = 'none';
+                mobileMenu.style.opacity    = '0';
+                mobileMenu.classList.remove('active');
+                hamburgerBtn.classList.remove('active');
+                requestAnimationFrame(() => {
+                    mobileMenu.style.transition = '';
+                    mobileMenu.style.opacity    = '';
+                });
+            } else {
+                hamburgerBtn.classList.remove('active');
+                mobileMenu.classList.remove('active');
+            }
         });
     });
 
