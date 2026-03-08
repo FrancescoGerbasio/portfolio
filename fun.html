@@ -3,28 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fun — Francesco Gerbasio</title>
-    <meta name="description" content="Francesco Gerbasio — the side of the portfolio that's just for fun. Travel, music production, and games.">
-    <meta property="og:title" content="Fun — Francesco Gerbasio">
-    <meta property="og:description" content="Travel stories, music, and games. The human behind the designer.">
-    <meta property="og:image" content="Assets/Images/og-image.webp">
-    <meta property="og:type" content="website">
-    <meta name="twitter:card" content="summary_large_image">
-    <link rel="icon" type="image/svg+xml" href="Assets/Images/favicon.svg">
+    <title>Fun - Francesco Gerbasio</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <a href="#main-content" class="skip-nav">Skip to main content</a>
     <!-- Fixed Navigation -->
     <nav class="navigation">
         <a href="index.html#work" class="nav-link">Work</a>
         <a href="fun.html" class="nav-link active">Fun</a>
         <a href="about.html" class="nav-link">About</a>
-        <a href="#" class="nav-link" data-cv-trigger>Resume</a>
+        <a href="index.html#resume" class="nav-link">Resume</a>
     </nav>
 
     <!-- Hamburger Button -->
-    <button class="hamburger-menu" id="hamburgerBtn" aria-label="Open navigation menu" aria-expanded="false" aria-controls="mobileMenu">
+    <button class="hamburger-menu" id="hamburgerBtn">
         <span></span>
         <span></span>
         <span></span>
@@ -34,24 +26,24 @@
     <div class="hamburger-fade-zone"></div>
 
     <!-- Mobile Menu Overlay -->
-    <div class="mobile-menu" id="mobileMenu" role="navigation" aria-label="Mobile navigation">
+    <div class="mobile-menu" id="mobileMenu">
         <a href="index.html#work" class="nav-link">Work</a>
         <a href="fun.html" class="nav-link active">Fun</a>
         <a href="about.html" class="nav-link">About</a>
-        <a href="#" class="nav-link" data-cv-trigger>Resume</a>
+        <a href="index.html#resume" class="nav-link">Resume</a>
     </div>
 
     <!-- Main Content -->
-    <div class="container" id="main-content" tabindex="-1">
-        <!-- Category Navigation at Top Right -->
-        <div class="category-nav-top">
-            <button class="category-btn active" data-category="travel">Travel</button>
-            <button class="category-btn" data-category="music">Music</button>
-            <button class="category-btn" data-category="gaming">Gaming</button>
+    <div class="container">
+        <!-- Sticky header: category nav + subtitle, content scrolls behind -->
+        <div class="fun-sticky-header">
+            <div class="category-nav-top">
+                <button class="category-btn active" data-category="travel">Travel</button>
+                <button class="category-btn" data-category="music">Music</button>
+                <button class="category-btn" data-category="gaming">Gaming</button>
+            </div>
+            <p class="category-subtitle" id="categorySubtitle">Places I've been and stories from the road. Every journey tells a story, and these are mine captured through moments and memories.</p>
         </div>
-
-        <!-- Dynamic Subtitle -->
-        <p class="category-subtitle" id="categorySubtitle">Places I've been and stories from the road. Every journey tells a story, and these are mine captured through moments and memories.</p>
 
         <!-- Travel Section -->
         <section class="category-section active" id="travel-section">
@@ -95,6 +87,11 @@
                 <p>Loading games...</p>
             </div>
         </section>
+    </div>
+
+    <!-- Version indicator -->
+    <div style="position: fixed; bottom: 10px; right: 10px; font-size: 10px; color: rgba(0,0,0,0.3); font-family: monospace; z-index: 9999;">
+        v2.9.0
     </div>
 
     <script src="data-games.js"></script>
