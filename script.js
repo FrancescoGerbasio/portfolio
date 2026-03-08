@@ -34,6 +34,8 @@ document.addEventListener('DOMContentLoaded', function() {
     
     mobileNavLinks.forEach(link => {
         link.addEventListener('click', function() {
+            // cv-trigger links open the picker — close the hamburger menu but
+            // let cv-picker.js handle the rest
             hamburgerBtn.classList.remove('active');
             mobileMenu.classList.remove('active');
             hamburgerBtn.setAttribute('aria-expanded', 'false');
@@ -43,6 +45,8 @@ document.addEventListener('DOMContentLoaded', function() {
     
     navLinks.forEach(link => {
         link.addEventListener('click', function(e) {
+            // cv-trigger links are owned by cv-picker.js — don't interfere
+            if (this.hasAttribute('data-cv-trigger')) return;
             navLinks.forEach(l => l.classList.remove('active'));
             mobileNavLinks.forEach(l => l.classList.remove('active'));
             this.classList.add('active');

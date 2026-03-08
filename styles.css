@@ -1142,18 +1142,19 @@ a {
     right: 20px;
     width: auto;
     min-width: 160px;
-    background: oklch(98% 0.01 15 / 0.92);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
+    background: oklch(98% 0.01 15 / 0.96);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
     z-index: 999;
     padding: 12px;
     border-radius: 16px;
     box-shadow: 0 8px 32px oklch(0% 0 0 / 0.12);
     border: 1px solid oklch(100% 0 0 / 0.5);
     opacity: 0;
-    transform: translateY(-8px);
+    transform: translateY(-6px);
     pointer-events: none;
-    transition: opacity 0.25s ease, transform 0.25s ease;
+    will-change: opacity, transform;
+    transition: opacity 0.18s ease, transform 0.18s ease;
 }
 
 .mobile-menu.active {
