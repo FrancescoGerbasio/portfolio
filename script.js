@@ -14,10 +14,12 @@ document.addEventListener('DOMContentLoaded', function() {
     if (hamburgerBtn) {
         hamburgerBtn.addEventListener('click', function(e) {
             e.stopPropagation();
-            const isOpen = mobileMenu.classList.toggle('active');
+            const isOpen = mobileMenu.classList.contains('active');
             this.classList.toggle('active');
-            this.setAttribute('aria-expanded', isOpen);
-            this.setAttribute('aria-label', isOpen ? 'Close navigation menu' : 'Open navigation menu');
+            mobileMenu.classList.toggle('active');
+            this.setAttribute('aria-expanded', String(!isOpen));
+            this.setAttribute('aria-label', isOpen ? 'Open navigation menu' : 'Close navigation menu');
+            mobileMenu.setAttribute('aria-hidden', String(isOpen));
         });
     }
     
@@ -28,40 +30,23 @@ document.addEventListener('DOMContentLoaded', function() {
                 mobileMenu.classList.remove('active');
                 hamburgerBtn.setAttribute('aria-expanded', 'false');
                 hamburgerBtn.setAttribute('aria-label', 'Open navigation menu');
+                mobileMenu.setAttribute('aria-hidden', 'true');
             }
         }
     });
     
     mobileNavLinks.forEach(link => {
         link.addEventListener('click', function() {
-            if (this.hasAttribute('data-cv-trigger')) {
-                // Instant close — no transition — so picker bottom sheet isn't hidden behind menu
-                mobileMenu.style.transition = 'none';
-                mobileMenu.style.opacity    = '0';
-                mobileMenu.style.transform  = 'translateY(-6px)';
-                mobileMenu.classList.remove('active');
-                hamburgerBtn.classList.remove('active');
-                hamburgerBtn.setAttribute('aria-expanded', 'false');
-                hamburgerBtn.setAttribute('aria-label', 'Open navigation menu');
-                // Restore transition after instant close
-                requestAnimationFrame(() => {
-                    mobileMenu.style.transition = '';
-                    mobileMenu.style.opacity    = '';
-                    mobileMenu.style.transform  = '';
-                });
-            } else {
-                hamburgerBtn.classList.remove('active');
-                mobileMenu.classList.remove('active');
-                hamburgerBtn.setAttribute('aria-expanded', 'false');
-                hamburgerBtn.setAttribute('aria-label', 'Open navigation menu');
-            }
+            hamburgerBtn.classList.remove('active');
+            mobileMenu.classList.remove('active');
+            hamburgerBtn.setAttribute('aria-expanded', 'false');
+            hamburgerBtn.setAttribute('aria-label', 'Open navigation menu');
+            mobileMenu.setAttribute('aria-hidden', 'true');
         });
     });
     
     navLinks.forEach(link => {
         link.addEventListener('click', function(e) {
-            // cv-trigger links are owned by cv-picker.js — don't interfere
-            if (this.hasAttribute('data-cv-trigger')) return;
             navLinks.forEach(l => l.classList.remove('active'));
             mobileNavLinks.forEach(l => l.classList.remove('active'));
             this.classList.add('active');
@@ -137,16 +122,9 @@ document.addEventListener('DOMContentLoaded', function() {
     
     let currentPhraseIndex = 0;
     
-    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
     function rotatePhrase() {
         const textElement = document.getElementById('rotatingText');
-        if (!textElement) return;
-        if (prefersReducedMotion) {
-            // Instant swap — no fade, no movement
-            currentPhraseIndex = (currentPhraseIndex + 1) % rotatingPhrases.length;
-            textElement.textContent = rotatingPhrases[currentPhraseIndex];
-        } else {
+        if (textElement) {
             textElement.style.opacity = '0';
             textElement.style.transform = 'translateY(-10px)';
             setTimeout(() => {
@@ -204,13 +182,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         } catch (error) {
             const descEl = document.getElementById('weatherDesc');
-            if (descEl) descEl.textContent = '';
-            const tempEl = document.getElementById('weatherTemp');
-            if (tempEl) tempEl.textContent = '';
-            const tempMobileEl = document.getElementById('weatherTempMobile');
-            if (tempMobileEl) tempMobileEl.textContent = '';
-            const iconMobileEl = document.getElementById('weatherIconMobile');
-            if (iconMobileEl) iconMobileEl.textContent = '📍';
+            if (descEl) descEl.textContent = 'Weather unavailable';
         }
     }
     
@@ -256,7 +228,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const ndaSubmitBtn = document.getElementById('ndaSubmitBtn');
     const ndaCancelBtn = document.getElementById('ndaCancelBtn');
     const ndaErrorMessage = document.getElementById('ndaErrorMessage');
-    let ndaTriggerElement = null;
     let currentNdaProject = null;
     
     if (ndaPasswordToggle) {
@@ -277,23 +248,13 @@ document.addEventListener('DOMContentLoaded', function() {
             e.preventDefault();
             e.stopPropagation();
             currentNdaProject = this.closest('.project-card');
-            ndaTriggerElement = this;
             openNdaModal();
-        });
-        overlay.addEventListener('keydown', function(e) {
-            if (e.key === 'Enter' || e.key === ' ') {
-                e.preventDefault();
-                currentNdaProject = this.closest('.project-card');
-                ndaTriggerElement = this;
-                openNdaModal();
-            }
         });
     });
     
     function openNdaModal() {
         ndaModal.classList.add('active');
-        ndaModal.removeAttribute('aria-hidden');
-        document.querySelector('.container').setAttribute('aria-hidden', 'true');
+        ndaModal.setAttribute('aria-hidden', 'false');
         ndaPasswordInput.value = '';
         ndaPasswordInput.setAttribute('type', 'password');
         ndaPasswordToggle.innerHTML = `<svg class="eye-open" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>`;
@@ -305,33 +266,11 @@ document.addEventListener('DOMContentLoaded', function() {
     function closeNdaModal() {
         ndaModal.classList.remove('active');
         ndaModal.setAttribute('aria-hidden', 'true');
-        document.querySelector('.container').removeAttribute('aria-hidden');
-        if (ndaTriggerElement) {
-            ndaTriggerElement.focus();
-            ndaTriggerElement = null;
-        }
         currentNdaProject = null;
     }
     
     ndaCancelBtn.addEventListener('click', closeNdaModal);
     ndaModal.addEventListener('click', function(e) { if (e.target === ndaModal) closeNdaModal(); });
-
-    // Focus trap inside NDA modal
-    ndaModal.addEventListener('keydown', function(e) {
-        if (!ndaModal.classList.contains('active')) return;
-        if (e.key === 'Escape') { closeNdaModal(); return; }
-        if (e.key !== 'Tab') return;
-        const focusable = Array.from(ndaModal.querySelectorAll(
-            'button, input, [tabindex]:not([tabindex="-1"])'
-        )).filter(el => !el.disabled);
-        const first = focusable[0];
-        const last  = focusable[focusable.length - 1];
-        if (e.shiftKey) {
-            if (document.activeElement === first) { e.preventDefault(); last.focus(); }
-        } else {
-            if (document.activeElement === last)  { e.preventDefault(); first.focus(); }
-        }
-    });
     
     async function submitPassword() {
         const password = ndaPasswordInput.value;
@@ -351,18 +290,9 @@ document.addEventListener('DOMContentLoaded', function() {
         if (!projectCard) return;
         projectCard.classList.add('unlocked');
         const link = projectCard.querySelector('.project-image-link.nda-link');
-        if (link) {
-            link.classList.add('unlocked');
-            link.removeAttribute('tabindex');
-            link.removeAttribute('aria-hidden');
-        }
+        if (link) link.classList.add('unlocked');
         const overlay = projectCard.querySelector('.nda-overlay');
-        if (overlay) {
-            overlay.classList.add('hidden');
-            overlay.setAttribute('tabindex', '-1');
-            overlay.removeAttribute('role');
-            overlay.removeAttribute('aria-label');
-        }
+        if (overlay) overlay.classList.add('hidden');
         setTimeout(() => {
             projectCard.querySelectorAll('.particle-container').forEach(c => c.remove());
         }, 1000);
@@ -455,9 +385,16 @@ document.addEventListener('DOMContentLoaded', function() {
     
     if (accordionTrigger) {
         accordionTrigger.addEventListener('click', function() {
-            const isOpen = accordionContent.classList.toggle('open');
-            accordionTrigger.classList.toggle('active', isOpen);
-            accordionTrigger.setAttribute('aria-expanded', isOpen);
+            const isOpen = accordionContent.classList.contains('open');
+            if (isOpen) {
+                accordionContent.classList.remove('open');
+                accordionTrigger.classList.remove('active');
+                accordionTrigger.setAttribute('aria-expanded', 'false');
+            } else {
+                accordionContent.classList.add('open');
+                accordionTrigger.classList.add('active');
+                accordionTrigger.setAttribute('aria-expanded', 'true');
+            }
         });
     }
     
