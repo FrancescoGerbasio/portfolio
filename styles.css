@@ -1105,7 +1105,7 @@ a {
     position: fixed;
     top: 20px;
     right: 20px;
-    z-index: 1000;
+    z-index: 10000;
     background: transparent;
     border: none;
     cursor: pointer;
@@ -1244,25 +1244,27 @@ a {
         left: 0;
         right: 0;
         width: 100%;
-        height: 160px;
+        height: 100px;
         background: linear-gradient(to bottom,
             #fdf5f6 0%,
-            #fdf5f6 35%,
-            rgba(253, 245, 246, 0.92) 52%,
-            rgba(253, 245, 246, 0.72) 65%,
-            rgba(253, 245, 246, 0.45) 78%,
-            rgba(253, 245, 246, 0.18) 90%,
+            #fdf5f6 30%,
+            rgba(253, 245, 246, 0.75) 58%,
+            rgba(253, 245, 246, 0.3) 80%,
             transparent 100%);
-        /* ── iOS Safari GPU compositor fix ──────────────────
-           Without translateZ, iOS Safari renders GPU-composited
-           elements (animated cards) ABOVE position:fixed elements,
-           ignoring z-index. translateZ forces this element into
-           the GPU compositor stack so z-index: 9999 is respected.  */
         z-index: 9999;
-        transform: translateZ(0);
-        -webkit-transform: translateZ(0);
-        will-change: transform;
         pointer-events: none;
+        /*
+         * CRITICAL iOS Safari fix:
+         * travel-card CSS `transform` promotes cards to GPU compositing layers.
+         * On iOS, composited layers bypass z-index ordering against non-composited
+         * fixed elements. Promoting the fade zone with translateZ(0) puts it in
+         * the same GPU layer tree so z-index is correctly respected.
+         */
+        -webkit-transform: translateZ(0);
+        transform: translateZ(0);
+        will-change: transform;
+        -webkit-backface-visibility: hidden;
+        backface-visibility: hidden;
     }
     
     .container {
@@ -1639,16 +1641,6 @@ html {
     transition: opacity 0.3s ease;
 }
 
-@media (max-width: 768px) {
-    .masonry-grid {
-        /* Create a stacking context so all child GPU compositing layers
-           (animated travel cards) are contained within it at z-index: 1.
-           The fixed fade zone at z-index: 9999 is definitively above this. */
-        z-index: 1;
-        isolation: isolate;
-    }
-}
-
 .editorial-grid {
     position: relative !important;
     height: auto;
@@ -1725,22 +1717,13 @@ html {
     overflow: hidden;
     cursor: pointer;
     opacity: 0;
-    transform: scale(0.92) translateY(12px);
+    /* No default transform here: having transform on EVERY card (even off-screen
+       ones) creates GPU compositing layers that bypass fixed-element z-index on
+       iOS Safari. The card-reveal animation still starts from the correct
+       transformed position — it just won't pollute the compositor layer tree. */
     transition:
         transform  0.3s ease,
         box-shadow 0.3s ease;
-}
-
-@media (max-width: 768px) {
-    .travel-card {
-        /* Remove transform transition on mobile — hover transforms don't apply
-           on touch, and keeping it causes iOS Safari to hold each card as a
-           permanent GPU compositing layer (which bypasses z-index on fixed elements). */
-        transition: box-shadow 0.3s ease;
-    }
-    .travel-card:hover {
-        transform: none;
-    }
 }
 
 .travel-card[data-anim-done] {
