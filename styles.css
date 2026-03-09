@@ -1244,19 +1244,24 @@ a {
         left: 0;
         right: 0;
         width: 100%;
-        /* Extend height to cover safe area + fade zone */
-        height: calc(160px + env(safe-area-inset-top, 0px));
-        background: linear-gradient(to bottom, 
+        height: 160px;
+        background: linear-gradient(to bottom,
             #fdf5f6 0%,
-            #fdf5f6 calc(env(safe-area-inset-top, 44px) + 20px),
-            rgba(253, 245, 246, 0.95) calc(env(safe-area-inset-top, 44px) + 40px),
-            rgba(253, 245, 246, 0.8) calc(env(safe-area-inset-top, 44px) + 65px),
-            rgba(253, 245, 246, 0.5) calc(env(safe-area-inset-top, 44px) + 90px),
-            rgba(253, 245, 246, 0.2) calc(env(safe-area-inset-top, 44px) + 120px),
-            rgba(253, 245, 246, 0.05) calc(env(safe-area-inset-top, 44px) + 145px),
+            #fdf5f6 35%,
+            rgba(253, 245, 246, 0.92) 52%,
+            rgba(253, 245, 246, 0.72) 65%,
+            rgba(253, 245, 246, 0.45) 78%,
+            rgba(253, 245, 246, 0.18) 90%,
             transparent 100%);
-        /* Must be above everything including absolute-positioned cards */
-        z-index: 200;
+        /* ── iOS Safari GPU compositor fix ──────────────────
+           Without translateZ, iOS Safari renders GPU-composited
+           elements (animated cards) ABOVE position:fixed elements,
+           ignoring z-index. translateZ forces this element into
+           the GPU compositor stack so z-index: 9999 is respected.  */
+        z-index: 9999;
+        transform: translateZ(0);
+        -webkit-transform: translateZ(0);
+        will-change: transform;
         pointer-events: none;
     }
     
@@ -1473,14 +1478,6 @@ html {
     flex-wrap: wrap;
 }
 
-@media (max-width: 768px) {
-    .category-nav-top {
-        /* Match the hero's 70px top margin used on index.html */
-        padding-top: 70px;
-        margin-bottom: 28px;
-    }
-}
-
 .category-btn {
     padding: 8px 0;
     background: transparent;
@@ -1642,6 +1639,16 @@ html {
     transition: opacity 0.3s ease;
 }
 
+@media (max-width: 768px) {
+    .masonry-grid {
+        /* Create a stacking context so all child GPU compositing layers
+           (animated travel cards) are contained within it at z-index: 1.
+           The fixed fade zone at z-index: 9999 is definitively above this. */
+        z-index: 1;
+        isolation: isolate;
+    }
+}
+
 .editorial-grid {
     position: relative !important;
     height: auto;
@@ -1722,6 +1729,18 @@ html {
     transition:
         transform  0.3s ease,
         box-shadow 0.3s ease;
+}
+
+@media (max-width: 768px) {
+    .travel-card {
+        /* Remove transform transition on mobile — hover transforms don't apply
+           on touch, and keeping it causes iOS Safari to hold each card as a
+           permanent GPU compositing layer (which bypasses z-index on fixed elements). */
+        transition: box-shadow 0.3s ease;
+    }
+    .travel-card:hover {
+        transform: none;
+    }
 }
 
 .travel-card[data-anim-done] {
