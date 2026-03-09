@@ -29,14 +29,14 @@
     /* OKLCH Colors - Better perceptual uniformity */
     --color-bg: oklch(98% 0.01 15 / 1); /* #fdf5f6 */
     --color-text: oklch(0% 0 0 / 1); /* #000000 */
-    --color-text-light: oklch(60% 0 0 / 1); /* #888888 */
-    --color-border: oklch(60% 0 0 / 1); /* #888888 */
+    --color-text-light: oklch(44% 0 0 / 1); /* #6b6b6b — passes WCAG AA 4.5:1 on --color-bg */
+    --color-border: oklch(60% 0 0 / 1); /* #888888 — borders only, contrast rules don't apply */
     
     /* Fallback for older browsers */
     @supports not (color: oklch(0% 0 0)) {
         --color-bg: #fdf5f6;
         --color-text: #000000;
-        --color-text-light: #888888;
+        --color-text-light: #6b6b6b;
         --color-border: #888888;
     }
 }
@@ -288,8 +288,7 @@ a {
 .sidebar-bio {
     font-size: clamp(16px, 1.3vw, 22px);
     line-height: 1.4;
-    color: var(--color-text);
-    opacity: 0.5;
+    color: var(--color-text-light);
     margin-bottom: 32px;
     transition: font-size 0.3s ease;
 }
