@@ -1280,7 +1280,7 @@ a {
         position: fixed;
         top: 20px;
         left: 20px;
-        z-index: 100;
+        z-index: 10000;
         align-items: center;
         gap: 10px;
         background: rgba(253, 245, 246, 0.9);
