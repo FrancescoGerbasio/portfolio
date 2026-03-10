@@ -59,52 +59,39 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // ===================================
     // FROSTED GLASS NAV ON SCROLL
+    // (single rAF-throttled listener — no layout reads)
     // ===================================
-    
-    let lastScrollY = window.scrollY;
-    
-    function handleScroll() {
-        const currentScrollY = window.scrollY;
-        if (currentScrollY > 20) {
-            navigation.classList.add('scrolled');
-        } else {
-            navigation.classList.remove('scrolled');
-        }
-        lastScrollY = currentScrollY;
+
+    let scrollScheduled = false;
+    function onScroll() {
+        if (scrollScheduled) return;
+        scrollScheduled = true;
+        requestAnimationFrame(() => {
+            navigation.classList.toggle('scrolled', window.scrollY > 20);
+            scrollScheduled = false;
+        });
     }
-    
-    window.addEventListener('scroll', handleScroll);
-    handleScroll();
-    
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+
     // ===================================
-    // SCROLL SPY
+    // SCROLL SPY — IntersectionObserver
+    // (zero layout reads; replaces offsetTop/offsetHeight loop)
     // ===================================
-    
+
     const sections = document.querySelectorAll('section[id]');
-    
-    function scrollSpy() {
-        const scrollY = window.scrollY + 200;
-        sections.forEach(section => {
-            const sectionHeight = section.offsetHeight;
-            const sectionTop = section.offsetTop;
-            const sectionId = section.getAttribute('id');
-            if (scrollY > sectionTop && scrollY <= sectionTop + sectionHeight) {
-                const navLink = document.querySelector(`.nav-link[href="#${sectionId}"]`);
-                if (navLink) {
-                    navLinks.forEach(link => link.classList.remove('active'));
-                    navLink.classList.add('active');
-                }
+    const sectionObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (!entry.isIntersecting) return;
+            const id = entry.target.getAttribute('id');
+            const match = document.querySelector(`.nav-link[href="#${id}"]`);
+            if (match) {
+                navLinks.forEach(l => l.classList.remove('active'));
+                match.classList.add('active');
             }
         });
-        if (scrollY < 300) {
-            navLinks.forEach(link => link.classList.remove('active'));
-            const workLink = document.querySelector('.nav-link[href="#work"]');
-            if (workLink) workLink.classList.add('active');
-        }
-    }
-    
-    window.addEventListener('scroll', scrollSpy);
-    scrollSpy();
+    }, { rootMargin: '-35% 0px -55% 0px' });
+    sections.forEach(s => sectionObserver.observe(s));
     
     // ===================================
     // ROTATING PHRASES
@@ -146,29 +133,58 @@ document.addEventListener('DOMContentLoaded', function() {
         const location = typeof myLocation !== 'undefined' ? myLocation : {
             city: 'Madrid', country: 'Spain', lat: 40.4168, lon: -3.7038
         };
-        
+
         const cityElement = document.getElementById('locationCity');
         if (cityElement) cityElement.textContent = `${location.city}, ${location.country}`;
-        
+
         const isOnVacation = !(location.city === 'Madrid' && location.country === 'Spain');
         const vacationBadge = document.getElementById('vacationBadge');
         if (vacationBadge) {
             isOnVacation ? vacationBadge.classList.add('show') : vacationBadge.classList.remove('show');
         }
-        
+
         const cityMobileElement = document.getElementById('locationCityMobile');
         if (cityMobileElement) cityMobileElement.textContent = location.city;
-        
-        try {
-            const weatherResponse = await fetch(
-                `https://api.open-meteo.com/v1/forecast?latitude=${location.lat}&longitude=${location.lon}&current_weather=true`
-            );
-            const weatherData = await weatherResponse.json();
-            
-            if (weatherData.current_weather) {
-                const temp = Math.round(weatherData.current_weather.temperature);
-                const weatherInfo = getWeatherInfo(weatherData.current_weather.weathercode);
-                
+
+        // Defer actual weather fetch until the browser is idle
+        // Cache in sessionStorage to avoid repeat fetches within the session
+        const schedule = window.requestIdleCallback
+            ? cb => requestIdleCallback(cb, { timeout: 4000 })
+            : cb => setTimeout(cb, 1000);
+
+        schedule(async () => {
+            const CACHE_KEY = 'weather_cache';
+            const CACHE_TTL = 30 * 60 * 1000; // 30 min
+
+            let weatherData = null;
+            try {
+                const cached = sessionStorage.getItem(CACHE_KEY);
+                if (cached) {
+                    const { data, ts } = JSON.parse(cached);
+                    if (Date.now() - ts < CACHE_TTL) weatherData = data;
+                }
+            } catch (_) {}
+
+            if (!weatherData) {
+                try {
+                    const res = await fetch(
+                        `https://api.open-meteo.com/v1/forecast?latitude=${location.lat}&longitude=${location.lon}&current_weather=true`
+                    );
+                    const json = await res.json();
+                    weatherData = json.current_weather;
+                    try {
+                        sessionStorage.setItem(CACHE_KEY, JSON.stringify({ data: weatherData, ts: Date.now() }));
+                    } catch (_) {}
+                } catch (_) {
+                    const descEl = document.getElementById('weatherDesc');
+                    if (descEl) descEl.textContent = 'Weather unavailable';
+                    return;
+                }
+            }
+
+            if (weatherData) {
+                const temp = Math.round(weatherData.temperature);
+                const weatherInfo = getWeatherInfo(weatherData.weathercode);
                 const tempEl = document.getElementById('weatherTemp');
                 if (tempEl) tempEl.textContent = `${temp}°C`;
                 const iconEl = document.getElementById('weatherIcon');
@@ -180,10 +196,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 const iconMobileEl = document.getElementById('weatherIconMobile');
                 if (iconMobileEl) iconMobileEl.textContent = weatherInfo.icon;
             }
-        } catch (error) {
-            const descEl = document.getElementById('weatherDesc');
-            if (descEl) descEl.textContent = 'Weather unavailable';
-        }
+        });
     }
     
     function getWeatherInfo(code) {
@@ -315,62 +328,82 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // ===================================
     // PARTICLE SYSTEM
+    // (reads batched before writes to avoid forced reflow per element)
     // ===================================
-    
-    function createParticleSystem(element) {
-        const rect = element.getBoundingClientRect();
-        const container = document.createElement('div');
-        container.className = 'particle-container';
-        container.style.cssText = `position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;overflow:hidden;`;
-        const numParticles = Math.floor(rect.width / 5);
+
+    function buildParticleHTML(numParticles) {
+        let html = '';
         for (let i = 0; i < numParticles; i++) {
-            const particle = document.createElement('div');
-            particle.className = 'particle';
             const x = Math.random() * 100, y = Math.random() * 100;
             const size = Math.random() * 3 + 2;
             const opacity = Math.random() * 0.3 + 0.2;
             const duration = Math.random() * 3 + 3;
             const delay = Math.random() * 2;
-            particle.style.cssText = `position:absolute;left:${x}%;top:${y}%;width:${size}px;height:${size}px;background:rgba(136,136,136,${opacity});border-radius:50%;animation:particle-drift ${duration}s ease-in-out ${delay}s infinite;`;
-            container.appendChild(particle);
+            html += `<div class="particle" style="position:absolute;left:${x}%;top:${y}%;width:${size}px;height:${size}px;background:rgba(136,136,136,${opacity});border-radius:50%;animation:particle-drift ${duration}s ease-in-out ${delay}s infinite;"></div>`;
         }
+        return html;
+    }
+
+    function createParticleSystem(element, width) {
+        const numParticles = Math.floor(width / 5);
+        const container = document.createElement('div');
+        container.className = 'particle-container';
+        container.style.cssText = 'position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;overflow:hidden;';
+        container.innerHTML = buildParticleHTML(numParticles);
         element.style.position = 'relative';
         element.appendChild(container);
         return container;
     }
-    
-    document.querySelectorAll('.project-card.nda-protected').forEach(card => {
-        if (!card.classList.contains('unlocked')) {
+
+    // Batch: read all rects first, then write
+    const ndaCards = Array.from(document.querySelectorAll('.project-card.nda-protected'));
+    const ndaItems = Array.from(document.querySelectorAll('.project-list-item.nda-protected-item'));
+    const today = new Date();
+
+    // Batch reads
+    const cardData = ndaCards
+        .filter(card => !card.classList.contains('unlocked'))
+        .map(card => {
             const title = card.querySelector('.project-title');
-            if (title) createParticleSystem(title);
-            card.querySelectorAll('.nda-hidden-text').forEach(text => createParticleSystem(text));
-        }
-    });
-    
-    document.querySelectorAll('.project-list-item.nda-protected-item').forEach(item => {
+            const texts = Array.from(card.querySelectorAll('.nda-hidden-text'));
+            const titleWidth = title ? title.getBoundingClientRect().width : 0;
+            const textWidths = texts.map(t => t.getBoundingClientRect().width);
+            return { title, texts, titleWidth, textWidths };
+        });
+
+    const itemData = ndaItems.map(item => {
         const releaseDate = item.getAttribute('data-release-date');
-        const today = new Date();
-        if (releaseDate && today >= new Date(releaseDate)) {
-            item.classList.add('unlocked');
-            return;
-        }
-        item.querySelectorAll('.nda-hidden-text').forEach(text => {
-            const rect = text.getBoundingClientRect();
-            const numParticles = Math.max(Math.floor(rect.width / 8), 15);
+        if (releaseDate && today >= new Date(releaseDate)) return { item, skip: true };
+        const texts = Array.from(item.querySelectorAll('.nda-hidden-text'));
+        const widths = texts.map(t => t.getBoundingClientRect().width);
+        return { item, texts, widths, skip: false };
+    });
+
+    // Batch writes
+    cardData.forEach(({ title, texts, titleWidth, textWidths }) => {
+        if (title) createParticleSystem(title, titleWidth);
+        texts.forEach((t, i) => createParticleSystem(t, textWidths[i]));
+    });
+
+    itemData.forEach(({ item, texts, widths, skip }) => {
+        if (skip) { item.classList.add('unlocked'); return; }
+        texts.forEach((text, i) => {
+            const numParticles = Math.max(Math.floor(widths[i] / 8), 15);
             const container = document.createElement('div');
             container.className = 'particle-container';
-            container.style.cssText = `position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;overflow:hidden;`;
-            for (let i = 0; i < numParticles; i++) {
-                const particle = document.createElement('div');
-                particle.className = 'particle';
+            container.style.cssText = 'position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;overflow:hidden;';
+            container.innerHTML = buildParticleHTML(numParticles).replace(/3 \+ 2/g, '2 + 1.5'); // smaller for list items
+            // Use smaller particles for list items
+            let html = '';
+            for (let j = 0; j < numParticles; j++) {
                 const x = Math.random() * 100, y = Math.random() * 100;
                 const size = Math.random() * 2 + 1.5;
                 const opacity = Math.random() * 0.3 + 0.2;
                 const duration = Math.random() * 3 + 3;
                 const delay = Math.random() * 2;
-                particle.style.cssText = `position:absolute;left:${x}%;top:${y}%;width:${size}px;height:${size}px;background:rgba(136,136,136,${opacity});border-radius:50%;animation:particle-drift ${duration}s ease-in-out ${delay}s infinite;`;
-                container.appendChild(particle);
+                html += `<div class="particle" style="position:absolute;left:${x}%;top:${y}%;width:${size}px;height:${size}px;background:rgba(136,136,136,${opacity});border-radius:50%;animation:particle-drift ${duration}s ease-in-out ${delay}s infinite;"></div>`;
             }
+            container.innerHTML = html;
             text.style.position = 'relative';
             text.appendChild(container);
         });
