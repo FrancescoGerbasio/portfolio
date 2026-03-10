@@ -12,6 +12,20 @@
   const studies   = [];
   const studyMap  = {}; // overlayId → study
 
+  // ── Convert a card DOMRect to a clip-path inset() string ──
+  // The panel is always position:absolute inset:0 (= full viewport).
+  // inset(t% r% b% l% round Rpx) clips it to match the card rect exactly —
+  // GPU-composited, zero layout reads per frame, perfect aspect ratio.
+  function rectToInset(rect, radius) {
+    const vw = window.innerWidth;
+    const vh = window.innerHeight;
+    const t = (rect.top              / vh * 100).toFixed(3);
+    const r = ((vw - rect.right)     / vw * 100).toFixed(3);
+    const b = ((vh - rect.bottom)    / vh * 100).toFixed(3);
+    const l = (rect.left             / vw * 100).toFixed(3);
+    return `inset(${t}% ${r}% ${b}% ${l}% round ${radius}px)`;
+  }
+
   // ── Core open function (used by card click AND next/prev nav) ──
   function openOverlay(overlayId) {
     const study = studyMap[overlayId];
@@ -19,34 +33,27 @@
 
     const { card, overlay, panel, progress } = study;
     const rect = card.getBoundingClientRect();
+    study.openRect = rect; // store so close always targets the same position
 
-    // Reset sections before opening so reveal fires fresh
+    // Reset sections + scroll before opening
     panel.querySelectorAll('.cs-section').forEach(s => s.classList.remove('cs-visible'));
     panel.scrollTop = 0;
 
-    // Position panel at card, make visible, no transition
-    panel.style.transition   = 'none';
-    panel.style.visibility   = 'visible';
-    panel.style.top          = rect.top    + 'px';
-    panel.style.left         = rect.left   + 'px';
-    panel.style.width        = rect.width  + 'px';
-    panel.style.height       = rect.height + 'px';
-    panel.style.borderRadius = '20px';
+    // Snap clip to card rect instantly (no transition), then make visible
+    panel.style.transition = 'none';
+    panel.style.visibility = 'visible';
+    panel.style.clipPath   = rectToInset(rect, 14);
 
     overlay.classList.add('cs-open');
     document.body.style.overflow = 'hidden';
     document.body.classList.add('cs-is-open');
 
-    // Double-rAF: ensures one frame with the initial styles painted
-    // before we remove the 'none' transition — avoids forced sync layout
+    // Double-rAF: one frame with the card-sized clip painted,
+    // then let the CSS transition take over → expands to full viewport.
     requestAnimationFrame(() => {
       requestAnimationFrame(() => {
-        panel.style.transition   = '';
-        panel.style.top          = '0';
-        panel.style.left         = '0';
-        panel.style.width        = '100%';
-        panel.style.height       = '100%';
-        panel.style.borderRadius = '0';
+        panel.style.transition = '';
+        panel.style.clipPath   = 'inset(0% 0% 0% 0% round 0px)';
       });
     });
 
@@ -63,12 +70,16 @@
 
     panel.querySelectorAll('.cs-section').forEach(s => s.classList.remove('cs-visible'));
 
-    const rect = card.getBoundingClientRect();
-    panel.style.top          = rect.top    + 'px';
-    panel.style.left         = rect.left   + 'px';
-    panel.style.width        = rect.width  + 'px';
-    panel.style.height       = rect.height + 'px';
-    panel.style.borderRadius = '20px';
+    // Snap scroll to top so the hero fills the panel as it collapses —
+    // visually matches the card's colour rather than mid-article content
+    panel.scrollTop = 0;
+
+    // Use stored openRect so geometry is identical to open time
+    // (immune to any scroll / browser-chrome drift between open and close)
+    const rect = study.openRect || card.getBoundingClientRect();
+
+    // Animate clip-path back to card rect — perfect aspect ratio every frame
+    panel.style.clipPath = rectToInset(rect, 14);
 
     overlay.classList.remove('cs-open');
     document.body.style.overflow = '';
@@ -76,10 +87,8 @@
 
     setTimeout(() => {
       panel.style.visibility = 'hidden';
-      panel.style.width      = '0';
-      panel.style.height     = '0';
-      panel.style.top        = '0';
-      panel.style.left       = '0';
+      panel.style.transition = 'none';
+      panel.style.clipPath   = 'inset(0% 0% 0% 0% round 0px)';
       panel.scrollTop        = 0;
       if (progress) progress.style.width = '0%';
     }, 820);
