@@ -33,7 +33,6 @@
 
     const { card, overlay, panel, progress } = study;
     const rect = card.getBoundingClientRect();
-    study.openRect = rect; // store so close always targets the same position
 
     // Reset sections + scroll before opening
     panel.querySelectorAll('.cs-section').forEach(s => s.classList.remove('cs-visible'));
@@ -70,13 +69,16 @@
 
     panel.querySelectorAll('.cs-section').forEach(s => s.classList.remove('cs-visible'));
 
-    // Snap scroll to top so the hero fills the panel as it collapses —
-    // visually matches the card's colour rather than mid-article content
+    // Snap scroll to top so the hero fills the panel as it collapses
     panel.scrollTop = 0;
 
-    // Use stored openRect so geometry is identical to open time
-    // (immune to any scroll / browser-chrome drift between open and close)
-    const rect = study.openRect || card.getBoundingClientRect();
+    // Re-measure the card live — scrollbar-gutter:stable on body prevents
+    // any layout shift, so this matches the open position exactly
+    const rect = card.getBoundingClientRect();
+
+    // Ease-in for close: starts slow, rushes into the card at the end.
+    // (Ease-out is correct for open/expand but feels "stuck" when collapsing.)
+    panel.style.transition = `clip-path var(--cs-dur-slow) cubic-bezier(.4, 0, .8, .2)`;
 
     // Animate clip-path back to card rect — perfect aspect ratio every frame
     panel.style.clipPath = rectToInset(rect, 14);

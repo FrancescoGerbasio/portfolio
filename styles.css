@@ -67,6 +67,7 @@ body {
     color: var(--color-text);
     line-height: 1.6;
     overflow-x: hidden;
+    scrollbar-gutter: stable;
 }
 
 img {
