@@ -68,32 +68,39 @@
     const { card, overlay, panel, progress } = study;
 
     panel.querySelectorAll('.cs-section').forEach(s => s.classList.remove('cs-visible'));
-
-    // Snap scroll to top so the hero fills the panel as it collapses
     panel.scrollTop = 0;
-
-    // Re-measure the card live — scrollbar-gutter:stable on body prevents
-    // any layout shift, so this matches the open position exactly
-    const rect = card.getBoundingClientRect();
-
-    // Ease-in for close: starts slow, rushes into the card at the end.
-    // (Ease-out is correct for open/expand but feels "stuck" when collapsing.)
-    panel.style.transition = `clip-path var(--cs-dur-slow) cubic-bezier(.4, 0, .8, .2)`;
-
-    // Animate clip-path back to card rect — perfect aspect ratio every frame
-    panel.style.clipPath = rectToInset(rect, 14);
 
     overlay.classList.remove('cs-open');
     document.body.style.overflow = '';
     document.body.classList.remove('cs-is-open');
 
-    setTimeout(() => {
+    // Measure AFTER removing cs-open so layout is fully settled
+    const rect = card.getBoundingClientRect();
+
+    // Set ease-in transition first
+    panel.style.transition = 'clip-path var(--cs-dur-slow) cubic-bezier(.4, 0, .8, .2)';
+
+    // Force a style flush — browser must snapshot the current clip-path value
+    // as the "from" state before we set the target.
+    // Without this, both assignments batch into one frame and the animation is skipped.
+    void panel.getBoundingClientRect();
+
+    // NOW set the target — browser animates from full to card rect
+    panel.style.clipPath = rectToInset(rect, 14);
+
+    // transitionend for exact cleanup timing (+ fallback in case it misfires)
+    let cleaned = false;
+    function cleanup() {
+      if (cleaned) return;
+      cleaned = true;
       panel.style.visibility = 'hidden';
       panel.style.transition = 'none';
       panel.style.clipPath   = 'inset(0% 0% 0% 0% round 0px)';
       panel.scrollTop        = 0;
       if (progress) progress.style.width = '0%';
-    }, 820);
+    }
+    panel.addEventListener('transitionend', cleanup, { once: true });
+    setTimeout(cleanup, 900); // fallback
   }
 
   // ── Scroll reveal observer ──
