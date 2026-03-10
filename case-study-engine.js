@@ -39,6 +39,8 @@
     panel.scrollTop = 0;
 
     // Snap clip to card rect instantly (no transition), then make visible
+    // The round value (14px) matches the card's border-radius — clip-path
+    // handles ALL rounding so panel border-radius is 0.
     panel.style.transition = 'none';
     panel.style.visibility = 'visible';
     panel.style.clipPath   = rectToInset(rect, 14);
@@ -47,8 +49,8 @@
     document.body.style.overflow = 'hidden';
     document.body.classList.add('cs-is-open');
 
-    // Double-rAF: one frame with the card-sized clip painted,
-    // then let the CSS transition take over → expands to full viewport.
+    // Double-rAF: browser paints the card-sized clip first,
+    // then transitions to full viewport — round animates 14px → 0px smoothly.
     requestAnimationFrame(() => {
       requestAnimationFrame(() => {
         panel.style.transition = '';
@@ -80,15 +82,16 @@
     // Set ease-in transition first
     panel.style.transition = 'clip-path var(--cs-dur-slow) cubic-bezier(.4, 0, .8, .2)';
 
-    // Force a style flush — browser must snapshot the current clip-path value
-    // as the "from" state before we set the target.
-    // Without this, both assignments batch into one frame and the animation is skipped.
+    // Force a style flush — browser must snapshot the current clip-path ("from" state)
+    // before we set the target, otherwise both batch into one frame and animation skips.
     void panel.getBoundingClientRect();
 
-    // NOW set the target — browser animates from full to card rect
+    // Animate back to card rect — round goes 0px → 14px matching card border-radius
     panel.style.clipPath = rectToInset(rect, 14);
 
-    // transitionend for exact cleanup timing (+ fallback in case it misfires)
+    // Filter transitionend to ONLY the clip-path on the panel itself —
+    // child elements also fire transitionend (bubbling), which would trigger
+    // cleanup too early before the panel finishes collapsing.
     let cleaned = false;
     function cleanup() {
       if (cleaned) return;
@@ -99,7 +102,11 @@
       panel.scrollTop        = 0;
       if (progress) progress.style.width = '0%';
     }
-    panel.addEventListener('transitionend', cleanup, { once: true });
+    panel.addEventListener('transitionend', function onEnd(e) {
+      if (e.target !== panel || e.propertyName !== 'clip-path') return;
+      panel.removeEventListener('transitionend', onEnd);
+      cleanup();
+    });
     setTimeout(cleanup, 900); // fallback
   }
 

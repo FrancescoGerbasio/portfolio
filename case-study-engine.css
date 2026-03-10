@@ -52,7 +52,7 @@
 .cs-panel {
   position: absolute;
   background: var(--color-bg, #fdf5f6);
-  border-radius: 20px;
+  border-radius: 0;
   overflow-y: auto;
   overflow-x: hidden;
   /* Always full-size — clip-path handles the card→fullscreen morph */
