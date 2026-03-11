@@ -312,7 +312,12 @@ document.addEventListener('DOMContentLoaded', function() {
         if (!projectCard) return;
         projectCard.classList.add('unlocked');
         const link = projectCard.querySelector('.project-image-link.nda-link');
-        if (link) link.classList.add('unlocked');
+        if (link) {
+            link.classList.add('unlocked');
+            // Restore the real destination URL stored in data-href
+            const realHref = link.getAttribute('data-href');
+            if (realHref) link.setAttribute('href', realHref);
+        }
         const overlay = projectCard.querySelector('.nda-overlay');
         if (overlay) overlay.classList.add('hidden');
         setTimeout(() => {
