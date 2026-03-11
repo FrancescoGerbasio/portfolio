@@ -62,60 +62,25 @@
     setTimeout(() => setupReveal(panel), 700);
   }
 
-  // ── Core close function ──
+  // ── Core close function — instant, no animation ──
   function closeOverlay(overlayId) {
     const study = studyMap[overlayId];
     if (!study) return;
 
-    const { card, overlay, panel, progress } = study;
+    const { overlay, panel, progress } = study;
 
-    // Snap scroll to top instantly — content must be at top before we collapse
-    // so the panel looks like the card thumbnail during the shrink
-    panel.style.overflow = 'hidden';
-    panel.scrollTop = 0;
-
-    // Remove cs-open: backdrop fades fast (0.22s via CSS), body scroll restored
     overlay.classList.remove('cs-open');
     document.body.style.overflow = '';
     document.body.classList.remove('cs-is-open');
 
-    // Measure card position now (body scroll is restored, layout is settled)
-    const rect = card.getBoundingClientRect();
-
-    // Single rAF — let the browser register "from" state (full viewport clip-path)
-    // before we set the "to" state. Also wait for scrollTop=0 to be painted.
-    requestAnimationFrame(() => {
-      // Animate clip-path (shrink to card) + opacity (fade to 0) simultaneously.
-      // The fade makes the dark case-study content disappear while the panel
-      // collapses, revealing the card thumbnail underneath naturally.
-      panel.style.transition = [
-        'clip-path var(--cs-dur-slow) cubic-bezier(.55, 0, .35, 1)',
-        'opacity    var(--cs-dur-slow) cubic-bezier(.55, 0, .35, 1)'
-      ].join(', ');
-
-      panel.style.clipPath = rectToInset(rect, 14);
-      panel.style.opacity  = '0';
-
-      let cleaned = false;
-      function cleanup() {
-        if (cleaned) return;
-        cleaned = true;
-        panel.style.overflow   = '';
-        panel.style.visibility = 'hidden';
-        panel.style.transition = 'none';
-        panel.style.clipPath   = 'inset(0% 0% 0% 0% round 0px)';
-        panel.style.opacity    = '1'; // reset for next open
-        panel.scrollTop        = 0;
-        if (progress) progress.style.width = '0%';
-        panel.querySelectorAll('.cs-section').forEach(s => s.classList.remove('cs-visible'));
-      }
-      panel.addEventListener('transitionend', function onEnd(e) {
-        if (e.target !== panel || e.propertyName !== 'clip-path') return;
-        panel.removeEventListener('transitionend', onEnd);
-        cleanup();
-      });
-      setTimeout(cleanup, 950); // fallback
-    });
+    panel.style.transition = 'none';
+    panel.style.visibility = 'hidden';
+    panel.style.clipPath   = 'inset(0% 0% 0% 0% round 0px)';
+    panel.style.opacity    = '1';
+    panel.style.overflow   = '';
+    panel.scrollTop        = 0;
+    if (progress) progress.style.width = '0%';
+    panel.querySelectorAll('.cs-section').forEach(s => s.classList.remove('cs-visible'));
   }
 
   // ── Scroll reveal observer ──
