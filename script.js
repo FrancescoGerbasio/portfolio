@@ -79,8 +79,13 @@ document.addEventListener('DOMContentLoaded', function() {
     // (zero layout reads; replaces offsetTop/offsetHeight loop)
     // ===================================
 
+    // Flag: set when user clicks an external nav link (fun.html, about.html)
+    // so scroll spy doesn't override active state before navigation completes
+    let navigatingAway = false;
+
     const sections = document.querySelectorAll('section[id]');
     const sectionObserver = new IntersectionObserver((entries) => {
+        if (navigatingAway) return;
         entries.forEach(entry => {
             if (!entry.isIntersecting) return;
             const id = entry.target.getAttribute('id');
@@ -92,6 +97,14 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }, { rootMargin: '-35% 0px -55% 0px' });
     sections.forEach(s => sectionObserver.observe(s));
+
+    // Mark navigatingAway when clicking external links (fun.html, about.html)
+    navLinks.forEach(link => {
+        const href = link.getAttribute('href');
+        if (href && !href.startsWith('#')) {
+            link.addEventListener('click', () => { navigatingAway = true; });
+        }
+    });
     
     // ===================================
     // ROTATING PHRASES

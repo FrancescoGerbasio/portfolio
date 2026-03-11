@@ -225,6 +225,11 @@
   flex-shrink: 0;
   position: relative;
   transition: transform .45s var(--cs-ease-spring);
+  /* Subpixel antialiasing — prevents jagged edges on rotated/transformed phones */
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  transform-style: preserve-3d;
+  isolation: isolate;
 }
 
 .cs-phone img {
@@ -233,6 +238,10 @@
   object-fit: cover;
   object-position: top center;
   display: block;
+  /* Force GPU layer for crisp image rendering inside transformed container */
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+  image-rendering: -webkit-optimize-contrast;
 }
 
 /* 3-phone layout tilt */
