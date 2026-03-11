@@ -6,6 +6,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
     const navLinks = document.querySelectorAll('.nav-link');
     const navigation = document.querySelector('.navigation');
+    let navigatingAway = false; // set true when navigating to another page
     
     const hamburgerBtn = document.getElementById('hamburgerBtn');
     const mobileMenu = document.getElementById('mobileMenu');
@@ -47,10 +48,15 @@ document.addEventListener('DOMContentLoaded', function() {
     
     navLinks.forEach(link => {
         link.addEventListener('click', function(e) {
+            const href = this.getAttribute('href');
+            // If navigating to another page, set flag so scroll spy
+            // doesn't fire and overwrite active state before unload
+            if (href && !href.startsWith('#')) {
+                navigatingAway = true;
+            }
             navLinks.forEach(l => l.classList.remove('active'));
             mobileNavLinks.forEach(l => l.classList.remove('active'));
             this.classList.add('active');
-            const href = this.getAttribute('href');
             document.querySelectorAll(`.nav-link[href="${href}"]`).forEach(l => {
                 l.classList.add('active');
             });
@@ -81,8 +87,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Flag: set when user clicks an external nav link (fun.html, about.html)
     // so scroll spy doesn't override active state before navigation completes
-    let navigatingAway = false;
-
     const sections = document.querySelectorAll('section[id]');
     const sectionObserver = new IntersectionObserver((entries) => {
         if (navigatingAway) return;
@@ -97,14 +101,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }, { rootMargin: '-35% 0px -55% 0px' });
     sections.forEach(s => sectionObserver.observe(s));
-
-    // Mark navigatingAway when clicking external links (fun.html, about.html)
-    navLinks.forEach(link => {
-        const href = link.getAttribute('href');
-        if (href && !href.startsWith('#')) {
-            link.addEventListener('click', () => { navigatingAway = true; });
-        }
-    });
     
     // ===================================
     // ROTATING PHRASES
