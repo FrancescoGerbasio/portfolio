@@ -23,10 +23,12 @@
   pointer-events: none;
   overflow: hidden;
   isolation: isolate;
+  visibility: hidden;
 }
 
 .cs-overlay.cs-open {
   pointer-events: auto;
+  visibility: visible;
 }
 
 /* ── Backdrop ── */
