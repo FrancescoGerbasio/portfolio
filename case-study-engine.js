@@ -132,14 +132,8 @@
     panel.querySelectorAll('[data-open]').forEach(el => {
       el.addEventListener('click', () => {
         const targetId = el.dataset.open;
-        // Close current WITHOUT animation (instant), then open target
-        overlay.classList.remove('cs-open');
-        document.body.classList.remove('cs-is-open');
-        panel.style.visibility = 'hidden';
-        panel.style.width = '0'; panel.style.height = '0';
-        panel.scrollTop = 0;
-        document.body.style.overflow = '';
-        // Small delay so the DOM settles, then open target
+        // Reuse closeOverlay for a clean instant reset, then open target
+        closeOverlay(overlayId);
         requestAnimationFrame(() => requestAnimationFrame(() => openOverlay(targetId)));
       });
     });

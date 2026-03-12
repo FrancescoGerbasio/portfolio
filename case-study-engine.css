@@ -57,6 +57,9 @@
   border-radius: 0;
   overflow-y: auto;
   overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
   /* Always full-size — clip-path handles the card→fullscreen morph */
   top: 0; left: 0; width: 100%; height: 100%;
   will-change: clip-path;
@@ -991,4 +994,12 @@ body.cs-is-open .mobile-menu {
     transform: none;
     opacity: 1;
   }
+}
+
+
+/* Callao title override — BrittiSans has full numeral support, Qurova does not */
+.cs-title.cs-title-body-font {
+  font-family: var(--font-body, sans-serif);
+  font-weight: 600;
+  letter-spacing: -0.01em;
 }
