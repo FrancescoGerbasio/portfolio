@@ -997,9 +997,8 @@ body.cs-is-open .mobile-menu {
 }
 
 
-/* Callao title override — BrittiSans has full numeral support, Qurova does not */
-.cs-title.cs-title-body-font {
+/* Numbers in cs-section-headings use body font which has full numeral glyph support */
+.cs-section-heading .num {
   font-family: var(--font-body, sans-serif);
-  font-weight: 600;
-  letter-spacing: -0.01em;
+  font-weight: 700;
 }
