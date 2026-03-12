@@ -997,8 +997,8 @@ body.cs-is-open .mobile-menu {
 }
 
 
-/* Numbers in cs-section-headings use body font which has full numeral glyph support */
-.cs-section-heading .num {
+/* .num — swap to body font wherever Qurova lacks numeral glyphs */
+.num {
   font-family: var(--font-body, sans-serif);
   font-weight: 700;
 }
