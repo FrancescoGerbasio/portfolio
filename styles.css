@@ -769,6 +769,15 @@ a {
     transform: translateX(2px);
 }
 
+/* NDA items have no hover arrow but need the same space reserved for year alignment */
+.project-list-item.nda-protected-item .project-year::after {
+    content: ' →';
+    opacity: 0;
+    display: inline-block;
+    transform: translateX(-6px);
+    pointer-events: none;
+}
+
 .project-list-item.nda-protected-item {
     cursor: default;
 }
