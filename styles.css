@@ -820,7 +820,8 @@ a {
 .project-name {
     font-weight: 600;
     color: var(--color-text);
-    flex-shrink: 0;
+    flex: 1;
+    min-width: 0;
 }
 
 .project-divider {
@@ -842,6 +843,8 @@ a {
     opacity: 0.7;
     white-space: nowrap;
     flex-shrink: 0;
+    min-width: 28px;
+    text-align: right;
 }
 
 @media (max-width: 768px) {
