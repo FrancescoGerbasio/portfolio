@@ -891,8 +891,6 @@ a {
     p, .timeline-desc, .sidebar-bio, .project-description, .cs-body, .about-text {
         text-align: justify;
         text-justify: inter-word;
-        hyphens: auto;
-        -webkit-hyphens: auto;
     }
 }
 /* ===================================
@@ -1424,7 +1422,7 @@ a {
         letter-spacing: 2px;
         line-height: 1.3;
         max-width: 100%;
-        text-align: left;
+        text-align: left !important;
     }
     
     .hero-info {
@@ -1450,9 +1448,6 @@ a {
         line-height: 1.5;
         text-align: justify;
         text-justify: inter-word;
-        hyphens: auto;
-        -webkit-hyphens: auto;
-        word-spacing: 0.05em;
     }
     
     .profile-image {
@@ -1570,9 +1565,6 @@ html {
     .category-subtitle {
         text-align: justify;
         text-justify: inter-word;
-        hyphens: auto;
-        -webkit-hyphens: auto;
-        word-spacing: 0.05em;
     }
 }
 
