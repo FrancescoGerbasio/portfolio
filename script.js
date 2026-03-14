@@ -113,7 +113,7 @@ document.addEventListener('DOMContentLoaded', function() {
         "Coffee first, wireframes second, everything else maybe.",
         "I have strong opinions about button radius.",
         "Dark mode is not a phase, it's a lifestyle.",
-        "I speak four languages: Italian, English, Spanish, and Design Systems."
+        "I speak four languages: Italian, English, Spanish, Design Systems."
     ];
     
     let currentPhraseIndex = 0;
