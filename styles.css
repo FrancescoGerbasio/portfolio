@@ -850,6 +850,14 @@ a {
         padding: 18px 0;
     }
 
+    .accordion-title {
+        text-align: left;
+    }
+
+    .accordion-icon {
+        margin-right: 0;
+    }
+
     /* ── Mobile list: two rows — name+year / studio ── */
     .project-list-item {
         padding: 13px 0;
