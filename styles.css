@@ -850,20 +850,51 @@ a {
         padding: 18px 0;
     }
 
+    /* ── Mobile list: two rows — name+year / studio ── */
     .project-list-item {
         padding: 13px 0;
-        gap: 8px;
+        gap: 4px 8px;
+        flex-wrap: wrap;
+        align-items: baseline;
     }
 
     .project-name {
         font-size: 14px;
+        flex-shrink: 1;
+    }
+
+    .project-divider {
+        display: none;
     }
 
     .project-studio {
-        font-size: 13px;
+        font-size: 12px;
+        width: 100%;
+        order: 3;
+        opacity: 0.6;
+    }
+
+    .project-year {
+        margin-left: auto;
+        order: 2;
+        font-size: 12px;
+    }
+
+    .project-list-item.clickable .project-year::after,
+    .project-list-item.nda-protected-item .project-year::after {
+        display: none;
     }
 }
 
+
+@media (max-width: 768px) {
+    p, .timeline-desc, .sidebar-bio, .project-description, .cs-body, .about-text {
+        text-align: justify;
+        text-justify: inter-word;
+        hyphens: auto;
+        -webkit-hyphens: auto;
+    }
+}
 /* ===================================
    WORK SECTIONS
    =================================== */
