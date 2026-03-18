@@ -741,6 +741,9 @@ a {
 .accordion-content.open .project-list-item:nth-child(9)  { transition-delay: 0.27s; }
 .accordion-content.open .project-list-item:nth-child(10) { transition-delay: 0.30s; }
 .accordion-content.open .project-list-item:nth-child(11) { transition-delay: 0.33s; }
+.accordion-content.open .project-list-item:nth-child(12) { transition-delay: 0.36s; }
+.accordion-content.open .project-list-item:nth-child(13) { transition-delay: 0.39s; }
+.accordion-content.open .project-list-item:nth-child(14) { transition-delay: 0.42s; }
 
 .project-list-item.clickable {
     cursor: pointer;
