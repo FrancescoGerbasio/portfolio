@@ -1034,3 +1034,38 @@ body.cs-is-open .mobile-menu {
 [data-theme="dark"] .cs-progress-bar-track {
     background: rgba(255,255,255,0.08);
 }
+
+/* ── Dark mode: case study hero and results keep their dark bg (they look fine) ── */
+/* ── But text inside needs to stay light ── */
+[data-theme="dark"] .cs-hero-meta,
+[data-theme="dark"] .cs-eyebrow,
+[data-theme="dark"] .cs-meta-label {
+    color: rgba(255,255,255,0.5);
+}
+[data-theme="dark"] .cs-meta-value {
+    color: rgba(255,255,255,0.85);
+}
+[data-theme="dark"] .cs-section-tag {
+    /* accent color already works fine */
+}
+[data-theme="dark"] .cs-section-heading,
+[data-theme="dark"] .cs-body,
+[data-theme="dark"] .cs-step-name,
+[data-theme="dark"] .cs-step-body,
+[data-theme="dark"] .cs-step-phase,
+[data-theme="dark"] .cs-insight-title,
+[data-theme="dark"] .cs-insight-body,
+[data-theme="dark"] .cs-next-label,
+[data-theme="dark"] .cs-next-title,
+[data-theme="dark"] .cs-result-desc,
+[data-theme="dark"] .cs-stat-desc {
+    color: var(--color-text);
+}
+[data-theme="dark"] .cs-step-num {
+    background: rgba(255,255,255,0.15);
+    color: var(--color-text);
+}
+[data-theme="dark"] .cs-insight {
+    background: rgba(255,255,255,0.04);
+    border-color: rgba(255,255,255,0.08);
+}

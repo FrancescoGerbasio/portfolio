@@ -175,7 +175,7 @@
 
 /* Smooth global theme transition */
 *, *::before, *::after {
-    transition: background-color 0.25s ease, border-color 0.25s ease, color 0.15s ease;
+    transition: background-color 0.25s ease, color 0.15s ease;
 }
 /* But don't slow down existing transitions */
 .cs-panel, .cs-overlay, .accordion-content, .project-list-item,
@@ -3223,4 +3223,8 @@ html {
 [data-theme="dark"] .song-card-front,
 [data-theme="dark"] .song-card-back {
     background: oklch(25% 0.008 15);
+}
+
+[data-theme="dark"] .project-badge::after {
+    filter: invert(1);
 }
