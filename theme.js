@@ -14,9 +14,7 @@
     }
 
     function getSavedTheme() {
-        const saved = localStorage.getItem(STORAGE_KEY);
-        if (saved) return saved;
-        return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        return localStorage.getItem(STORAGE_KEY) || 'light';
     }
 
     function toggleTheme() {

@@ -170,7 +170,7 @@
     left: 0;
     top: 50%;
     transform: translateY(-50%);
-    height: 16px;
+    height: 28px;
     width: 1px;
     background: rgba(0,0,0,0.12);
     transition: none !important;
