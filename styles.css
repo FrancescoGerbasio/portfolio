@@ -55,7 +55,7 @@
    =================================== */
 
 [data-theme="dark"] {
-    --color-bg:         oklch(3.32% 0.0000 0 / 1);   /* #0C0C0C — oil black */
+    --color-bg:         oklch(5.04% 0.031 237.7 / 1);   /* #0B1215 — obsidian */
     --color-text:       oklch(95% 0.005 15 / 1);   /* #f0ecec — warm white */
     --color-text-light: oklch(58% 0.005 15 / 1);   /* #888 — muted */
     --color-border:     oklch(45% 0.005 15 / 1);   /* mid-grey */
@@ -63,7 +63,7 @@
 
 @supports not (color: oklch(0% 0 0)) {
     [data-theme="dark"] {
-        --color-bg:         #0C0C0C;
+        --color-bg:         #0B1215;
         --color-text:       #f0ecec;
         --color-text-light: #888888;
         --color-border:     #666666;
@@ -72,7 +72,7 @@
 
 /* Dark mode — invert rgba(0,0,0,x) surfaces to rgba(255,255,255,x) */
 [data-theme="dark"] .navigation.scrolled {
-    background: rgba(12,12,12, 0.85);
+    background: rgba(11,18,21, 0.85);
     border-color: rgba(255,255,255,0.08);
 }
 
@@ -98,14 +98,14 @@
 }
 
 [data-theme="dark"] .nda-overlay {
-    background: rgba(12,12,12,0.96);
+    background: rgba(11,18,21,0.96);
     box-shadow: inset 0 0 0 2px rgba(255,255,255,0.08);
 }
 [data-theme="dark"] .nda-overlay:hover {
-    background: rgba(12,12,12,1);
+    background: rgba(11,18,21,1);
 }
 [data-theme="dark"] .project-card.nda-protected .project-image::before {
-    background: rgba(12,12,12,0.5);
+    background: rgba(11,18,21,0.5);
 }
 
 [data-theme="dark"] .nda-modal {
@@ -118,7 +118,7 @@
 }
 
 [data-theme="dark"] .cv-picker {
-    background: rgba(12,12,12,0.95);
+    background: rgba(11,18,21,0.95);
     border-color: rgba(255,255,255,0.1);
 }
 [data-theme="dark"] .cv-picker-option:hover {
@@ -127,14 +127,14 @@
 
 [data-theme="dark"] .hamburger-fade-zone {
     background: linear-gradient(to bottom,
-        oklch(3.32% 0.0000 0) 0%,
-        oklch(3.32% 0.0000 0) 10%,
-        rgba(12,12,12,0.9)  25%,
-        rgba(12,12,12,0.7)  40%,
-        rgba(12,12,12,0.4)  55%,
-        rgba(12,12,12,0.2)  70%,
-        rgba(12,12,12,0.08) 82%,
-        rgba(12,12,12,0.02) 92%,
+        oklch(5.04% 0.031 237.7) 0%,
+        oklch(5.04% 0.031 237.7) 10%,
+        rgba(11,18,21,0.9)  25%,
+        rgba(11,18,21,0.7)  40%,
+        rgba(11,18,21,0.4)  55%,
+        rgba(11,18,21,0.2)  70%,
+        rgba(11,18,21,0.08) 82%,
+        rgba(11,18,21,0.02) 92%,
         transparent         100%);
 }
 
@@ -3240,7 +3240,7 @@ html {
 
 [data-theme="dark"] .song-card-front,
 [data-theme="dark"] .song-card-back {
-    background: oklch(7% 0.0000 0);
+    background: oklch(9% 0.031 237.7);
 }
 
 [data-theme="dark"] .project-badge::after {
