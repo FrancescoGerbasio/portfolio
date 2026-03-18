@@ -3246,3 +3246,7 @@ html {
 [data-theme="dark"] .project-badge::after {
     filter: invert(1);
 }
+
+[data-theme="dark"] .social-links img {
+    filter: invert(1);
+}
