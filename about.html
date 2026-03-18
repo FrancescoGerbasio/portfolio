@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <script src="theme.js"></script>
     <meta charset="UTF-8">
     <meta name="description" content="About Francesco Gerbasio — UX/UI Designer and LQA Specialist based in Madrid. Background, skills, and experience.">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -474,6 +475,52 @@
             .about-hero { padding-top: 90px; }
             .about-cta { flex-direction: column; align-items: flex-start; }
         }
+    
+        /* ── Dark mode ── */
+        [data-theme="dark"] .skill-tag {
+            border-color: rgba(255,255,255,0.18);
+        }
+        [data-theme="dark"] .skill-tag:hover {
+            background: var(--color-text);
+            color: var(--color-bg);
+        }
+        [data-theme="dark"] .bento-card {
+            background: rgba(255,255,255,0.04);
+        }
+        [data-theme="dark"] .bento-card:hover {
+            background: rgba(255,255,255,0.08);
+        }
+        [data-theme="dark"] .lang-pill {
+            background: rgba(255,255,255,0.08);
+        }
+        [data-theme="dark"] .btn-secondary {
+            border-color: rgba(255,255,255,0.2);
+        }
+        [data-theme="dark"] .btn-secondary:hover {
+            background: rgba(255,255,255,0.06);
+        }
+        [data-theme="dark"] .about-cta {
+            border-top-color: rgba(255,255,255,0.1);
+        }
+        [data-theme="dark"] .timeline::before {
+            background: rgba(255,255,255,0.12);
+        }
+        [data-theme="dark"] .timeline-item {
+            border-bottom-color: rgba(255,255,255,0.06);
+        }
+        [data-theme="dark"] .about-stats {
+            border-top-color: rgba(255,255,255,0.1);
+            border-bottom-color: rgba(255,255,255,0.1);
+        }
+        [data-theme="dark"] .stat-item {
+            border-right-color: rgba(255,255,255,0.12);
+        }
+        [data-theme="dark"] .value-item {
+            border-bottom-color: rgba(255,255,255,0.07);
+        }
+        [data-theme="dark"] .values-header {
+            border-bottom-color: rgba(255,255,255,0.1);
+        }
     </style>
 </head>
 <body>
@@ -483,6 +530,7 @@
         <a href="fun.html" class="nav-link">Fun</a>
         <a href="about.html" class="nav-link active">About</a>
         <a href="#" class="nav-link" data-cv-trigger>Resume</a>
+            <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode"><svg class="icon-moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg><svg class="icon-sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg></button>
     </nav>
 
     <button class="hamburger-menu" id="hamburgerBtn"
@@ -499,6 +547,11 @@
         <a href="fun.html" class="nav-link">Fun</a>
         <a href="about.html" class="nav-link active">About</a>
         <a href="#" class="nav-link" data-cv-trigger>Resume</a>
+        <button class="theme-toggle theme-toggle-mobile" id="themeToggleMobile" aria-label="Toggle dark mode">
+            <svg class="icon-moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+            <svg class="icon-sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+            <span class="theme-toggle-label">Dark mode</span>
+        </button>
     </div>
 
     <main class="container">

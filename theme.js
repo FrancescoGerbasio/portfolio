@@ -1,0 +1,53 @@
+// ===================================
+// DARK MODE THEME TOGGLE
+// Runs before DOMContentLoaded to prevent flash of wrong theme
+// ===================================
+
+(function () {
+    'use strict';
+
+    const STORAGE_KEY = 'theme';
+    const html = document.documentElement;
+
+    function applyTheme(theme) {
+        html.setAttribute('data-theme', theme);
+    }
+
+    function getSavedTheme() {
+        const saved = localStorage.getItem(STORAGE_KEY);
+        if (saved) return saved;
+        return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    }
+
+    function toggleTheme() {
+        const current = html.getAttribute('data-theme') || 'light';
+        const next = current === 'dark' ? 'light' : 'dark';
+        applyTheme(next);
+        localStorage.setItem(STORAGE_KEY, next);
+    }
+
+    // Apply immediately — before any paint — to prevent flash
+    applyTheme(getSavedTheme());
+
+    document.addEventListener('DOMContentLoaded', function () {
+        // Bind both desktop and mobile toggles
+        ['themeToggle', 'themeToggleMobile'].forEach(function (id) {
+            const btn = document.getElementById(id);
+            if (btn) btn.addEventListener('click', toggleTheme);
+        });
+
+        // Sync across tabs
+        window.addEventListener('storage', function (e) {
+            if (e.key === STORAGE_KEY && e.newValue) {
+                applyTheme(e.newValue);
+            }
+        });
+
+        // Respect OS preference if user hasn't manually set a preference
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function (e) {
+            if (!localStorage.getItem(STORAGE_KEY)) {
+                applyTheme(e.matches ? 'dark' : 'light');
+            }
+        });
+    });
+})();
