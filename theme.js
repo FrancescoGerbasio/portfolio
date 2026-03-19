@@ -27,6 +27,14 @@
     // Apply immediately — before any paint — to prevent flash
     applyTheme(getSavedTheme());
 
+    // Suppress nav dot animation during initial paint
+    document.documentElement.classList.add('preload');
+    window.addEventListener('load', function () {
+        requestAnimationFrame(() => requestAnimationFrame(() => {
+            document.documentElement.classList.remove('preload');
+        }));
+    });
+
     document.addEventListener('DOMContentLoaded', function () {
         // Bind both desktop and mobile toggles
         ['themeToggle', 'themeToggleMobile'].forEach(function (id) {
