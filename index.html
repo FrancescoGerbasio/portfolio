@@ -32,6 +32,33 @@
     <!-- Case-study CSS only needed when an overlay opens — load non-blocking -->
     <link rel="stylesheet" href="case-study-engine.css" media="print" onload="this.media='all'">
     <noscript><link rel="stylesheet" href="case-study-engine.css"></noscript>
+
+    <!-- Structured Data — JSON-LD -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Person",
+      "name": "Francesco Gerbasio",
+      "url": "https://gerbas.io",
+      "image": "https://gerbas.io/Assets/Images/og-image.webp",
+      "sameAs": [
+        "https://www.linkedin.com/in/francesco-gerbasio",
+        "https://www.instagram.com/gerbasio_francesco/"
+      ],
+      "jobTitle": "UX/UI Designer & LQA Specialist",
+      "worksFor": {
+        "@type": "Organization",
+        "name": "Universally Speaking"
+      },
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Madrid",
+        "addressCountry": "ES"
+      },
+      "knowsLanguage": ["it", "en", "es"],
+      "description": "UX/UI Designer and Localization QA Specialist based in Madrid. Case studies in product design, accessibility, and interaction design."
+    }
+    </script>
 </head>
 <body>
     <!-- Navigation -->
