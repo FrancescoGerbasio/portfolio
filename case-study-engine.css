@@ -1012,7 +1012,7 @@ body.cs-is-open .mobile-menu {
 
 /* ── Dark mode overrides ── */
 [data-theme="dark"] .cs-panel {
-    background: oklch(11.6% 0.0173 256.6);
+    background: oklch(14.7% 0.0000 0);
 }
 [data-theme="dark"] .cs-section {
     border-color: rgba(255,255,255,0.07);
