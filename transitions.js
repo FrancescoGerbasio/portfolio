@@ -1,47 +1,40 @@
 /* ============================================================
-   PAGE TRANSITIONS — Apple-style fade
-   Uses a full-screen overlay so position:fixed nav is unaffected.
-   Enter: overlay fades out (revealing new page)
-   Leave: overlay fades in (covering old page) then navigates
-   ============================================================ */
+   PAGE TRANSITIONS — Apple spring
+   Animates <main> / #page-content only.
+   Fixed nav, hamburger, overlays are siblings → unaffected.
+
+   Enter : content springs up from slightly below + fades in
+   Leave : content floats up + fades out, then navigates
+============================================================ */
 
 (function () {
     'use strict';
 
-    const DURATION_OUT = 300;  // ms — leave (overlay fades in)
-    const DURATION_IN  = 400;  // ms — enter (overlay fades out)
+    const DURATION_OUT = 260;
+    const DURATION_IN  = 520;
 
-    // Inject overlay into DOM
-    const overlay = document.createElement('div');
-    overlay.id = 'pt-overlay';
-    document.body.appendChild(overlay);
+    function getTarget() {
+        return document.querySelector('main') || document.querySelector('.container');
+    }
 
-    // Animate in — overlay fades out revealing the page
     function animateIn() {
-        overlay.classList.add('pt-visible');
-        // tiny delay so the browser paints the overlay before removing it
-        requestAnimationFrame(() => requestAnimationFrame(() => {
-            overlay.classList.add('pt-fade-out');
-            setTimeout(() => {
-                overlay.classList.remove('pt-visible', 'pt-fade-out');
-            }, DURATION_IN + 50);
-        }));
+        const el = getTarget();
+        if (!el) return;
+        el.classList.add('pt-enter');
+        setTimeout(() => el.classList.remove('pt-enter'), DURATION_IN + 60);
     }
 
-    // Animate out — overlay fades in covering the page, then navigate
     function animateOut(href) {
-        if (overlay.classList.contains('pt-leaving')) return;
-        overlay.classList.add('pt-visible', 'pt-leaving');
-        setTimeout(() => {
-            window.location.href = href;
-        }, DURATION_OUT);
+        const el = getTarget();
+        if (!el) return;
+        if (el.classList.contains('pt-leave')) return;
+        el.classList.add('pt-leave');
+        setTimeout(() => { window.location.href = href; }, DURATION_OUT);
     }
 
-    // Intercept nav clicks
     document.addEventListener('click', function (e) {
         const anchor = e.target.closest('a');
         if (!anchor) return;
-
         const href = anchor.getAttribute('href');
         if (!href) return;
 
@@ -62,17 +55,16 @@
         animateOut(href);
     });
 
-    // Animate in on every page load
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', animateIn);
     } else {
-        animateIn();
+        requestAnimationFrame(() => requestAnimationFrame(animateIn));
     }
 
-    // Handle back/forward from bfcache
     window.addEventListener('pageshow', function (e) {
         if (e.persisted) {
-            overlay.classList.remove('pt-leaving');
+            const el = getTarget();
+            if (el) el.classList.remove('pt-leave');
             animateIn();
         }
     });

@@ -3314,36 +3314,43 @@ html {
 }
 
 /* ═══════════════════════════════════════════════════════
-   PAGE TRANSITIONS — overlay fade
-   A full-screen overlay fades in/out so position:fixed
-   elements (nav, hamburger) are never affected.
+   PAGE TRANSITIONS — Apple spring
+   Only <main> animates. Fixed nav/hamburger are siblings
+   so they're completely unaffected by the transform.
 ═══════════════════════════════════════════════════════ */
 
-#pt-overlay {
-    position: fixed;
-    inset: 0;
-    z-index: 9999;
-    background: var(--color-bg);
-    opacity: 0;
+/* ── ENTER: spring up from below ── */
+main.pt-enter,
+.container.pt-enter {
+    animation: pt-spring-in 520ms cubic-bezier(0.34, 1.18, 0.64, 1) both;
+}
+
+@keyframes pt-spring-in {
+    0%   { opacity: 0; transform: translateY(28px) scale(0.98); filter: blur(6px); }
+    55%  { opacity: 1; filter: blur(0); }
+    100% { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
+}
+
+/* ── LEAVE: float up and dissolve ── */
+main.pt-leave,
+.container.pt-leave {
+    animation: pt-float-out 260ms cubic-bezier(0.4, 0, 1, 1) both;
     pointer-events: none;
-    transition: opacity 0.3s ease;
-    will-change: opacity;
 }
 
-/* Overlay covering the page (leave or pre-enter state) */
-#pt-overlay.pt-visible {
-    opacity: 1;
-    pointer-events: auto;
-}
-
-/* Overlay fading out to reveal the new page */
-#pt-overlay.pt-fade-out {
-    opacity: 0;
-    transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+@keyframes pt-float-out {
+    0%   { opacity: 1; transform: translateY(0) scale(1);    filter: blur(0); }
+    100% { opacity: 0; transform: translateY(-20px) scale(0.98); filter: blur(4px); }
 }
 
 /* Respect reduced motion */
 @media (prefers-reduced-motion: reduce) {
-    #pt-overlay { transition: opacity 0.15s ease; }
-    #pt-overlay.pt-fade-out { transition: opacity 0.15s ease; }
+    main.pt-enter, .container.pt-enter {
+        animation: pt-fade-in 250ms ease both;
+    }
+    main.pt-leave, .container.pt-leave {
+        animation: pt-fade-out 200ms ease both;
+    }
+    @keyframes pt-fade-in  { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes pt-fade-out { from { opacity: 1; } to { opacity: 0; } }
 }
