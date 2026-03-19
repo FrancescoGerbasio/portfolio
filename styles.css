@@ -3250,3 +3250,33 @@ html {
 [data-theme="dark"] .social-links img {
     filter: invert(1);
 }
+
+/* ══════════════════════════════════════
+   DARK MODE — lift hardcoded blacks
+══════════════════════════════════════ */
+
+/* Song card front + back (#000) */
+[data-theme="dark"] .song-card-front,
+[data-theme="dark"] .song-card-back {
+  background: #252830;
+}
+
+/* Song card info bar */
+[data-theme="dark"] .song-card-info {
+  background: rgba(37, 40, 48, 0.85);
+}
+
+/* Artist card (#111) */
+[data-theme="dark"] .artist-card {
+  background: #252830;
+}
+
+/* Game cover (#1a1a1a) */
+[data-theme="dark"] .game-cover {
+  background: #2a2c32;
+}
+
+/* Gaming featured (#0a0a0a) */
+[data-theme="dark"] .games-featured {
+  background: #1e2025;
+}

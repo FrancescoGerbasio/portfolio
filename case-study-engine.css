@@ -1069,3 +1069,30 @@ body.cs-is-open .mobile-menu {
     background: rgba(255,255,255,0.04);
     border-color: rgba(255,255,255,0.08);
 }
+
+/* ══════════════════════════════════════
+   DARK MODE — lift hardcoded blacks
+══════════════════════════════════════ */
+
+/* Case study hero (#080808) */
+[data-theme="dark"] .cs-hero {
+  background: #252830;
+}
+
+/* Results callout (#080808) */
+[data-theme="dark"] .cs-results {
+  background: #1e2025;
+}
+
+/* Mockup showcase stage (#0c0c0c) */
+[data-theme="dark"] .cs-showcase {
+  background: #252830;
+}
+
+/* Phone/tablet frames (#111, #1a1a1a) */
+[data-theme="dark"] .cs-phone,
+[data-theme="dark"] .cs-tablet,
+[data-theme="dark"] .cs-showcase-phone,
+[data-theme="dark"] .cs-showcase-tablet {
+  background: #2a2c32;
+}
