@@ -1,34 +1,44 @@
 /* ============================================================
-   PAGE TRANSITIONS — Apple-style
-   Enter: page scales up from 0.97 + fades in (spring ease)
-   Leave: page scales down to 0.98 + fades out (fast)
+   PAGE TRANSITIONS — Apple-style fade
+   Uses a full-screen overlay so position:fixed nav is unaffected.
+   Enter: overlay fades out (revealing new page)
+   Leave: overlay fades in (covering old page) then navigates
    ============================================================ */
 
 (function () {
     'use strict';
 
-    const DURATION_OUT = 220;  // ms — leave animation
-    const DURATION_IN  = 480;  // ms — enter animation (spring feels longer)
+    const DURATION_OUT = 300;  // ms — leave (overlay fades in)
+    const DURATION_IN  = 400;  // ms — enter (overlay fades out)
 
-    // Mark the page as ready to animate in
+    // Inject overlay into DOM
+    const overlay = document.createElement('div');
+    overlay.id = 'pt-overlay';
+    document.body.appendChild(overlay);
+
+    // Animate in — overlay fades out revealing the page
     function animateIn() {
-        document.documentElement.classList.add('page-enter');
-        setTimeout(() => {
-            document.documentElement.classList.remove('page-enter');
-        }, DURATION_IN + 100);
+        overlay.classList.add('pt-visible');
+        // tiny delay so the browser paints the overlay before removing it
+        requestAnimationFrame(() => requestAnimationFrame(() => {
+            overlay.classList.add('pt-fade-out');
+            setTimeout(() => {
+                overlay.classList.remove('pt-visible', 'pt-fade-out');
+            }, DURATION_IN + 50);
+        }));
     }
 
-    // Animate out then navigate
+    // Animate out — overlay fades in covering the page, then navigate
     function animateOut(href) {
-        if (document.documentElement.classList.contains('page-leaving')) return;
-        document.documentElement.classList.add('page-leaving');
+        if (overlay.classList.contains('pt-leaving')) return;
+        overlay.classList.add('pt-visible', 'pt-leaving');
         setTimeout(() => {
             window.location.href = href;
         }, DURATION_OUT);
     }
 
     // Intercept nav clicks
-    function handleClick(e) {
+    document.addEventListener('click', function (e) {
         const anchor = e.target.closest('a');
         if (!anchor) return;
 
@@ -46,27 +56,23 @@
         );
 
         if (!isInternal) return;
-
-        // Don't intercept if a case study overlay is open
         if (document.body.classList.contains('cs-is-open')) return;
 
         e.preventDefault();
         animateOut(href);
-    }
+    });
 
-    document.addEventListener('click', handleClick);
-
-    // Animate in on load
+    // Animate in on every page load
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', animateIn);
     } else {
-        requestAnimationFrame(() => requestAnimationFrame(animateIn));
+        animateIn();
     }
 
-    // Handle back/forward navigation
+    // Handle back/forward from bfcache
     window.addEventListener('pageshow', function (e) {
         if (e.persisted) {
-            document.documentElement.classList.remove('page-leaving');
+            overlay.classList.remove('pt-leaving');
             animateIn();
         }
     });

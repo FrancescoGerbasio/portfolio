@@ -3314,63 +3314,36 @@ html {
 }
 
 /* ═══════════════════════════════════════════════════════
-   PAGE TRANSITIONS — Apple-style
-   Enter: scale 0.97→1 + fade in  (spring, 480ms)
-   Leave: scale 1→0.98 + fade out (ease-in, 220ms)
+   PAGE TRANSITIONS — overlay fade
+   A full-screen overlay fades in/out so position:fixed
+   elements (nav, hamburger) are never affected.
 ═══════════════════════════════════════════════════════ */
 
-/* Default state — fully visible, no transform */
-html {
-    opacity: 1;
-    transform: scale(1) translateY(0);
-    transform-origin: center top;
-}
-
-/* ── ENTER — new page springs in ── */
-html.page-enter {
-    animation: page-spring-in 480ms cubic-bezier(0.34, 1.18, 0.64, 1) both;
-}
-
-@keyframes page-spring-in {
-    0% {
-        opacity: 0;
-        transform: scale(0.97) translateY(12px);
-        filter: blur(4px);
-    }
-    60% {
-        opacity: 1;
-        filter: blur(0px);
-    }
-    100% {
-        opacity: 1;
-        transform: scale(1) translateY(0);
-        filter: blur(0px);
-    }
-}
-
-/* ── LEAVE — current page shrinks away ── */
-html.page-leaving {
-    animation: page-shrink-out 220ms cubic-bezier(0.4, 0, 1, 1) both;
+#pt-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    background: var(--color-bg);
+    opacity: 0;
     pointer-events: none;
+    transition: opacity 0.3s ease;
+    will-change: opacity;
 }
 
-@keyframes page-shrink-out {
-    0% {
-        opacity: 1;
-        transform: scale(1) translateY(0);
-        filter: blur(0px);
-    }
-    100% {
-        opacity: 0;
-        transform: scale(0.98) translateY(-8px);
-        filter: blur(3px);
-    }
+/* Overlay covering the page (leave or pre-enter state) */
+#pt-overlay.pt-visible {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+/* Overlay fading out to reveal the new page */
+#pt-overlay.pt-fade-out {
+    opacity: 0;
+    transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* Respect reduced motion */
 @media (prefers-reduced-motion: reduce) {
-    html.page-enter  { animation: page-fade-in  300ms ease both; }
-    html.page-leaving { animation: page-fade-out 200ms ease both; }
-    @keyframes page-fade-in  { from { opacity: 0; } to { opacity: 1; } }
-    @keyframes page-fade-out { from { opacity: 1; } to { opacity: 0; } }
+    #pt-overlay { transition: opacity 0.15s ease; }
+    #pt-overlay.pt-fade-out { transition: opacity 0.15s ease; }
 }
