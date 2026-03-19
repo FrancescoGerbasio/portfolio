@@ -1522,6 +1522,12 @@ a {
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         border: 1px solid rgba(255, 255, 255, 0.5);
     }
+
+    [data-theme="dark"] .location-widget-mobile {
+        background: rgba(37, 37, 37, 0.85);
+        border-color: rgba(255, 255, 255, 0.08);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    }
     
     .location-map-mobile {
         font-size: 24px;
