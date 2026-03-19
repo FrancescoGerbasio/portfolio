@@ -77,11 +77,15 @@ document.addEventListener('DOMContentLoaded', function() {
             scrollScheduled = false;
         });
     }
+    // nav-ready fires once on the first real user scroll — dot never animates on load
+    window.addEventListener('scroll', function addNavReady() {
+        navigation.classList.add('nav-ready');
+        window.removeEventListener('scroll', addNavReady);
+    }, { passive: true, once: true });
+
     window.addEventListener('scroll', onScroll, { passive: true });
     onScroll();
 
-    // Add nav-ready after page settles — prevents dot animation flash on load
-    setTimeout(() => navigation.classList.add('nav-ready'), 600);
 
     // ===================================
     // SCROLL SPY — IntersectionObserver
