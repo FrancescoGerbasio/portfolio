@@ -77,6 +77,11 @@ document.addEventListener('DOMContentLoaded', function() {
             scrollScheduled = false;
         });
     }
+    // nav-ready added on first user scroll — gates the dot animation so it never fires on load
+    window.addEventListener('scroll', function onFirstScroll() {
+        navigation.classList.add('nav-ready');
+    }, { passive: true, once: true });
+
     window.addEventListener('scroll', onScroll, { passive: true });
     onScroll();
 
