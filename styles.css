@@ -293,34 +293,7 @@ a {
     font-weight: 600;
 }
 
-/* Active section indicator dot - only shows when scrolled */
-.navigation.scrolled .nav-link.active::after {
-    content: '';
-    position: absolute;
-    bottom: 0px;
-    left: 50%;
-    width: 5px;
-    height: 5px;
-    background-color: var(--color-text);
-    border-radius: 50%;
-    transform: translateX(-50%) scale(1);
-    opacity: 1;
-}
-
-/* Only animate the dot after the page has settled */
-.navigation.scrolled.nav-ready .nav-link.active::after {
-    animation: dotSlideUp 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-
-/* Suppress ALL dot animation during initial page load */
-html.preload .navigation .nav-link::after,
-html.preload .navigation .nav-link.active::after {
-    animation: none !important;
-    opacity: 0 !important;
-    transform: translateX(-50%) scale(0) !important;
-}
-
-/* Hidden state for non-active items - smooth transition */
+/* Nav dot — transition only, no keyframe animation (prevents flash on scroll) */
 .navigation.scrolled .nav-link::after {
     content: '';
     position: absolute;
@@ -332,23 +305,14 @@ html.preload .navigation .nav-link.active::after {
     border-radius: 50%;
     transform: translateX(-50%) scale(0);
     opacity: 0;
-    transition: opacity 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), 
-                transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    transition:
+        opacity   0.25s ease,
+        transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-/* Slide up animation from bottom */
-@keyframes dotSlideUp {
-    0% {
-        opacity: 0;
-        transform: translateX(-50%) translateY(12px) scale(0.5);
-    }
-    60% {
-        transform: translateX(-50%) translateY(-2px) scale(1.2);
-    }
-    100% {
-        opacity: 1;
-        transform: translateX(-50%) translateY(0) scale(1);
-    }
+.navigation.scrolled .nav-link.active::after {
+    opacity: 1;
+    transform: translateX(-50%) scale(1);
 }
 
 .nav-link:hover {
