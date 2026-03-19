@@ -1,104 +1,124 @@
 /* ============================================================
-   CASE STUDY ENGINE — JavaScript v2
-   Fixes:
-   - "Next project" navigation now properly resets scroll reveal
-   - "Back to all" closes overlay and scrolls to top of page
-   - Close button position avoids hamburger on mobile
+   CASE STUDY ENGINE — v3 with lazy loading
+   Overlays are fetched from separate HTML files on first click,
+   injected into the DOM, then opened. Subsequent opens skip fetch.
    ============================================================ */
 
 (function () {
   'use strict';
 
-  const studies   = [];
-  const studyMap  = {}; // overlayId → study
+  const studies  = [];
+  const studyMap = {};
 
-  // ── Convert a card DOMRect to a clip-path inset() string ──
-  // The panel is always position:absolute inset:0 (= full viewport).
-  // inset(t% r% b% l% round Rpx) clips it to match the card rect exactly —
-  // GPU-composited, zero layout reads per frame, perfect aspect ratio.
-  function rectToInset(rect, radius) {
-    const vw = window.innerWidth;
-    const vh = window.innerHeight;
-    const t = (rect.top              / vh * 100).toFixed(3);
-    const r = ((vw - rect.right)     / vw * 100).toFixed(3);
-    const b = ((vh - rect.bottom)    / vh * 100).toFixed(3);
-    const l = (rect.left             / vw * 100).toFixed(3);
-    return `inset(${t}% ${r}% ${b}% ${l}% round ${radius}px)`;
+  // Track which overlays have been loaded
+  const loaded = {};
+
+  // Map card → overlay id → fragment file
+  const registry = {}; // populated by CaseStudy.register()
+
+  // ── Fetch and inject overlay HTML ──
+  async function loadOverlay(overlayId) {
+    if (loaded[overlayId]) return; // already in DOM
+    loaded[overlayId] = true;
+
+    try {
+      const res  = await fetch(`${overlayId}.html`);
+      const text = await res.text();
+
+      // Parse and inject
+      const tmp = document.createElement('div');
+      tmp.innerHTML = text;
+      while (tmp.firstChild) {
+        document.body.appendChild(tmp.firstChild);
+      }
+
+      // Re-register now the overlay is in DOM
+      const entry = registry[overlayId];
+      if (entry) _register(entry.cardId, overlayId);
+
+    } catch (err) {
+      console.error(`Failed to load ${overlayId}.html`, err);
+      loaded[overlayId] = false; // allow retry
+    }
   }
 
-  // ── Core open function (used by card click AND next/prev nav) ──
+  // ── Core open ──
   function openOverlay(overlayId) {
     const study = studyMap[overlayId];
     if (!study) return;
 
-    const { card, overlay, panel, progress } = study;
-    const rect = card.getBoundingClientRect();
+    const { card, overlay, panel } = study;
 
-    // Reset sections + scroll before opening
     panel.querySelectorAll('.cs-section').forEach(s => s.classList.remove('cs-visible'));
     panel.scrollTop = 0;
 
-    // Snap clip to card rect instantly (no transition), then make visible
-    // The round value (14px) matches the card's border-radius — clip-path
-    // handles ALL rounding so panel border-radius is 0.
-    panel.style.transition = 'none';
-    panel.style.visibility = 'visible';
-    panel.style.clipPath   = rectToInset(rect, 14);
+    const rect = card.getBoundingClientRect();
+    panel.style.transition   = 'none';
+    panel.style.visibility   = 'visible';
+    panel.style.top          = rect.top    + 'px';
+    panel.style.left         = rect.left   + 'px';
+    panel.style.width        = rect.width  + 'px';
+    panel.style.height       = rect.height + 'px';
+    panel.style.borderRadius = '20px';
 
     overlay.classList.add('cs-open');
     document.body.style.overflow = 'hidden';
     document.body.classList.add('cs-is-open');
 
-    // Double-rAF: browser paints the card-sized clip first,
-    // then transitions to full viewport — round animates 14px → 0px smoothly.
-    requestAnimationFrame(() => {
-      requestAnimationFrame(() => {
-        panel.style.transition = '';
-        panel.style.clipPath   = 'inset(0% 0% 0% 0% round 0px)';
-      });
-    });
+    panel.offsetHeight;
+    panel.style.transition   = '';
+    panel.style.top          = '0';
+    panel.style.left         = '0';
+    panel.style.width        = '100%';
+    panel.style.height       = '100%';
+    panel.style.borderRadius = '0';
 
-    // Set up scroll reveal after animation lands
     setTimeout(() => setupReveal(panel), 700);
   }
 
-  // ── Core close function — instant, no animation ──
+  // ── Core close ──
   function closeOverlay(overlayId) {
     const study = studyMap[overlayId];
     if (!study) return;
 
-    const { overlay, panel, progress } = study;
+    const { card, overlay, panel, progress } = study;
+
+    panel.querySelectorAll('.cs-section').forEach(s => s.classList.remove('cs-visible'));
+
+    const rect = card.getBoundingClientRect();
+    panel.style.top          = rect.top    + 'px';
+    panel.style.left         = rect.left   + 'px';
+    panel.style.width        = rect.width  + 'px';
+    panel.style.height       = rect.height + 'px';
+    panel.style.borderRadius = '20px';
 
     overlay.classList.remove('cs-open');
     document.body.style.overflow = '';
     document.body.classList.remove('cs-is-open');
 
-    panel.style.transition = 'none';
-    panel.style.visibility = 'hidden';
-    panel.style.clipPath   = 'inset(0% 0% 0% 0% round 0px)';
-    panel.style.opacity    = '1';
-    panel.style.overflow   = '';
-    panel.scrollTop        = 0;
-    if (progress) progress.style.width = '0%';
-    panel.querySelectorAll('.cs-section').forEach(s => s.classList.remove('cs-visible'));
+    setTimeout(() => {
+      panel.style.visibility = 'hidden';
+      panel.style.width      = '0';
+      panel.style.height     = '0';
+      panel.style.top        = '0';
+      panel.style.left       = '0';
+      panel.scrollTop        = 0;
+      if (progress) progress.style.width = '0%';
+    }, 820);
   }
 
-  // ── Scroll reveal observer ──
+  // ── Scroll reveal ──
   function setupReveal(panel) {
-    const sections = panel.querySelectorAll('.cs-section');
     const obs = new IntersectionObserver((entries) => {
       entries.forEach(e => {
-        if (e.isIntersecting) {
-          e.target.classList.add('cs-visible');
-          obs.unobserve(e.target);
-        }
+        if (e.isIntersecting) { e.target.classList.add('cs-visible'); obs.unobserve(e.target); }
       });
     }, { root: panel, threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
-    sections.forEach(s => obs.observe(s));
+    panel.querySelectorAll('.cs-section').forEach(s => obs.observe(s));
   }
 
-  // ── Register a case study ──
-  function register(cardId, overlayId) {
+  // ── Internal register (called after overlay is in DOM) ──
+  function _register(cardId, overlayId) {
     const card    = document.getElementById(cardId);
     const overlay = document.getElementById(overlayId);
     if (!card || !overlay) return;
@@ -112,42 +132,84 @@
     studies.push(study);
     studyMap[overlayId] = study;
 
-    // Reading progress bar
     panel.addEventListener('scroll', () => {
       if (!progress) return;
       const sh = panel.scrollHeight - panel.clientHeight;
       progress.style.width = sh > 0 ? (panel.scrollTop / sh) * 100 + '%' : '0%';
     });
 
-    // Card click → open
-    card.addEventListener('click', () => openOverlay(overlayId));
-
-    // Close button
     if (closeBtn) closeBtn.addEventListener('click', () => closeOverlay(overlayId));
-
-    // Backdrop click
     if (backdrop) backdrop.addEventListener('click', () => closeOverlay(overlayId));
 
-    // "Next project" links inside this panel
+    // "Next project" links
     panel.querySelectorAll('[data-open]').forEach(el => {
       el.addEventListener('click', () => {
         const targetId = el.dataset.open;
-        // Reuse closeOverlay for a clean instant reset, then open target
-        closeOverlay(overlayId);
-        requestAnimationFrame(() => requestAnimationFrame(() => openOverlay(targetId)));
+        overlay.classList.remove('cs-open');
+        document.body.classList.remove('cs-is-open');
+        panel.style.visibility = 'hidden';
+        panel.style.width = '0'; panel.style.height = '0';
+        panel.scrollTop = 0;
+        document.body.style.overflow = '';
+
+        // Load target if needed, then open
+        ensureAndOpen(targetId);
       });
     });
 
-    // "Back to all projects" — close and scroll page to top
+    // Back to top
     const backTop   = panel.querySelector('#cs-back-to-top');
     const backArrow = panel.querySelector('#cs-back-arrow');
     [backTop, backArrow].forEach(el => {
       if (!el) return;
       el.addEventListener('click', () => {
         closeOverlay(overlayId);
-        // After close animation, scroll main page back to top
         setTimeout(() => window.scrollTo({ top: 0, behavior: 'smooth' }), 200);
       });
+    });
+
+    // Now open if this was triggered by a click
+    if (study._pendingOpen) {
+      study._pendingOpen = false;
+      openOverlay(overlayId);
+    }
+  }
+
+  // ── Ensure overlay is loaded then open ──
+  async function ensureAndOpen(overlayId) {
+    if (!loaded[overlayId]) {
+      // Mark as pending so _register opens it when ready
+      registry[overlayId] = registry[overlayId] || {};
+      registry[overlayId]._pendingOpen = true;
+
+      await loadOverlay(overlayId);
+
+      // If _register already ran (sync path), open now
+      if (studyMap[overlayId] && !studyMap[overlayId]._pendingOpen) {
+        requestAnimationFrame(() => requestAnimationFrame(() => openOverlay(overlayId)));
+      }
+    } else {
+      requestAnimationFrame(() => requestAnimationFrame(() => openOverlay(overlayId)));
+    }
+  }
+
+  // ── Public register — called on DOMContentLoaded for each card ──
+  function register(cardId, overlayId) {
+    registry[overlayId] = { cardId, overlayId };
+
+    const card = document.getElementById(cardId);
+    if (!card) return;
+
+    card.addEventListener('click', async () => {
+      if (!loaded[overlayId]) {
+        // Show a subtle loading state on the card
+        card.style.cursor = 'wait';
+        await loadOverlay(overlayId);
+        card.style.cursor = '';
+        requestAnimationFrame(() => requestAnimationFrame(() => openOverlay(overlayId)));
+      } else {
+        openOverlay(overlayId);
+      }
     });
   }
 
@@ -160,4 +222,5 @@
   });
 
   window.CaseStudy = { register };
+
 })();
