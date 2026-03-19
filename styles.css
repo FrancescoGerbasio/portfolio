@@ -3258,9 +3258,9 @@ html {
 /* Mobile theme toggle in hamburger menu */
 .theme-toggle-mobile {
     border-left: none;
-    border-top: 1px solid rgba(0,0,0,0.08);
-    padding: 16px 0;
-    margin: 8px 0 0 0;
+    border: none;
+    padding: 10px 16px;
+    margin: 4px 0 0 0;
     width: 100%;
     justify-content: flex-start;
     gap: 0;
@@ -3268,22 +3268,17 @@ html {
     font-weight: 400;
     font-family: var(--font-body);
     opacity: 0.7;
-    /* No icon — text only, no absolute positioning needed */
     position: static;
-    padding-left: 16px;
 }
 
 /* Text label switching */
-.theme-toggle-label { position: relative; }
+/* Light mode → show "Dark mode" label; Dark mode → show "Light mode" label */
 .theme-toggle-label .label-light { display: none; }
-.theme-toggle-label .label-dark  { display: block; }
-[data-theme="dark"] .theme-toggle-label .label-light { display: block; }
+.theme-toggle-label .label-dark  { display: inline; }
+[data-theme="dark"] .theme-toggle-label .label-light { display: inline; }
 [data-theme="dark"] .theme-toggle-label .label-dark  { display: none; }
 .theme-toggle-mobile:hover { transform: none; opacity: 1; }
-.theme-toggle-label {
-    font-size: clamp(18px, 1.5vw, 24px);
-    font-weight: 400;
-}
+
 [data-theme="dark"] .theme-toggle-mobile {
     border-top-color: rgba(255,255,255,0.08);
 }
