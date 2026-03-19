@@ -80,6 +80,9 @@ document.addEventListener('DOMContentLoaded', function() {
     window.addEventListener('scroll', onScroll, { passive: true });
     onScroll();
 
+    // Add nav-ready after page settles — prevents dot animation flash on load
+    setTimeout(() => navigation.classList.add('nav-ready'), 600);
+
     // ===================================
     // SCROLL SPY — IntersectionObserver
     // (zero layout reads; replaces offsetTop/offsetHeight loop)
@@ -113,7 +116,7 @@ document.addEventListener('DOMContentLoaded', function() {
         "Coffee first, wireframes second, everything else maybe.",
         "I have strong opinions about button radius.",
         "Dark mode is not a phase, it's a lifestyle.",
-        "I speak four languages: Italian, English, Spanish, Design Systems."
+        "I speak three languages: Italian, English, and Design Systems."
     ];
     
     let currentPhraseIndex = 0;

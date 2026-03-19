@@ -303,9 +303,13 @@ a {
     height: 5px;
     background-color: var(--color-text);
     border-radius: 50%;
-    animation: dotSlideUp 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
     transform: translateX(-50%) scale(1);
     opacity: 1;
+}
+
+/* Only animate the dot after the page has settled */
+.navigation.scrolled.nav-ready .nav-link.active::after {
+    animation: dotSlideUp 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 /* Hidden state for non-active items - smooth transition */
@@ -3256,6 +3260,16 @@ html {
     font-weight: 400;
     font-family: var(--font-body);
     opacity: 0.7;
+    /* Override the absolute icon positioning from desktop toggle */
+    position: relative;
+}
+
+/* Icon wrapper — fixed size box, icons stack absolutely inside it */
+.theme-toggle-mobile .pt-icon-wrap {
+    position: relative;
+    width: 22px;
+    height: 22px;
+    flex-shrink: 0;
 }
 .theme-toggle-mobile:hover { transform: none; opacity: 1; }
 .theme-toggle-label {
