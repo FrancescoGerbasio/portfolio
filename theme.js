@@ -11,9 +11,18 @@
 
     function applyTheme(theme) {
         html.setAttribute('data-theme', theme);
-        // Update safe area / browser chrome color
-        const meta = document.getElementById('themeColorMeta');
-        if (meta) meta.setAttribute('content', theme === 'dark' ? '#252525' : '#fdf5f6');
+        // Force iOS Safari to update browser chrome color
+        // setAttribute alone is ignored — remove+recreate is the reliable fix
+        const color = theme === 'dark' ? '#252525' : '#fdf5f6';
+        let meta = document.querySelector('meta[name="theme-color"]');
+        if (meta) {
+            meta.parentNode.removeChild(meta);
+        }
+        meta = document.createElement('meta');
+        meta.name = 'theme-color';
+        meta.id = 'themeColorMeta';
+        meta.content = color;
+        document.head.appendChild(meta);
     }
 
     function getSavedTheme() {
@@ -31,10 +40,6 @@
     applyTheme(getSavedTheme());
 
     document.addEventListener('DOMContentLoaded', function () {
-        // Sync theme-color meta now that DOM exists
-        const meta = document.getElementById('themeColorMeta');
-        if (meta) meta.setAttribute('content', getSavedTheme() === 'dark' ? '#252525' : '#fdf5f6');
-
         // Bind both desktop and mobile toggles
         ['themeToggle', 'themeToggleMobile'].forEach(function (id) {
             const btn = document.getElementById(id);
