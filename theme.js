@@ -33,7 +33,12 @@
         const current = html.getAttribute('data-theme') || 'light';
         const next = current === 'dark' ? 'light' : 'dark';
         localStorage.setItem(STORAGE_KEY, next);
-        window.location.reload();
+        // Reload only on mobile so iOS Safari updates the status bar color
+        if (window.innerWidth <= 768) {
+            location.reload();
+        } else {
+            applyTheme(next);
+        }
     }
 
     // Apply immediately — before any paint — to prevent flash
