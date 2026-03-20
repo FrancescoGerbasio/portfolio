@@ -23,12 +23,15 @@
     <title>Francesco - Portfolio</title>
 
     <!-- Preconnect to 3rd-party origin used for weather (reduces TTFB on the fetch) -->
-    <link rel="preconnect" href="https://api.open-meteo.com">
+    <link rel="preconnect" href="https://api.open-meteo.com" crossorigin>
 
     <!-- Preload the LCP image so the browser discovers it immediately -->
     <link rel="preload" as="image" href="Assets/Images/Francesco_Gerbasio.webp" fetchpriority="high">
 
     <!-- Critical CSS — render-blocking, must stay here -->
+    <!-- Preload custom fonts to reduce render-blocking -->
+    <link rel="preload" href="Assets/Fonts/Qurova/Qurova-Bold.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="Assets/Fonts/BrittiSans/BrittiSans-Semibold.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="stylesheet" href="styles.css">
 
     <!-- Case-study CSS only needed when an overlay opens — load non-blocking -->
@@ -176,7 +179,7 @@
                 <div class="project-card nda-protected" data-project-id="red-dead">
                     <a href="#" data-href="https://www.rockstargames.com/reddeadredemption" target="_blank" class="project-image-link nda-link">
                         <div class="project-image">
-                            <img src="Assets/Images/RedDeadRedemption.webp" alt="Red Dead Redemption" loading="lazy" decoding="async">
+                            <img src="Assets/Images/RedDeadRedemption.webp" alt="Red Dead Redemption" width="744" height="418" loading="lazy" decoding="async">
                             <!-- NDA Lock Overlay -->
                             <div class="nda-overlay">
                                 <div class="nda-lock-icon">🔒</div>
@@ -199,7 +202,7 @@
                 <div class="project-card">
                     <a href="https://www.surgentstudios.com/projects/dead-take" target="_blank" class="project-image-link">
                         <div class="project-image">
-                            <img src="Assets/Images/DeadTake.webp" alt="Dead Take" loading="lazy" decoding="async">
+                            <img src="Assets/Images/DeadTake.webp" alt="Dead Take" width="744" height="418" loading="lazy" decoding="async">
                         </div>
                     </a>
                     <div class="project-info">
@@ -311,7 +314,7 @@
                 <!-- Cines Callao -->
                 <div class="project-card cs-card" id="card-callao" role="button" tabindex="0" aria-label="Open Cines Callao case study">
                     <div class="project-image cs-card-thumb" style="background:linear-gradient(135deg,#1a0a0c 0%,#2d0a0e 100%);">
-                        <img src="Assets/Images/CinesCallao.webp" alt="Cines Callao" loading="eager" decoding="async">
+                        <img src="Assets/Images/CinesCallao.webp" alt="Cines Callao" width="744" height="418" loading="eager" decoding="async">
                         <div class="cs-card-overlay">
                             <span class="cs-card-tag">UX/UI · iOS · 2025</span>
                             <span class="cs-card-open">View Case Study <svg width="13" height="13" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="vertical-align:middle;display:inline-block;margin-left:1px;"><path d="M2.5 11.5L11.5 2.5M11.5 2.5H5M11.5 2.5V9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
@@ -330,7 +333,7 @@
                 <!-- Abruzzo Experience -->
                 <div class="project-card cs-card" id="card-abruzzo" role="button" tabindex="0" aria-label="Open Abruzzo Experience case study">
                     <div class="project-image cs-card-thumb" style="background:linear-gradient(135deg,#0a1a0f 0%,#0d2416 100%);">
-                        <img src="Assets/Images/AbruzzoExperience.webp" alt="Abruzzo Experience" loading="eager" decoding="async">
+                        <img src="Assets/Images/AbruzzoExperience.webp" alt="Abruzzo Experience" width="744" height="418" loading="eager" decoding="async">
                         <div class="cs-card-overlay">
                             <span class="cs-card-tag">UX/UI · Travel App · 2024</span>
                             <span class="cs-card-open">View Case Study <svg width="13" height="13" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="vertical-align:middle;display:inline-block;margin-left:1px;"><path d="M2.5 11.5L11.5 2.5M11.5 2.5H5M11.5 2.5V9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
@@ -349,7 +352,7 @@
                 <!-- Dicarlobus -->
                 <div class="project-card cs-card" id="card-dicarlobus" role="button" tabindex="0" aria-label="Open Dicarlobus case study">
                     <div class="project-image cs-card-thumb" style="background:linear-gradient(135deg,#1a0e00 0%,#261500 100%);">
-                        <img src="Assets/Images/DicarlobusRedesign.webp" alt="Dicarlobus Redesign" loading="eager" decoding="async">
+                        <img src="Assets/Images/DicarlobusRedesign.webp" alt="Dicarlobus Redesign" width="744" height="418" loading="eager" decoding="async">
                         <div class="cs-card-overlay">
                             <span class="cs-card-tag">UX/UI · Transport · 2024</span>
                             <span class="cs-card-open">View Case Study <svg width="13" height="13" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="vertical-align:middle;display:inline-block;margin-left:1px;"><path d="M2.5 11.5L11.5 2.5M11.5 2.5H5M11.5 2.5V9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
@@ -368,7 +371,7 @@
                 <!-- QuickCheckout -->
                 <div class="project-card cs-card" id="card-quickcheckout" role="button" tabindex="0" aria-label="Open QuickCheckout case study">
                     <div class="project-image cs-card-thumb" style="background:linear-gradient(135deg,#040c1a 0%,#0a1a2e 100%);">
-                        <img src="Assets/Images/QuickCheckout.webp" alt="QuickCheckout" loading="eager" decoding="async">
+                        <img src="Assets/Images/QuickCheckout.webp" alt="QuickCheckout" width="744" height="418" loading="eager" decoding="async">
                         <div class="cs-card-overlay">
                             <span class="cs-card-tag">UX/UI · E-Commerce · 2024</span>
                             <span class="cs-card-open">View Case Study <svg width="13" height="13" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="vertical-align:middle;display:inline-block;margin-left:1px;"><path d="M2.5 11.5L11.5 2.5M11.5 2.5H5M11.5 2.5V9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
