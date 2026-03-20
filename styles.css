@@ -1788,6 +1788,10 @@ html {
 
 .flag-navigation::-webkit-scrollbar { display: none; }
 
+[data-theme="dark"] .flag-navigation {
+    background: rgba(255,255,255,0.08);
+}
+
 @media (max-width: 768px) {
     .flag-navigation {
         width: 100%;
