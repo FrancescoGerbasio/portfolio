@@ -31,6 +31,10 @@
     applyTheme(getSavedTheme());
 
     document.addEventListener('DOMContentLoaded', function () {
+        // Sync theme-color meta now that DOM exists
+        const meta = document.getElementById('themeColorMeta');
+        if (meta) meta.setAttribute('content', getSavedTheme() === 'dark' ? '#252525' : '#fdf5f6');
+
         // Bind both desktop and mobile toggles
         ['themeToggle', 'themeToggleMobile'].forEach(function (id) {
             const btn = document.getElementById(id);
