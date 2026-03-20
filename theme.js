@@ -11,6 +11,9 @@
 
     function applyTheme(theme) {
         html.setAttribute('data-theme', theme);
+        // Update safe area / browser chrome color
+        const meta = document.getElementById('themeColorMeta');
+        if (meta) meta.setAttribute('content', theme === 'dark' ? '#252525' : '#fdf5f6');
     }
 
     function getSavedTheme() {
