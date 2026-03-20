@@ -1962,18 +1962,8 @@ html {
 }
 
 @keyframes card-reveal {
-    0% {
-        opacity: 0;
-        transform: scale(0.92) translateY(12px);
-    }
-    60% {
-        opacity: 1;
-        transform: scale(1.01) translateY(-2px);
-    }
-    100% {
-        opacity: 1;
-        transform: scale(1) translateY(0);
-    }
+    0%   { opacity: 0; }
+    100% { opacity: 1; }
 }
 
 .travel-card.revealed {
@@ -3322,6 +3312,7 @@ html {
 /* ── ENTER: spring up from below ── */
 main.pt-enter,
 .container.pt-enter {
+    will-change: transform, opacity;
     animation: pt-spring-in 520ms cubic-bezier(0.34, 1.18, 0.64, 1) both;
 }
 
