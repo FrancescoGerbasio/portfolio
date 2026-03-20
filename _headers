@@ -4,9 +4,14 @@
 # For Vercel: rename to vercel.json and see the commented block below.
 # ─────────────────────────────────────────────────────────────
 
+# Prevent proxies from modifying content (stops email obfuscation)
+/*
+  Cache-Control: no-transform
+
 # HTML — short cache so deploys are picked up immediately
 /*.html
   Cache-Control: public, max-age=0, must-revalidate
+  X-Content-Type-Options: nosniff
 
 # CSS & JS — always revalidate so updates are picked up immediately
 /*.css
